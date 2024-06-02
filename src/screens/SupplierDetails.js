@@ -279,7 +279,7 @@ export default function SupplierDetails({route, navigation}) {
                         styles.nodatafound,
                         {paddingHorizontal: scale(100)},
                       ]}>
-                      {'No Service Found'}
+                      {'No se encontró ningún servicio'}
                     </Text>
                   </View>
                 );
@@ -325,7 +325,7 @@ export default function SupplierDetails({route, navigation}) {
           </View>
           <View style={styles.textinputView}>
             <TextInput
-              placeholder={'Leave your comments*'}
+              placeholder={'Deja tus comentarios*'}
               placeholderTextColor={'COLORS.textColor'}
               multiline={true}
               value={comment}
@@ -348,7 +348,9 @@ export default function SupplierDetails({route, navigation}) {
             ListEmptyComponent={() => {
               return (
                 <View style={styles.nodataView}>
-                  <Text style={styles.nodatafound}>{'No Rating Found'}</Text>
+                  <Text style={styles.nodatafound}>
+                    {'No se encontró ninguna calificación'}
+                  </Text>
                 </View>
               );
             }}

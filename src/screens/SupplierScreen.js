@@ -187,7 +187,7 @@ export default function SupplierScreen() {
           <Image source={IMAGES.searchIcon} style={styles.searchIconView} />
           <TextInput
             value={searchValue}
-            placeholder="Search all Suppliers"
+            placeholder="Buscar todos los proveedores"
             placeholderTextColor={'COLORS.textColor'}
             onChangeText={handleSearchChange}
             style={styles.textInput}
@@ -223,7 +223,7 @@ export default function SupplierScreen() {
                 return (
                   <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={styles.nodatadount}>
-                      {'No Supplier Found '}
+                      {'No se encontró ningún proveedor '}
                     </Text>
                   </View>
                 );

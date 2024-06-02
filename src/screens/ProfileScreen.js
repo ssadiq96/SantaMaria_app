@@ -185,7 +185,7 @@ export default function ProfileScreen(props) {
         </TouchableOpacity>
         <View style={styles.nameView}>
           <Text numberOfLines={1} style={styles.nameText}>
-            {user?.firstName}
+            {`${user?.firstName || ''} ${user?.lastName || ''}`}
           </Text>
           <Text numberOfLines={1} style={styles.descText}>
             {user?.bio}
@@ -251,7 +251,7 @@ export default function ProfileScreen(props) {
           </Text>
         </View>
         <View style={{marginTop: scale(10)}}>
-          <Text style={styles.headerText}>{'Saved Discounts'}</Text>
+          <Text style={styles.headerText}>{'Descuentos Guardados'}</Text>
           <FlatList
             data={bannerData}
             renderItem={bannerDatarenderItem}
@@ -273,7 +273,7 @@ export default function ProfileScreen(props) {
                     backgroundColor: COLORS.yellow,
                   }}>
                   <Text style={[styles.nodatafound]}>
-                    {'No Saved Discount Found'}
+                    {'No se encontró ningún descuento guardado'}
                   </Text>
                 </View>
               );
@@ -284,7 +284,7 @@ export default function ProfileScreen(props) {
         </View>
 
         <View style={{flex: 1, marginBottom: 40}}>
-          <Text style={styles.headerText}>{'Saved Suppliers'}</Text>
+          <Text style={styles.headerText}>{'Proveedores Guardados'}</Text>
           <FlatList
             data={supplierData}
             scrollEnabled
@@ -306,7 +306,7 @@ export default function ProfileScreen(props) {
                     backgroundColor: COLORS.yellow,
                   }}>
                   <Text style={[styles.nodatafound]}>
-                    {'No Saved Supplier Found'}
+                    {'No se encontró ningún proveedor guardado'}
                   </Text>
                 </View>
               );

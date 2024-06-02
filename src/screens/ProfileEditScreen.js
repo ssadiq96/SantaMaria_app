@@ -99,8 +99,7 @@ export default function ProfileEditScreen({route, navigation}) {
     const dateofbirth =
       date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
     console.log('dateofbirth', dateofbirth);
-  if (ConfirmValid) {
-      
+    if (ConfirmValid) {
       let formData = new FormData();
       formData.append('bio', bio);
       formData.append('image', {
@@ -119,7 +118,7 @@ export default function ProfileEditScreen({route, navigation}) {
       if (response.code == 201) {
         navigation.goBack();
         showSimpleAlert(response.message);
-      }else if(response.code ==200){
+      } else if (response.code == 200) {
         navigation.goBack();
         showSimpleAlert(response.message);
       } else {
@@ -162,12 +161,12 @@ export default function ProfileEditScreen({route, navigation}) {
               setname(text);
             }}
             imageSource={IMAGES.profile}
-            placeholder={'Name'}
+            placeholder={'Nombre'}
           />
           <CustomTextInput
             value={email}
             imageSource={IMAGES.emailIcon}
-            placeholder={'Email'}
+            placeholder={'Correo electrónico'}
           />
           <CustomTextInput
             value={bio}
@@ -175,10 +174,9 @@ export default function ProfileEditScreen({route, navigation}) {
               setbio(text);
             }}
             imageSource={IMAGES.bio}
-            placeholder={'Bio'}
+            placeholder={'Biografía'}
           />
 
-       
           <TouchableOpacity
             onPress={() => {
               setOpen(!open);
@@ -209,11 +207,11 @@ export default function ProfileEditScreen({route, navigation}) {
               setlocation(text);
             }}
             imageSource={IMAGES.location}
-            placeholder={'Enter Location'}
+            placeholder={'Ingrese la ubicación'}
           />
           <CustomButton
             flag={0}
-            title={'Update'}
+            title={'Actualizar'}
             onPress={() => {
               editProfile();
             }}

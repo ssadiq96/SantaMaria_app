@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FONTS, IMAGES} from '../assets';
 import {scale} from '../common/Scale';
@@ -14,6 +14,7 @@ import {ActivityLoader} from '../components/ActivityLoader';
 export default function LoginScreen({route, navigation}) {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const [loginImage, setLoginImage] = useState(null);
   const [isLoading, setisLoading] = useState(false);
 
   const checkLogin = async () => {
@@ -36,15 +37,15 @@ export default function LoginScreen({route, navigation}) {
           StorageService.STORAGE_KEYS.USER_DETAILS,
           response.data,
         );
-        setemail('')
-        setpassword('')
+        setemail('');
+        setpassword('');
         setTimeout(() => {
           // navigation.navigate('TabScreen');
           // navigation.reset()
           navigation.reset({
             index: 0,
-            routes: [{ name: 'TabScreen' }]
-       })
+            routes: [{name: 'TabScreen'}],
+          });
         }, 1000);
       } else {
         showSimpleAlert(response.message);
@@ -62,11 +63,20 @@ export default function LoginScreen({route, navigation}) {
       return true;
     }
   };
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const response = await Request.get('mainPageImage/getLoginImage');
+      setLoginImage(response?.data || null);
+    };
+    fetchImage();
+  }, []);
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={{marginTop: scale(80), alignItems: 'center'}}>
-          <Image source={IMAGES.loginLogo} />
+          <Image source={loginImage ? {uri: loginImage} : IMAGES.loginLogo} />
         </View>
         <View style={styles.textinputView}>
           <CustomTextInput
@@ -75,7 +85,7 @@ export default function LoginScreen({route, navigation}) {
             onChangeText={text => {
               setemail(text);
             }}
-            placeholder={'Email'}
+            placeholder={'Correo Electrónico'}
           />
           <CustomTextInput
             value={password}
@@ -84,32 +94,32 @@ export default function LoginScreen({route, navigation}) {
               setpassword(text);
             }}
             imageSource={IMAGES.passwordIcon}
-            placeholder={'Password'}
+            placeholder={'Contraseña'}
           />
           {/* <TouchableOpacity
             onPress={() => {
               navigation.navigate('ForgotPasswordScreen');
             }}>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
           </TouchableOpacity> */}
         </View>
 
         <CustomButton
           flag={0}
-          title={'Login'}
+          title={'Iniciar Sesión'}
           style={{alignSelf: 'center'}}
           onPress={() => {
             checkLogin();
           }}
         />
         <Text style={styles.signUpText}>
-          Don’t have an Account?
+          ¿No tienes una cuenta?
           <TouchableOpacity
             style={styles.signUpView}
             onPress={() => {
               navigation.navigate('SignUpScreen');
             }}>
-            <Text style={styles.signUpText2}> Sign up</Text>
+            <Text style={styles.signUpText2}> Regístrate</Text>
           </TouchableOpacity>
         </Text>
       </KeyboardAwareScrollView>

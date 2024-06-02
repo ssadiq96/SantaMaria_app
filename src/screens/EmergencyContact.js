@@ -77,7 +77,6 @@ export default function EmergencyContact({navigation}) {
     }
   };
   const renderItem = ({item, index}) => {
-    console.log('item', item);
     return (
       <View style={styles.renderView}>
         <Image
@@ -106,16 +105,56 @@ export default function EmergencyContact({navigation}) {
             {item.name}
           </Text>
         </View>
-        <TouchableOpacity onPress={()=>{
-           let phoneNumberFormatted = `tel:${item.contact_no}`;
-           Linking.openURL(phoneNumberFormatted).catch((err) => console.error('Error opening dialer', err));
-        }}>
-          <View style={styles.bottomView}>
-            <Text numberOfLines={1} style={styles.numberText}>
-              {item.contact_no}
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.bottomView}>
+          <TouchableOpacity
+            onPress={() => {
+              let phoneNumberFormatted = `tel:${item.contact_no}`;
+              Linking.openURL(phoneNumberFormatted).catch(err =>
+                console.error('Error opening dialer', err),
+              );
+            }}>
+            <View style={styles.contactNumberContainer}>
+              <Image
+                style={{
+                  alignSelf: 'center',
+                  borderRadius: scale(50),
+                  width: scale(20),
+                  height: scale(20),
+                }}
+                resizeMode="contain"
+                source={IMAGES.phoneIcon}
+              />
+              <Text numberOfLines={1} style={styles.numberText}>
+                {item.contact_no}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          {item.whatsapp_no && (
+            <TouchableOpacity
+              onPress={() => {
+                let phoneNumberFormatted = `https://wa.me/:${item.whatsapp_no}`;
+                Linking.openURL(phoneNumberFormatted).catch(err =>
+                  console.error('Error opening dialer', err),
+                );
+              }}>
+              <View style={styles.contactNumberContainer}>
+                <Image
+                  style={{
+                    alignSelf: 'center',
+                    borderRadius: scale(50),
+                    width: scale(40),
+                    height: scale(40),
+                  }}
+                  resizeMode="contain"
+                  source={IMAGES.whatsappIcon}
+                />
+                <Text numberOfLines={1} style={styles.numberText}>
+                  {item.whatsapp_no}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     );
   };
@@ -283,7 +322,6 @@ const styles = StyleSheet.create({
   },
   renderView: {
     marginHorizontal: scale(12),
-    height: scale(180),
     width: scale(145),
     marginVertical: scale(10),
     borderColor: COLORS.yellow,
@@ -340,7 +378,7 @@ const styles = StyleSheet.create({
   },
   numberText: {
     color: '#F9F1E4',
-    fontSize: scale(16),
+    fontSize: scale(12),
     fontWeight: '600',
     fontFamily: FONTS.GotamBold,
   },
@@ -349,8 +387,13 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: scale(12),
     borderBottomEndRadius: scale(12),
     backgroundColor: COLORS.yellow,
-    height: scale(40),
+    minHeight: scale(40),
+    paddingTop: 5,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  contactNumberContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
   ambulanceText: {

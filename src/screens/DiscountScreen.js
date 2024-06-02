@@ -88,6 +88,26 @@ export default function DiscountScreen({route, navigation}) {
               source={IMAGES.appLogo}
             />
           )}
+          <View style={styles.profileView}>
+            <View style={styles.profileImage}>
+              {item.company.profile_image ? (
+                <Image
+                  source={{uri: item.company.profile_image}}
+                  style={styles.companyProfileImage}
+                />
+              ) : (
+                <Image
+                  resizeMode="contain"
+                  style={styles.companyProfileImage}
+                  source={IMAGES.appLogo}
+                />
+              )}
+              {/* <Image source={{uri: item.company.profile_image}} /> */}
+            </View>
+            {/* <Text numberOfLines={1} style={styles.ambulanceText}> */}
+            {/* {item.name} */}
+            {/* </Text> */}
+          </View>
           {/* <Image source={{uri: item.company.profile_image}} /> */}
           <View style={styles.bottomView}>
             <Text numberOfLines={1} style={styles.titleText}>
@@ -140,7 +160,7 @@ export default function DiscountScreen({route, navigation}) {
       <View style={styles.mainContainer}>
         <View style={styles.subContainer}>
           <Image source={IMAGES.discountIcon} style={styles.imageView} />
-          <Text style={styles.headerText}>Discounts</Text>
+          <Text style={styles.headerText}>Descuentos</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
@@ -180,7 +200,7 @@ export default function DiscountScreen({route, navigation}) {
         <Image source={IMAGES.searchIcon} style={styles.searchIconView} />
         <TextInput
           value={searchValue}
-          placeholder="Search all Discounts"
+          placeholder="Buscar en Descuentos"
           placeholderTextColor={COLORS.textColor}
           onChangeText={handleSearchChange}
           style={styles.textInput}
@@ -222,6 +242,23 @@ const styles = StyleSheet.create({
     width: scale(145),
     marginLeft: scale(15),
     marginHorizontal: scale(10),
+  },
+  profileImage: {
+    height: scale(40),
+    width: scale(40),
+    alignSelf: 'center',
+    borderRadius: scale(20),
+  },
+  companyProfileImage: {
+    alignSelf: 'center',
+    borderRadius: scale(50),
+    width: scale(40),
+    height: scale(40),
+  },
+  profileView: {
+    position: 'absolute',
+    alignSelf: 'center',
+    marginTop: '60%',
   },
   bottomView: {
     borderBottomStartRadius: scale(12),
