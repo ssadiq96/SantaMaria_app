@@ -191,7 +191,9 @@ export default function NewEventScreen(Props) {
             <Image source={IMAGES.logoutIcon} style={styles.logoutView} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.discoverText}>{'Discover whats trending'}</Text>
+        <Text style={styles.discoverText}>
+          {'Descubre lo que está en tendencia'}
+        </Text>
         <View style={{marginTop: scale(15)}}>
           <FlatList
             data={eventbanner}
@@ -216,7 +218,7 @@ export default function NewEventScreen(Props) {
               styles.eventText,
               {color: eventselected ? COLORS.white : COLORS.yellow},
             ]}>
-            {'Events'}
+            {'Eventos'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -237,7 +239,7 @@ export default function NewEventScreen(Props) {
               styles.newsText,
               {color: eventselected ? COLORS.yellow : COLORS.white},
             ]}>
-            {'News'}
+            {'Noticias'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -264,7 +266,9 @@ export default function NewEventScreen(Props) {
                     backgroundColor: COLORS.yellow,
                     marginTop: scale(50),
                   }}>
-                  <Text style={[styles.nodatafound]}>{'No data Found'}</Text>
+                  <Text style={[styles.nodatafound]}>
+                    {'Datos no encontrados'}
+                  </Text>
                 </View>
               );
             }}

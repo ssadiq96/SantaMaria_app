@@ -23,6 +23,7 @@ import {HomeSkeleton} from '../common/CustomSkeleton';
 import StorageService, {clearAllData} from '../utils/StorageService';
 import SvgUri from 'react-native-svg';
 import {useIsFocused} from '@react-navigation/native';
+import moment from 'moment';
 export default function HomeScreen(props) {
   const [arrData, setarrData] = useState([]);
   const [supplierArray, setsupplierArray] = useState([]);
@@ -30,6 +31,8 @@ export default function HomeScreen(props) {
   const [newsData, setnewsData] = useState([]);
   const [discountData, setdiscountData] = useState([]);
   const [user, setuserData] = useState([]);
+  const [userBirthDay, setUserBirthDay] = useState(false);
+  const [mainPageImage, setMainPageImage] = useState(null);
   const isFocused = useIsFocused();
 
   const [bannerData, setbannerData] = useState([
@@ -82,23 +85,33 @@ export default function HomeScreen(props) {
   useEffect(() => {
     async function fetchData() {
       if (isFocused) {
-        console.log('props234', props);
         await getProfileData();
+        await getMainPageImage();
       }
     }
     // Call the async function
     fetchData();
   }, [isFocused]);
+
   const getProfileData = async () => {
     const response = await Request.get('user');
     setuserData(response.data);
-
+    setUserBirthDay(checkUserBirthDay(response.data.dob));
     await StorageService.saveItem(
       StorageService.STORAGE_KEYS.USER_DETAILS,
       response.data,
     );
   };
- 
+
+  const getMainPageImage = async () => {
+    const response = await Request.get('mainPageImage/getMainPageImage');
+    setMainPageImage(response?.data);
+  };
+
+  const checkUserBirthDay = dob => {
+    return moment(dob).format('DD/MM') == moment().format('DD/MM');
+  };
+
   useEffect(() => {
     async function fetchData2() {
       setisLoading(true);
@@ -162,11 +175,11 @@ export default function HomeScreen(props) {
     return (
       <TouchableOpacity
         onPress={() => {
-          if (item.name == 'Suppliers') {
+          if (item.name == 'Proveedores') {
             props.ontabPress(3);
-          } else if (item.type == 'Newsandevent') {
+          } else if (item.name == 'Noticias y Eventos') {
             props.ontabPress(1);
-          } else if (item.name == 'Discount') {
+          } else if (item.name == 'Descuentos') {
             props.ontabPress(2);
           } else {
             NavigationService.navigate('EmergencyContact');
@@ -478,12 +491,12 @@ export default function HomeScreen(props) {
             <View style={{flex: 1, marginVertical: scale(15)}}>
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.headerText}>{'New Discounts'}</Text>
+                <Text style={styles.headerText}>{'Descuentos Recientes'}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     props.ontabPress(2);
                   }}>
-                  <Text style={styles.viewAll}>{'See All'}</Text>
+                  <Text style={styles.viewAll}>{'Ver todo'}</Text>
                 </TouchableOpacity>
               </View>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -502,12 +515,12 @@ export default function HomeScreen(props) {
             <View style={{flex: 1}}>
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.headerText}>{'Events and News'}</Text>
+                <Text style={styles.headerText}>{'Noticias y Eventos'}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     props.ontabPress(1);
                   }}>
-                  <Text style={styles.viewAll}>{'See All'}</Text>
+                  <Text style={styles.viewAll}>{'Ver todo'}</Text>
                 </TouchableOpacity>
               </View>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -527,12 +540,12 @@ export default function HomeScreen(props) {
             <View style={{flex: 1, marginVertical: scale(10)}}>
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.headerText}>{'Suppliers'}</Text>
+                <Text style={styles.headerText}>{'Proveedores'}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     props.ontabPress(3);
                   }}>
-                  <Text style={styles.viewAll}>{'See All'}</Text>
+                  <Text style={styles.viewAll}>{'Ver todo'}</Text>
                 </TouchableOpacity>
               </View>
               <ScrollView
@@ -563,7 +576,7 @@ export default function HomeScreen(props) {
                             alignSelf: 'center',
                             textAlign: 'center',
                           }}>
-                          {'No  Supplier Found'}
+                          {'No se encontró ningún proveedor'}
                         </Text>
                       </View>
                     );

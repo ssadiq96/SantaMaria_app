@@ -1,5 +1,12 @@
 import React, {useRef, useState} from 'react';
-import {View, Image, StyleSheet, Text, TouchableOpacity, Platform} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import {FONTS, IMAGES} from '../assets';
 import {COLORS, CONSTANTS} from '../common';
 import {moderateScale, scale, verticalScale} from '../common/Scale';
@@ -76,7 +83,7 @@ export default function SignUpScreen({route, navigation}) {
       // };
       let formData = new FormData();
       formData.append('bio', bio);
-      formData.append('email', email)
+      formData.append('email', email);
       formData.append('firstName', name);
 
       formData.append('image', {
@@ -89,15 +96,14 @@ export default function SignUpScreen({route, navigation}) {
 
       formData.append('dob', dateofbirth);
       setisLoading(true);
-      console.log("formdara",formData);
+      console.log('formdara', formData);
       const response = await Request.post('register', formData);
       setisLoading(false);
 
       if (response.code == 201) {
         showSimpleAlert(response.message);
         navigation.goBack();
-      }
-      else if (response.code == 200) {
+      } else if (response.code == 200) {
         showSimpleAlert(response.message);
         navigation.goBack();
       } else {
@@ -165,7 +171,7 @@ export default function SignUpScreen({route, navigation}) {
               setname(text);
             }}
             imageSource={IMAGES.profile}
-            placeholder={'Name'}
+            placeholder={'Nombre'}
           />
           <CustomTextInput
             value={email}
@@ -173,7 +179,7 @@ export default function SignUpScreen({route, navigation}) {
               setemail(text);
             }}
             imageSource={IMAGES.emailIcon}
-            placeholder={'Email'}
+            placeholder={'Correo electrónico'}
           />
           <CustomTextInput
             value={bio}
@@ -181,7 +187,7 @@ export default function SignUpScreen({route, navigation}) {
               setbio(text);
             }}
             imageSource={IMAGES.bio}
-            placeholder={'Bio'}
+            placeholder={'Correo electrónico'}
           />
 
           <CustomTextInput
@@ -190,7 +196,7 @@ export default function SignUpScreen({route, navigation}) {
               setpassword(text);
             }}
             imageSource={IMAGES.passwordIcon}
-            placeholder={'Password'}
+            placeholder={'Contraseña'}
           />
           <CustomTextInput
             value={confirmpassword}
@@ -198,7 +204,7 @@ export default function SignUpScreen({route, navigation}) {
               setconfirmpassword(text);
             }}
             imageSource={IMAGES.passwordIcon}
-            placeholder={'Confirm Password'}
+            placeholder={'confirmar Contraseña'}
           />
           <TouchableOpacity
             onPress={() => {
@@ -231,7 +237,7 @@ export default function SignUpScreen({route, navigation}) {
               setlocation(text);
             }}
             imageSource={IMAGES.location}
-            placeholder={'Enter Location'}
+            placeholder={'Ingrese la ubicación'}
           />
           <CustomButton
             flag={0}

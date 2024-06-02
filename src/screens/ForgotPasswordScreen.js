@@ -58,7 +58,7 @@ export default function ForgotPasswordScreen({route, navigation}) {
             onChangeText={text => {
               setemail(text);
             }}
-            placeholder={'Email'}
+            placeholder={'Correo electrónico'}
           />
         </View>
         <CustomButton

@@ -32,14 +32,16 @@ const IMAGES = {
   discountCompanyDummy: require('./discountCompanyDummy.png'),
   discountcompanyBanner: require('./discountcompanyBanner.png'),
   phone: require('./phone.png'),
+  phoneIcon: require('./phoneicon.png'),
   instagram: require('./instagram.png'),
   emergencyBanner: require('./emergencyBanner.png'),
   emergencyContact: require('./emergencyContact.png'),
   birthday: require('./birthday.png'),
   nodataImage: require('./NodataFound.png'),
   logoutIcon: require('./logoutIcon.png'),
-  placeholder:require('./placeholderuser.jpeg'),
-  warning:require('./warning.png')
+  placeholder: require('./placeholderuser.jpeg'),
+  warning: require('./warning.png'),
+  whatsappIcon: require('./whatsappIcon.png'),
 };
 
 export default IMAGES;
