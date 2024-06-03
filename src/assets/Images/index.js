@@ -41,7 +41,7 @@ const IMAGES = {
   logoutIcon: require('./logoutIcon.png'),
   placeholder: require('./placeholderuser.jpeg'),
   warning: require('./warning.png'),
-  whatsappIcon: require('./whatsappIcon.png'),
+  whatsappIcon: require('./whatsapp.png'),
 };
 
 export default IMAGES;

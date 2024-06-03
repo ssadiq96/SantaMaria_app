@@ -14,13 +14,18 @@ export function isValidPassword(string) {
   if (reg.test(string) === true) {
     return true;
   }
-  showSimpleAlert('Please enter valid password');
+  showSimpleAlert('Por favor ingrese una contraseña válida');
   return false;
 }
 export function showSimpleAlert(message) {
-  Alert.alert(CONSTANTS.AppName, message, [{text: 'OK', onPress: () => null}], {
-    cancelable: false,
-  });
+  Alert.alert(
+    CONSTANTS.AppName,
+    message,
+    [{text: 'DE ACUERDO', onPress: () => null}],
+    {
+      cancelable: false,
+    },
+  );
 }
 
 export function converTimetoSecond(hms) {

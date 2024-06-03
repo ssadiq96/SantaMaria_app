@@ -44,7 +44,7 @@ export default function ProfileEditScreen({route, navigation}) {
         StorageService.STORAGE_KEYS.USER_DETAILS,
       );
       setuserData(userData);
-      console.log('imageimageimageimage', image);
+      // console.log('imageimageimageimage', image);
     }
     // Call the async function
     fetchData();
@@ -59,7 +59,7 @@ export default function ProfileEditScreen({route, navigation}) {
       setImage(selectedImage.path);
       refRBSheet.current.close();
     } catch (error) {
-      console.log('Image selection error:', error);
+      console.error('Image selection error:', error);
     }
   };
 
@@ -74,22 +74,22 @@ export default function ProfileEditScreen({route, navigation}) {
       setImage(takenImage.path);
       refRBSheet.current.close();
     } catch (error) {
-      console.log('Photo taking error:', error);
+      console.error('Photo taking error:', error);
     }
   };
   const validationofField = () => {
     if (name == '') {
-      showSimpleAlert('Please enter name');
+      showSimpleAlert('Por favor ingrese el nombre');
     } else if (email == '') {
-      showSimpleAlert('Please enter email');
+      showSimpleAlert('Por favor ingrese el correo electrónico');
     } else if (!isValidEmail(email)) {
-      showSimpleAlert('Please enter valid email');
+      showSimpleAlert('Por favor introduzca un correo electrónico válido');
     } else if (bio == '') {
-      showSimpleAlert('Please enter bio');
+      showSimpleAlert('Por favor ingresa a la biografía');
     } else if (selectedDate == '') {
-      showSimpleAlert('Please select date of birth');
+      showSimpleAlert('Por favor seleccione fecha de nacimiento');
     } else if (location == '') {
-      showSimpleAlert('Please enter location');
+      showSimpleAlert('Por favor ingresa la ubicación');
     } else {
       return true;
     }
@@ -98,7 +98,7 @@ export default function ProfileEditScreen({route, navigation}) {
     const ConfirmValid = validationofField();
     const dateofbirth =
       date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
-    console.log('dateofbirth', dateofbirth);
+    // console.log('dateofbirth', dateofbirth);
     if (ConfirmValid) {
       let formData = new FormData();
       formData.append('bio', bio);
@@ -111,7 +111,7 @@ export default function ProfileEditScreen({route, navigation}) {
       formData.append('location', location);
       formData.append('dob', dateofbirth);
       setisLoading(true);
-      console.log('formDataformDataformData', formData);
+      // console.log('formDataformDataformData', formData);
       const response = await Request.post('update', formData);
       setisLoading(false);
 
@@ -196,7 +196,7 @@ export default function ProfileEditScreen({route, navigation}) {
                       (date.getMonth() + 1) +
                       '-' +
                       date.getFullYear()
-                    : 'Select DOB'}
+                    : 'Seleccione fecha de nacimiento'}
                 </Text>
               </View>
             </View>
@@ -223,7 +223,7 @@ export default function ProfileEditScreen({route, navigation}) {
             mode="date"
             date={date}
             onConfirm={date => {
-              console.log('datedate', date);
+              // console.log('datedate', date);
               setOpen(false);
               setDate(date);
               setselectedDate(date);
@@ -244,23 +244,23 @@ export default function ProfileEditScreen({route, navigation}) {
               },
             }}>
             <View style={{alignItems: 'center', height: '70%'}}>
-              <Text style={styles.selectImageText}>Select an Image</Text>
+              <Text style={styles.selectImageText}>Seleccione una imagen</Text>
               <CustomButton
                 flag={0}
                 style={{marginVertical: scale(10)}}
-                title="Choose from Library"
+                title="Elige de la biblioteca"
                 onPress={selectImageFromLibrary}
               />
               <CustomButton
                 style={{marginVertical: scale(10)}}
                 flag={0}
-                title="Take Photo"
+                title="Tomar foto"
                 onPress={takePhoto}
               />
               <CustomButton
                 flag={0}
                 style={{marginVertical: scale(10)}}
-                title="Cancel"
+                title="Cancelar"
                 onPress={() => refRBSheet.current.close()}
               />
             </View>

@@ -38,7 +38,7 @@ export default function NewEventScreen(Props) {
         StorageService.STORAGE_KEYS.USER_DETAILS,
       );
       setuserData(userData);
-      console.log('userDatauserDatauserData', userData);
+      // console.log('userDatauserDatauserData', userData);
       await geteventnewsBanner();
     }
     // Call the async function
@@ -121,7 +121,7 @@ export default function NewEventScreen(Props) {
     );
     if (response) {
       setisLoading(false);
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         setnewsData(response.data.rows);
       } else {
@@ -163,7 +163,7 @@ export default function NewEventScreen(Props) {
               style={styles.profileEditImage}
             />
             <Text style={styles.headerText}>
-              {'Good Morning'} {user?.firstName}
+              {'Buen día'} {user?.firstName}
             </Text>
           </View>
 
@@ -177,14 +177,14 @@ export default function NewEventScreen(Props) {
             onPress={() => {
               Alert.alert(
                 CONSTANTS.AppName,
-                'Are you sure you want to logout',
+                '¿Estás seguro de que quieres cerrar sesión?',
                 [
                   {
-                    text: 'Cancel',
+                    text: 'Cancelar',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                   },
-                  {text: 'OK', onPress: () => logoutApi()},
+                  {text: 'DE ACUERDO', onPress: () => logoutApi()},
                 ],
               );
             }}>

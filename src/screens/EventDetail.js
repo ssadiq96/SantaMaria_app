@@ -43,7 +43,7 @@ export default function EventDetail({route, navigation}) {
       }),
     ).toString('base64');
     const response = await Request.get(`newsandevent/${base64EncodedIdObject}`);
-    console.log('responseresponse', response);
+    // console.log('responseresponse', response);
     if (response) {
       setisLoading(false);
       if (response.code == 200) {
@@ -52,27 +52,32 @@ export default function EventDetail({route, navigation}) {
         showSimpleAlert(response.message);
       }
     }
-    console.log('base64EncodedIdObject', base64EncodedIdObject);
+    // console.log('base64EncodedIdObject', base64EncodedIdObject);
   };
-  const modifyHtmlContent = (html) => {
+  const modifyHtmlContent = html => {
     // Regular expression to match <p> tags with or without existing styles
     const pRegex = /<p(.*?)>/g;
     const pReplacement = `<p style='font-size: ${fontSize}px; text-align: justify;'>`;
     const imgRegex = /<img(.*?)>/g;
     const imgReplacement = `<div style="width: 100%; height: auto; display: flex; justify-content: center;"><img style="width: 100%; height: 100%; object-fit: contain;" $1></div>`;
     // Replace all <p> tags with the new style
-    const data = html?.replace(pRegex, (match, p1) => {
-      // Check if the <p> tag already has a style attribute
-      if (/style\s*=\s*["'][^"']*["']/.test(p1)) {
-        // Replace the existing style attribute with the new styles
-        return match.replace(/style\s*=\s*["'][^"']*["']/, `style='font-size: ${fontSize}px; text-align: justify;'`);
-      } else {
-        // Add the new style attribute to the <p> tag
-        return `<p style='font-size: ${fontSize}px; text-align: justify;'${p1}>`;
-      }
-    }).replace(imgRegex, imgReplacement);
+    const data = html
+      ?.replace(pRegex, (match, p1) => {
+        // Check if the <p> tag already has a style attribute
+        if (/style\s*=\s*["'][^"']*["']/.test(p1)) {
+          // Replace the existing style attribute with the new styles
+          return match.replace(
+            /style\s*=\s*["'][^"']*["']/,
+            `style='font-size: ${fontSize}px; text-align: justify;'`,
+          );
+        } else {
+          // Add the new style attribute to the <p> tag
+          return `<p style='font-size: ${fontSize}px; text-align: justify;'${p1}>`;
+        }
+      })
+      .replace(imgRegex, imgReplacement);
 
-    console.log('Modified HTML:', data);
+    // console.log('Modified HTML:', data);
     return data;
   };
   // const randomItem = dummyData[Math.floor(Math.random() * dummyData.length)];

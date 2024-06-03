@@ -32,10 +32,9 @@ export default function SupplierScreen() {
     async function fetchData() {
       setisLoading(true);
       const response = await Request.get('supplier');
-      console.log('');
       if (response) {
         setisLoading(false);
-        console.log('responser123', response);
+        // console.log('responser123', response);
         if (response.code == 200) {
           setsupplierData(response.data.rows);
         } else {
@@ -56,7 +55,7 @@ export default function SupplierScreen() {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-          console.log('base64EncodedIdObject12', base64EncodedIdObject);
+          // console.log('base64EncodedIdObject12', base64EncodedIdObject);
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -110,7 +109,7 @@ export default function SupplierScreen() {
         const response = await Request.get(`supplier?name=${searchText}`);
         if (response) {
           setisLoading(false);
-          console.log('responser123', response);
+          // console.log('responser123', response);
           if (response.code == 200) {
             setsupplierData(response.data.rows);
           } else {
@@ -147,7 +146,7 @@ export default function SupplierScreen() {
         <View style={styles.mainContainer}>
           <View style={styles.subContainer}>
             <Image source={IMAGES.supplier} style={styles.imageView} />
-            <Text style={styles.headerText}>Suppliers</Text>
+            <Text style={styles.headerText}>Proveedoras</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -162,14 +161,14 @@ export default function SupplierScreen() {
               onPress={() => {
                 Alert.alert(
                   CONSTANTS.AppName,
-                  'Are you sure you want to logout',
+                  '¿Estás seguro de que quieres cerrar sesión?',
                   [
                     {
-                      text: 'Cancel',
+                      text: 'Cancelar',
                       onPress: () => console.log('Cancel Pressed'),
                       style: 'cancel',
                     },
-                    {text: 'OK', onPress: () => logoutApi()},
+                    {text: 'DE ACUERDO', onPress: () => logoutApi()},
                   ],
                 );
               }}>
@@ -188,7 +187,7 @@ export default function SupplierScreen() {
           <TextInput
             value={searchValue}
             placeholder="Buscar todos los proveedores"
-            placeholderTextColor={'COLORS.textColor'}
+            placeholderTextColor={COLORS.textColor}
             onChangeText={handleSearchChange}
             style={styles.textInput}
           />

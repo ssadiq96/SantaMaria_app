@@ -31,9 +31,9 @@ export default function ForgotPasswordScreen({route, navigation}) {
   };
   const validationofField = () => {
     if (email == '') {
-      showSimpleAlert('Please enter email');
+      showSimpleAlert('Por favor ingrese el correo electrónico');
     } else if (!isValidEmail(email)) {
-      showSimpleAlert('Please enter valid email');
+      showSimpleAlert('Por favor introduzca un correo electrónico válido');
     } else {
       return true;
     }
@@ -63,14 +63,14 @@ export default function ForgotPasswordScreen({route, navigation}) {
         </View>
         <CustomButton
           flag={0}
-          title={'Forgot Password'}
+          title={'Has olvidado tu contraseña'}
           onPress={() => {
             forgotPassword();
           }}
         />
         <Text style={styles.signUpText}>
-          We will send you a new password by your email you can then change it
-          in your settings
+          Le enviaremos una nueva contraseña a su correo electrónico y luego
+          podrá cambiarla en su configuración.
         </Text>
       </View>
     </KeyboardAwareScrollView>

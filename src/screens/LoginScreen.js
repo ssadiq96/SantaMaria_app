@@ -54,11 +54,11 @@ export default function LoginScreen({route, navigation}) {
   };
   const validationofField = () => {
     if (email == '') {
-      showSimpleAlert('Please enter email');
+      showSimpleAlert('Por favor ingrese el correo electrónico');
     } else if (!isValidEmail(email)) {
-      showSimpleAlert('Please enter valid email');
+      showSimpleAlert('Por favor introduzca un correo electrónico válido');
     } else if (password == '') {
-      showSimpleAlert('Please enter password');
+      showSimpleAlert('Por favor, ingrese contraseña');
     } else {
       return true;
     }

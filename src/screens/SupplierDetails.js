@@ -41,11 +41,11 @@ export default function SupplierDetails({route, navigation}) {
   }, []);
   const getComponentData = async () => {
     const encodedString = route?.params?.supplierObj;
-    console.log('encodedString', encodedString);
+    // console.log('encodedString', encodedString);
     const response = await Request.get(`supplier/${encodedString}`);
     if (response) {
       setisLoading(false);
-      console.log('getComponentDataresponser123', response);
+      // console.log('getComponentDataresponser123', response);
       if (response.code == 200) {
         setsupplierDetails(response.data);
         setservice(response.data.services);
@@ -79,7 +79,7 @@ export default function SupplierDetails({route, navigation}) {
     );
   };
   const ratingrenderItem = ({item}) => {
-    console.log('ratingrenderItemitem', item);
+    // console.log('ratingrenderItemitem', item);
     return (
       <View style={{marginVertical: scale(10)}}>
         <View style={{flexDirection: 'row', marginHorizontal: scale(10)}}>
@@ -114,7 +114,7 @@ export default function SupplierDetails({route, navigation}) {
   };
   const submitReview = async () => {
     if (!comment) {
-      showSimpleAlert('Please enter comment');
+      showSimpleAlert('Por favor ingrese comentario');
     } else {
       const encodedString = route?.params?.supplierObj;
       let params = {
@@ -123,7 +123,7 @@ export default function SupplierDetails({route, navigation}) {
         comment: comment,
       };
       const response = await Request.post('supplier/giveFeedback', params);
-      console.log('responseresponse', response);
+      // console.log('responseresponse', response);
 
       if (response.code == 200) {
         setcomment('');
@@ -137,7 +137,7 @@ export default function SupplierDetails({route, navigation}) {
   };
   const addwishlist = async () => {
     const encodedString = route?.params?.supplierObj;
-    console.log('encodedString', encodedString);
+    // console.log('encodedString', encodedString);
     let params = {
       category: 'Supplier',
       typeId: encodedString,
@@ -145,7 +145,7 @@ export default function SupplierDetails({route, navigation}) {
     const response = await Request.post('wishlist', params);
     if (response) {
       setisLoading(false);
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         getComponentData();
       } else {
@@ -257,7 +257,7 @@ export default function SupplierDetails({route, navigation}) {
           backgroundColor: COLORS.white,
         }}>
         <View>
-          <Text style={styles.supplierText}>{'Services we provide'}</Text>
+          <Text style={styles.supplierText}>{'Servicios que brindamos'}</Text>
           <ScrollView horizontal style={{flex: 1}}>
             <FlatList
               data={service}
@@ -277,7 +277,7 @@ export default function SupplierDetails({route, navigation}) {
                     <Text
                       style={[
                         styles.nodatafound,
-                        {paddingHorizontal: scale(100)},
+                        {paddingHorizontal: scale(50)},
                       ]}>
                       {'No se encontró ningún servicio'}
                     </Text>
@@ -291,7 +291,7 @@ export default function SupplierDetails({route, navigation}) {
 
         <View style={styles.ratingView}>
           <Text style={styles.ratingText}>
-            {'Rate your experience with supplier'}
+            {'Califica tu experiencia con el proveedor'}
           </Text>
           <View style={styles.ratingView2}>
             <Rating
@@ -300,7 +300,7 @@ export default function SupplierDetails({route, navigation}) {
               fillColor={COLORS.yellow}
               type={'custom'}
               onChange={data => {
-                console.log('data', Math.round(data));
+                // console.log('data', Math.round(data));
                 setuserRate(Math.round((data + userRate) * 5) / 10);
               }}
               onMove={data => {
@@ -320,13 +320,13 @@ export default function SupplierDetails({route, navigation}) {
                 backgroundColor: COLORS.yellow,
                 borderRadius: scale(20),
               }}>
-              <Text style={styles.submitText}>{'Submit'}</Text>
+              <Text style={styles.submitText}>{'Entregar'}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.textinputView}>
             <TextInput
               placeholder={'Deja tus comentarios*'}
-              placeholderTextColor={'COLORS.textColor'}
+              placeholderTextColor={COLORS.textColor}
               multiline={true}
               value={comment}
               onChangeText={text => {
@@ -340,7 +340,7 @@ export default function SupplierDetails({route, navigation}) {
               }}
             />
           </View>
-          <Text style={[styles.ratingText]}>{'Ratings'}</Text>
+          <Text style={[styles.ratingText]}>{'Calificaciones'}</Text>
           <FlatList
             style={{flex: 1}}
             data={supplierRating}
