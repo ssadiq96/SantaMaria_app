@@ -109,17 +109,19 @@ const updateAuthToken = async (endpoint, params) => {
 const buildRequest = async (endpoint, params = {}, options = undefined) => {
   if ((await checkNetInfo()) != false) {
     try {
-      console.log('endpointendpoint', endpoint);
+      // console.log('endpointendpoint', endpoint);
 
       const headers =
-        endpoint == 'update'|| endpoint == 'register'? await getHeaders3() : await getHeaders2();
+        endpoint == 'update' || endpoint == 'register'
+          ? await getHeaders3()
+          : await getHeaders2();
       // console.log("headers->", headers);
 
-      console.log('%c REQUEST::', 'background: #222; color: #bada55', {
-        url: `${apiConfigs.SERVER_API_URL}${endpoint}`,
-        ...params,
-      });
-      console.log('headerssss', headers);
+      // console.log('%c REQUEST::', 'background: #222; color: #bada55', {
+      //   url: `${apiConfigs.SERVER_API_URL}${endpoint}`,
+      //   ...params,
+      // });
+      // console.log('headerssss', headers);
       if (endpoint == 'user') {
         const response = await timeOut(
           fetch(`${apiConfigs.USER_PROFILE}`, {
@@ -127,11 +129,11 @@ const buildRequest = async (endpoint, params = {}, options = undefined) => {
             ...params,
           }),
         );
-        console.log('response', response);
+        // console.log('response', response);
         const result = await response.json();
         // console.log('result---->', result);
 
-        console.log('result---->', result);
+        // console.log('result---->', result);
         return checkValidatinoResponse(result, endpoint, params);
       } else {
         const response = await timeOut(
@@ -140,15 +142,15 @@ const buildRequest = async (endpoint, params = {}, options = undefined) => {
             ...params,
           }),
         );
-        console.log('response', response);
+        // console.log('response', response);
         const result = await response.json();
         // console.log('result---->', result);
 
-        console.log('result---->', result);
+        // console.log('result---->', result);
         return checkValidatinoResponse(result, endpoint, params);
       }
     } catch (error) {
-      console.log('Error----->', error);
+      // console.log('Error----->', error);
       if (error) {
         if (error.status == apiConfigs.TIMEOUT) {
           showSimpleAlert(ConstantsText.requestTimeoutMessage);

@@ -49,7 +49,7 @@ export default function EmergencyContact({navigation}) {
     const emergencyResponse = await Request.get('component');
     if (emergencyResponse) {
       setisLoading(false);
-      console.log('emergencyResponse', emergencyResponse);
+      // console.log('emergencyResponse', emergencyResponse);
       let rowData = [];
       const emergencydata = emergencyResponse.data.rows.map(item => {
         if (item.name === 'Emergency Contact') {
@@ -58,7 +58,7 @@ export default function EmergencyContact({navigation}) {
       });
 
       setemergencyCoverData(rowData[0]);
-      console.log('filteredData', rowData);
+      // console.log('filteredData', rowData);
     } else {
       setisLoading(false);
       showSimpleAlert(response.message);
@@ -118,8 +118,9 @@ export default function EmergencyContact({navigation}) {
                 style={{
                   alignSelf: 'center',
                   borderRadius: scale(50),
-                  width: scale(20),
-                  height: scale(20),
+                  width: scale(16),
+                  height: scale(16),
+                  marginHorizontal: scale(2),
                 }}
                 resizeMode="contain"
                 source={IMAGES.phoneIcon}
@@ -142,8 +143,9 @@ export default function EmergencyContact({navigation}) {
                   style={{
                     alignSelf: 'center',
                     borderRadius: scale(50),
-                    width: scale(40),
-                    height: scale(40),
+                    width: scale(16),
+                    height: scale(16),
+                    marginHorizontal: scale(2),
                   }}
                   resizeMode="contain"
                   source={IMAGES.whatsappIcon}
@@ -280,7 +282,7 @@ export default function EmergencyContact({navigation}) {
               showsVerticalScrollIndicator={false}
               renderItem={renderItem}
               estimatedItemSize={271}
-              keyExtractor={(item, index) => item.key}
+              keyExtractor={(item, index) => index}
               numColumns={2}
             />
           </View>
@@ -388,13 +390,14 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: scale(12),
     backgroundColor: COLORS.yellow,
     minHeight: scale(40),
-    paddingTop: 5,
+    paddingVertical: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   contactNumberContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: scale(2),
   },
   ambulanceText: {
     color: '#F9F1E4',

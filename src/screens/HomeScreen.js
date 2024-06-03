@@ -138,7 +138,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('discount');
     if (response) {
       setisLoading(false);
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         setdiscountData(response.data.rows);
       } else {
@@ -150,7 +150,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('component');
     if (response) {
       setisLoading(false);
-      console.log('getComponentDataresponser123', response);
+      // console.log('getComponentDataresponser123', response);
       if (response.code == 200) {
         setarrData(response.data.rows);
       } else {
@@ -162,7 +162,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('supplier');
     if (response) {
       setisLoading(false);
-      console.log('supplierresponser123', response);
+      // console.log('supplierresponser123', response);
       if (response.code == 200) {
         setsupplierArray(response.data.rows);
       } else {
@@ -171,15 +171,15 @@ export default function HomeScreen(props) {
     }
   };
   const renderItem = ({item, index}) => {
-    console.log('item12', item);
+    console.log(JSON.stringify(item, null, 2));
     return (
       <TouchableOpacity
         onPress={() => {
-          if (item.name == 'Proveedores') {
+          if (item.type == 'Suppliers') {
             props.ontabPress(3);
-          } else if (item.name == 'Noticias y Eventos') {
+          } else if (item.type == 'Newsandevent') {
             props.ontabPress(1);
-          } else if (item.name == 'Descuentos') {
+          } else if (item.type == 'Discount') {
             props.ontabPress(2);
           } else {
             NavigationService.navigate('EmergencyContact');
@@ -228,7 +228,7 @@ export default function HomeScreen(props) {
     );
   };
   const navigatediscountDetailPage = item => {
-    console.log('item1234', item);
+    // console.log('item1234', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -365,14 +365,14 @@ export default function HomeScreen(props) {
   };
 
   const supplierRedirection = item => {
-    console.log('item', item);
+    // console.log('item', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
         encryptedData: item?.id?.encryptedData,
       }),
     ).toString('base64');
-    console.log('base64EncodedIdObject12', base64EncodedIdObject);
+    // console.log('base64EncodedIdObject12', base64EncodedIdObject);
     NavigationService.navigate('SupplierDetails', {
       supplierObj: base64EncodedIdObject,
     });
@@ -382,7 +382,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('newsandevent');
     if (response) {
       setisLoading(false);
-      console.log('getnewsEventresponser123', response);
+      // console.log('getnewsEventresponser123', response);
       if (response.code == 200) {
         setnewsData(response.data.rows);
       } else {
@@ -447,14 +447,14 @@ export default function HomeScreen(props) {
                 onPress={() => {
                   Alert.alert(
                     CONSTANTS.AppName,
-                    'Are you sure you want to logout',
+                    '¿Estás seguro de que quieres cerrar sesión?',
                     [
                       {
-                        text: 'Cancel',
+                        text: 'Cancelar',
                         onPress: () => console.log('Cancel Pressed'),
                         style: 'cancel',
                       },
-                      {text: 'OK', onPress: () => logoutApi()},
+                      {text: 'DE ACUERDO', onPress: () => logoutApi()},
                     ],
                   );
                 }}>

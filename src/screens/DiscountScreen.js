@@ -39,7 +39,7 @@ export default function DiscountScreen({route, navigation}) {
     const response = await Request.get('discount');
     if (response) {
       setisLoading(false);
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         setdiscountData(response.data.rows);
       } else {
@@ -48,7 +48,7 @@ export default function DiscountScreen({route, navigation}) {
     }
   };
   const navigatediscountDetailPage = item => {
-    console.log('item1234', item);
+    // console.log('item1234', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -59,6 +59,30 @@ export default function DiscountScreen({route, navigation}) {
       discountobj: base64EncodedIdObject,
     });
   };
+
+  const onWishListSave = async item => {
+    const base64EncodedIdObject = Buffer.from(
+      JSON.stringify({
+        iv: item?.id?.iv,
+        encryptedData: item?.id?.encryptedData,
+      }),
+    ).toString('base64');
+    let params = {
+      category: 'Discount',
+      typeId: base64EncodedIdObject,
+    };
+    const response = await Request.post('wishlist', params);
+    if (response) {
+      setisLoading(false);
+      // console.log('responser123', response);
+      if (response.code == 200) {
+        getdiscountData();
+      } else {
+        showSimpleAlert(response.message);
+      }
+    }
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -88,6 +112,21 @@ export default function DiscountScreen({route, navigation}) {
               source={IMAGES.appLogo}
             />
           )}
+          <View style={styles.wishListView}>
+            <TouchableOpacity
+              onPress={() => {
+                onWishListSave(item);
+              }}
+              style={styles.savedImage}>
+              <Image
+                source={
+                  item?.isWishlist == true ? IMAGES.unsaved : IMAGES.saved
+                }
+                resizeMode="contain"
+                style={{}}
+              />
+            </TouchableOpacity>
+          </View>
           <View style={styles.profileView}>
             <View style={styles.profileImage}>
               {item.company.profile_image ? (
@@ -125,7 +164,7 @@ export default function DiscountScreen({route, navigation}) {
         const response = await Request.get(`discount?search=${searchText}`);
         if (response) {
           setisLoading(false);
-          console.log('responser123', response);
+          // console.log('responser123', response);
           if (response.code == 200) {
             setdiscountData(response.data.rows);
           } else {
@@ -175,14 +214,14 @@ export default function DiscountScreen({route, navigation}) {
             onPress={() => {
               Alert.alert(
                 CONSTANTS.AppName,
-                'Are you sure you want to logout',
+                '¿Estás seguro de que quieres cerrar sesión?',
                 [
                   {
-                    text: 'Cancel',
+                    text: 'Cancelar',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                   },
-                  {text: 'OK', onPress: () => logoutApi()},
+                  {text: 'DE ACUERDO', onPress: () => logoutApi()},
                 ],
               );
             }}>
@@ -242,6 +281,18 @@ const styles = StyleSheet.create({
     width: scale(145),
     marginLeft: scale(15),
     marginHorizontal: scale(10),
+  },
+  wishListView: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    marginTop: '10%',
+  },
+  savedImage: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    borderRadius: scale(20),
+    margin: scale(10),
+    right: scale(5),
   },
   profileImage: {
     height: scale(40),

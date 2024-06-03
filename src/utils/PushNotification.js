@@ -3,23 +3,23 @@
 //    Text,
 //    useState, useEffect, messaging, showMessage, NavigationService
 
-import { AppState, Platform } from "react-native";
-import messaging from "@react-native-firebase/messaging";
-import StorageService from "./StorageService";
-import NavigationService from "./NavigationService";
-import { COLORS } from "../common";
-import { useEffect } from "react";
-import Request from "../api/Request";
+import {AppState, Platform} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import StorageService from './StorageService';
+import NavigationService from './NavigationService';
+import {COLORS} from '../common';
+import {useEffect} from 'react';
+import Request from '../api/Request';
 
 // } from '../utils/importLibrary'
-export default function PushNotification({ route, navigation }) {
+export default function PushNotification({route, navigation}) {
   let appState = AppState.currentState;
   useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange);
+    AppState.addEventListener('change', _handleAppStateChange);
     checkPermission();
 
     /** token refresh in firebase notification */
-    messaging().onTokenRefresh(async (fcmToken) => {
+    messaging().onTokenRefresh(async fcmToken => {
       const deviceToken = await Request.getDeviceToken();
       if (deviceToken !== fcmToken) {
         setFCMToken(fcmToken);
@@ -27,12 +27,12 @@ export default function PushNotification({ route, navigation }) {
     });
 
     // forground ( when app open ) in firebase notification
-    messaging().onMessage(async (remoteMessage) => {
-      console.log("remotemessage", remoteMessage);
-      if (appState == "active") {
+    messaging().onMessage(async remoteMessage => {
+      // console.log("remotemessage", remoteMessage);
+      if (appState == 'active') {
         showMessage(
           {
-            type: "default",
+            type: 'default',
             // description: remoteMessage.notification.body,
             message: remoteMessage.notification.title,
             color: remoteMessage.notification.body,
@@ -48,33 +48,33 @@ export default function PushNotification({ route, navigation }) {
               marginHorizontal: 10,
             },
             onPress: () => handleNotificationRedirection(remoteMessage.data),
-            type: "success",
-            icon: "appIcon",
+            type: 'success',
+            icon: 'appIcon',
             backgroundColor:
-              Platform.OS === "android"
+              Platform.OS === 'android'
                 ? remoteMessage.notification.android.imageUrl
                 : remoteMessage.data.fcm_options.image,
           },
-          () => {}
+          () => {},
         );
-        console.log("remoteMessageremoteMessage", remoteMessage);
+        // console.log('remoteMessageremoteMessage', remoteMessage);
       }
     });
 
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
-    messaging().onNotificationOpenedApp((remoteMessage) => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
       handleNotificationRedirection(remoteMessage.data);
     });
 
     // executes when application is in background state.
-    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
       handleNotificationRedirection(remoteMessage);
     });
 
     //If your app is closed
     const remoteInitialNotification = messaging()
       .getInitialNotification()
-      .then((notificationOpen) => {
+      .then(notificationOpen => {
         if (notificationOpen) {
           handleNotificationRedirection(notificationOpen.data, true);
         }
@@ -102,15 +102,15 @@ export default function PushNotification({ route, navigation }) {
 
   /**check config for iOS platform */
   const checkForIOS = async () => {
-    if (Platform.OS == "ios") {
+    if (Platform.OS == 'ios') {
       await messaging().registerDeviceForRemoteMessages();
       await messaging().setAutoInitEnabled(true);
     }
   };
 
   /**handle app state change  */
-  const _handleAppStateChange = (nextAppState) => {
-    if (appState.match(/inactive|background/) && nextAppState === "active") {
+  const _handleAppStateChange = nextAppState => {
+    if (appState.match(/inactive|background/) && nextAppState === 'active') {
     }
     appState = nextAppState;
   };
@@ -151,11 +151,11 @@ export default function PushNotification({ route, navigation }) {
   };
 
   /**set the fcm token */
-  const setFCMToken = async (fcmToken) => {
-    console.log("token", fcmToken);
+  const setFCMToken = async fcmToken => {
+    // console.log('token', fcmToken);
     await StorageService.saveItem(
       StorageService.STORAGE_KEYS.DEVICE_TOKEN,
-      fcmToken
+      fcmToken,
     );
   };
 
@@ -171,7 +171,7 @@ export default function PushNotification({ route, navigation }) {
 
   /**remove notification all listeners */
   const removeAllNotificationListners = () => {
-    AppState.removeEventListener("change", _handleAppStateChange);
+    AppState.removeEventListener('change', _handleAppStateChange);
   };
 
   /**componet render method */

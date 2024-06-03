@@ -32,7 +32,7 @@ export default function ProfileScreen(props) {
   useEffect(() => {
     async function fetchData() {
       if (isFocused) {
-        console.log('props234', props);
+        // console.log('props234', props);
         await getProfileData();
         await getWishlistData();
         props.updateprofile(1);
@@ -53,11 +53,11 @@ export default function ProfileScreen(props) {
   const getWishlistData = async () => {
     setisLoading(true);
     const response = await Request.get('wishlist');
-    console.log('wishlistresponseresponseresponse', response);
+    // console.log('wishlistresponseresponseresponse', response);
     if (response) {
       setisLoading(false);
 
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         response.data.rows.forEach(item => {
           if (item.category === 'Supplier') {
@@ -125,7 +125,7 @@ export default function ProfileScreen(props) {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-          console.log('base64EncodedIdObject12', base64EncodedIdObject);
+          // console.log('base64EncodedIdObject12', base64EncodedIdObject);
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -181,7 +181,7 @@ export default function ProfileScreen(props) {
             NavigationService.navigate('ProfileEditScreen', {user: user});
           }}
           style={styles.profileView2}>
-          <Text style={styles.profileText}>{'Edit Profile'}</Text>
+          <Text style={styles.profileText}>{'Editar perfil'}</Text>
         </TouchableOpacity>
         <View style={styles.nameView}>
           <Text numberOfLines={1} style={styles.nameText}>
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     color: COLORS.yellow,
-    fontSize: scale(28),
+    fontSize: scale(22),
     fontWeight: 'bold',
   },
   descText: {

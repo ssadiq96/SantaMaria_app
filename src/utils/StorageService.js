@@ -21,7 +21,7 @@ export default class StorageService extends Component {
     try {
       await AsyncStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
-      console.log('saving error', e);
+      console.error('saving error', e);
     }
   };
 
@@ -33,7 +33,7 @@ export default class StorageService extends Component {
         return await JSON.parse(value);
       }
     } catch (e) {
-      console.log(' error reading value', e);
+      console.error(' error reading value', e);
     }
   };
 
@@ -42,7 +42,7 @@ export default class StorageService extends Component {
     try {
       await AsyncStorage.removeItem(key);
     } catch (e) {
-      console.log(`error while removing ${key}`, e);
+      console.error(`error while removing ${key}`, e);
     }
   };
 }

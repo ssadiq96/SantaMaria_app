@@ -42,12 +42,12 @@ export default function SignUpScreen({route, navigation}) {
       const selectedImage = await ImagePicker.openPicker({
         mediaType: 'photo',
       });
-      console.log('selectedImage', selectedImage);
+      // console.log('selectedImage', selectedImage);
       setImage(selectedImage.path);
       setimgObj(selectedImage);
       refRBSheet.current.close();
     } catch (error) {
-      console.log('Image selection error:', error);
+      console.error('Image selection error:', error);
     }
   };
 
@@ -62,14 +62,14 @@ export default function SignUpScreen({route, navigation}) {
       setimgObj(takenImage);
       refRBSheet.current.close();
     } catch (error) {
-      console.log('Photo taking error:', error);
+      console.error('Photo taking error:', error);
     }
   };
   const signup = async () => {
-    console.log('image', image);
+    // console.log('image', image);
     const dateofbirth =
       date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
-    console.log('dateofbirth', dateofbirth);
+    // console.log('dateofbirth', dateofbirth);
     const ConfirmValid = validationofField();
     if (ConfirmValid) {
       // let params = {
@@ -96,7 +96,7 @@ export default function SignUpScreen({route, navigation}) {
 
       formData.append('dob', dateofbirth);
       setisLoading(true);
-      console.log('formdara', formData);
+      // console.log('formdara', formData);
       const response = await Request.post('register', formData);
       setisLoading(false);
 
@@ -113,25 +113,25 @@ export default function SignUpScreen({route, navigation}) {
   };
   const validationofField = () => {
     if (!image) {
-      showSimpleAlert('Please upload image');
+      showSimpleAlert('Por favor sube imagen');
     } else if (name == '') {
-      showSimpleAlert('Please enter name');
+      showSimpleAlert('Por favor ingrese el nombre');
     } else if (email == '') {
-      showSimpleAlert('Please enter email');
+      showSimpleAlert('Por favor ingrese el correo electrónico');
     } else if (!isValidEmail(email)) {
-      showSimpleAlert('Please enter valid email');
+      showSimpleAlert('Por favor introduzca un correo electrónico válido');
     } else if (bio == '') {
-      showSimpleAlert('Please enter bio');
+      showSimpleAlert('Por favor ingresa a la biografía');
     } else if (!password) {
-      showSimpleAlert('Please enter password');
+      showSimpleAlert('Por favor, ingrese contraseña');
     } else if (!confirmpassword) {
-      showSimpleAlert('Please enter confirm password');
+      showSimpleAlert('Por favor ingrese confirmar contraseña');
     } else if (confirmpassword != password) {
-      showSimpleAlert('Password and Confirm Password should be same');
+      showSimpleAlert('Contraseña y Confirmar contraseña deben ser iguales');
     } else if (selectedDate == '') {
-      showSimpleAlert('Please select date of birth');
+      showSimpleAlert('Por favor seleccione fecha de nacimiento');
     } else if (location == '') {
-      showSimpleAlert('Please enter location');
+      showSimpleAlert('Por favor ingresa la ubicación');
     } else {
       return true;
     }
@@ -226,7 +226,7 @@ export default function SignUpScreen({route, navigation}) {
                       (date.getMonth() + 1) +
                       '-' +
                       date.getFullYear()
-                    : 'Select DOB'}
+                    : 'Seleccione fecha de nacimiento'}
                 </Text>
               </View>
             </View>
@@ -273,23 +273,23 @@ export default function SignUpScreen({route, navigation}) {
               },
             }}>
             <View style={{alignItems: 'center', height: '70%'}}>
-              <Text style={styles.selectImageText}>Select an Image</Text>
+              <Text style={styles.selectImageText}>Seleccione una imagen</Text>
               <CustomButton
                 flag={0}
                 style={{marginVertical: scale(10)}}
-                title="Choose from Library"
+                title="Elige de la biblioteca"
                 onPress={selectImageFromLibrary}
               />
               <CustomButton
                 style={{marginVertical: scale(10)}}
                 flag={0}
-                title="Take Photo"
+                title="Tomar foto"
                 onPress={takePhoto}
               />
               <CustomButton
                 flag={0}
                 style={{marginVertical: scale(10)}}
-                title="Cancel"
+                title="Cancelar"
                 onPress={() => refRBSheet.current.close()}
               />
             </View>

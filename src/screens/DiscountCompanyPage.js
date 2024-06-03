@@ -37,16 +37,16 @@ function DiscountCompanyPage({route, navigation}) {
   const getdiscountcoverData = async data => {
     setisLoading(true);
 
-    console.log('discountAray', data);
+    // console.log('discountAray', data);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: data?.company?.id?.iv,
         encryptedData: data?.company?.id?.encryptedData,
       }),
     ).toString('base64');
-    console.log('base64EncodedIdObject', base64EncodedIdObject);
+    // console.log('base64EncodedIdObject', base64EncodedIdObject);
     const response = await Request.get(`company/${base64EncodedIdObject}`);
-    console.log('responseresponse', response);
+    // console.log('responseresponse', response);
     if (response) {
       setisLoading(false);
       if (response.code == 200) {
@@ -62,10 +62,10 @@ function DiscountCompanyPage({route, navigation}) {
     const encodedString = route?.params?.discountobj;
 
     const response = await Request.get(`discount/${encodedString}`);
-    console.log('responseresponse', response);
+    // console.log('responseresponse', response);
     if (response) {
       setisLoading(false);
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         await getdiscountcoverData(response.data);
       } else {
@@ -75,7 +75,7 @@ function DiscountCompanyPage({route, navigation}) {
   };
 
   const applysave = async item => {
-    console.log('itemitem', item);
+    // console.log('itemitem', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -89,7 +89,7 @@ function DiscountCompanyPage({route, navigation}) {
     const response = await Request.post('wishlist', params);
     if (response) {
       setisLoading(false);
-      console.log('responser123', response);
+      // console.log('responser123', response);
       if (response.code == 200) {
         getdiscountDetails();
       } else {
@@ -99,7 +99,7 @@ function DiscountCompanyPage({route, navigation}) {
   };
 
   const renderItem = ({item, index}) => {
-    console.log('iteemm', item);
+    // console.log('iteemm', item);
     return (
       <View style={styles.renderView}>
         <Image
@@ -176,57 +176,62 @@ function DiscountCompanyPage({route, navigation}) {
                     />
                   </TouchableOpacity>
                 </View>
-                <View>
-                  <TouchableOpacity
-                    style={[styles.phoneView]}
-                    onPress={() => {
-                      let phoneNumberFormatted = `tel:${disacountCoverData?.contact_no}`;
-                      Linking.openURL(phoneNumberFormatted).catch(err =>
-                        console.error('Error opening dialer', err),
-                      );
+                <View style={{marginRight: scale(25)}}>
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      alignContent: 'center',
                     }}>
-                    <Image
-                      style={{
-                        height: scale(20),
-                        width: scale(20),
-                        resizeMode: 'contain',
+                    <TouchableOpacity
+                      style={[styles.phoneView]}
+                      onPress={() => {
+                        let phoneNumberFormatted = `tel:${disacountCoverData?.contact_no}`;
+                        Linking.openURL(phoneNumberFormatted).catch(err =>
+                          console.error('Error opening dialer', err),
+                        );
+                      }}>
+                      <Image
+                        style={{
+                          height: scale(20),
+                          width: scale(20),
+                          resizeMode: 'contain',
+                        }}
+                        source={IMAGES.phone}
+                      />
+                      <Text style={styles.phoneText}>
+                        {disacountCoverData?.contact_no}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        Linking.openURL(disacountCoverData?.instagram_url);
                       }}
-                      source={IMAGES.phone}
-                    />
-                    <Text style={styles.phoneText}>
-                      {disacountCoverData?.contact_no}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      Linking.openURL(disacountCoverData?.instagram_url);
-                    }}
-                    style={[
-                      {
-                        backgroundColor: COLORS.yellow,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        // padding: scale(5),
-                        borderRadius: scale(20),
-                        marginRight: scale(20),
-                      },
-                    ]}>
-                    <Image
-                      style={{
-                        height: scale(15),
-                        width: scale(15),
-                        resizeMode: 'contain',
-                        tintColor: COLORS.white,
-                        alignSelf: 'center',
-                      }}
-                      source={IMAGES.instagram}
-                    />
-                    <Text style={styles.phoneText}>{'Instagram'}</Text>
-                    {/* <Text style={styles.phoneText}>
-                      {disacountCoverData?.instagram_url}
-                    </Text> */}
-                  </TouchableOpacity>
+                      style={[
+                        {
+                          backgroundColor: COLORS.yellow,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          // padding: scale(5),
+                          borderRadius: scale(20),
+                          marginRight: scale(10),
+                          paddingHorizontal: scale(10),
+                        },
+                      ]}>
+                      <Image
+                        style={{
+                          height: scale(15),
+                          width: scale(15),
+                          resizeMode: 'contain',
+                          tintColor: COLORS.white,
+                          alignSelf: 'center',
+                        }}
+                        source={IMAGES.instagram}
+                      />
+                      <Text style={styles.phoneText}>{'Instagram'}</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
               <View style={styles.subView}>
@@ -248,7 +253,7 @@ function DiscountCompanyPage({route, navigation}) {
                       Linking.openURL(disacountCoverData?.location);
                     }}
                     style={styles.directionView}>
-                    <Text style={styles.directionText}>{'Direction'}</Text>
+                    <Text style={styles.directionText}>{'Dirección'}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.nameView}>
@@ -273,6 +278,7 @@ function DiscountCompanyPage({route, navigation}) {
             <FlatList
               data={discountArray}
               renderItem={renderItem}
+              keyExtractor={(item, index) => index}
               style={{marginVertical: scale(20)}}
             />
           </ScrollView>
@@ -312,12 +318,12 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: scale(14),
     paddingVertical: scale(5),
-    paddingHorizontal: scale(8),
+    paddingRight: scale(8),
     fontFamily: FONTS.GothamLight,
   },
   titleText: {
     color: COLORS.white,
-    fontSize: scale(24),
+    fontSize: scale(20),
     // width: scale(180),
     fontFamily: FONTS.GotamBold,
   },
@@ -339,6 +345,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'flex-end',
     marginLeft: scale(140),
+    marginHorizontal: scale(15),
     // alignItems: 'center',
   },
   directionText: {
@@ -439,7 +446,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     // width: scale(140),
-    marginHorizontal: scale(10),
+    marginRight: scale(8),
   },
   nameView: {
     flexDirection: 'row',
