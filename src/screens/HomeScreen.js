@@ -171,7 +171,6 @@ export default function HomeScreen(props) {
     }
   };
   const renderItem = ({item, index}) => {
-    console.log(JSON.stringify(item, null, 2));
     return (
       <TouchableOpacity
         onPress={() => {
