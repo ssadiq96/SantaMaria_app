@@ -52,7 +52,7 @@ export default function EmergencyContact({navigation}) {
       // console.log('emergencyResponse', emergencyResponse);
       let rowData = [];
       const emergencydata = emergencyResponse.data.rows.map(item => {
-        if (item.name === 'Emergency Contact') {
+        if (item.type === 'EmergencyContact') {
           rowData.push(item);
         }
       });

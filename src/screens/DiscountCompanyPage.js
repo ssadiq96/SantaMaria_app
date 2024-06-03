@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     marginHorizontal: scale(20),
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    marginTop: verticalScale(50),
+    marginTop: verticalScale(62),
   },
   backView: {
     alignSelf: 'flex-start',
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: COLORS.white,
-    fontSize: scale(20),
+    fontSize: scale(18),
     // width: scale(180),
     fontFamily: FONTS.GotamBold,
   },
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
   },
   descText: {
     color: COLORS.white,
-    fontSize: scale(14),
+    fontSize: scale(12),
     fontFamily: FONTS.GothamLight,
     paddingTop: scale(10),
   },
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(20),
     justifyContent: 'center',
     alignSelf: 'flex-end',
-    marginLeft: scale(140),
+    marginLeft: scale(130),
     marginHorizontal: scale(15),
     // alignItems: 'center',
   },

@@ -112,12 +112,12 @@ export default function DiscountScreen({route, navigation}) {
               source={IMAGES.appLogo}
             />
           )}
-          <View style={styles.wishListView}>
-            <TouchableOpacity
-              onPress={() => {
-                onWishListSave(item);
-              }}
-              style={styles.savedImage}>
+          <TouchableOpacity
+            onPress={() => {
+              onWishListSave(item);
+            }}
+            style={styles.wishListView}>
+            <View style={styles.savedImage}>
               <Image
                 source={
                   item?.isWishlist == true ? IMAGES.unsaved : IMAGES.saved
@@ -125,8 +125,8 @@ export default function DiscountScreen({route, navigation}) {
                 resizeMode="contain"
                 style={{}}
               />
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
           <View style={styles.profileView}>
             <View style={styles.profileImage}>
               {item.company.profile_image ? (
@@ -285,13 +285,16 @@ const styles = StyleSheet.create({
   wishListView: {
     position: 'absolute',
     alignSelf: 'flex-end',
-    marginTop: '10%',
+    paddingTop: '10%',
+    width: scale(50),
+    height: scale(50),
   },
   savedImage: {
     position: 'absolute',
     alignSelf: 'flex-end',
-    borderRadius: scale(20),
-    margin: scale(10),
+    borderRadius: scale(10),
+    marginVertical: scale(15),
+    marginHorizontal: scale(10),
     right: scale(5),
   },
   profileImage: {
