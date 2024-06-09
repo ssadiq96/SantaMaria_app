@@ -1,26 +1,25 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import {FONTS, IMAGES} from '../assets';
-import {COLORS, CONSTANTS} from '../common';
-import {moderateScale, scale} from '../common/Scale';
-import {wp} from '../utils/constants';
-import NavigationService from '../utils/NavigationService';
-import Request from '../api/Request';
-import {ActivityLoader} from '../components/ActivityLoader';
-import {showSimpleAlert} from '../utils/CommonUtils';
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import {Rating} from '@kolking/react-native-rating';
 import {Buffer} from 'buffer';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import CustomSkeleton, {SupplierSkeleton} from '../common/CustomSkeleton';
+import React, {useEffect, useMemo, useState} from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Request from '../api/Request';
+import {FONTS, IMAGES} from '../assets';
+import {COLORS, CONSTANTS} from '../common';
+import {SupplierSkeleton} from '../common/CustomSkeleton';
+import {moderateScale, scale} from '../common/Scale';
+import {showSimpleAlert} from '../utils/CommonUtils';
+import NavigationService from '../utils/NavigationService';
 import {clearAllData} from '../utils/StorageService';
 
 export default function SupplierScreen() {
@@ -146,12 +145,12 @@ export default function SupplierScreen() {
         <View style={styles.mainContainer}>
           <View style={styles.subContainer}>
             <Image source={IMAGES.supplier} style={styles.imageView} />
-            <Text style={styles.headerText}>Proveedoras</Text>
+            <Text style={styles.headerText}>Proveedores</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => {
-                NavigationService.navigate('EmergencyContact');
+                // NavigationService.navigate('EmergencyContact');
               }}>
               <View style={styles.subContainer}>
                 <Image source={IMAGES.notification} tintColor={COLORS.black} />
@@ -186,7 +185,7 @@ export default function SupplierScreen() {
           <Image source={IMAGES.searchIcon} style={styles.searchIconView} />
           <TextInput
             value={searchValue}
-            placeholder="Buscar todos los proveedores"
+            placeholder="Buscar en proveedores"
             placeholderTextColor={COLORS.textColor}
             onChangeText={handleSearchChange}
             style={styles.textInput}
@@ -216,8 +215,9 @@ export default function SupplierScreen() {
               showsVerticalScrollIndicator={false}
               renderItem={renderItem}
               keyExtractor={(item, index) => `${index}`}
-              style={{marginBottom: scale(100), marginTop: scale(10)}}
+              style={{marginBottom: scale(10), marginTop: scale(10)}}
               contentContainerStyle={{flexGrow: 1}}
+              // eslint-disable-next-line react/no-unstable-nested-components
               ListEmptyComponent={() => {
                 return (
                   <View style={{flex: 1, justifyContent: 'center'}}>
@@ -326,6 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
     marginHorizontal: scale(20),
+    marginBottom: scale(90),
     borderRadius: scale(20),
   },
   nodatadount: {

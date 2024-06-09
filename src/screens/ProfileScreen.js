@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -25,7 +27,7 @@ export default function ProfileScreen(props) {
 
   const [bannerData, setbannerData] = useState([]);
   const [supplierData, setsupplierData] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [, setisLoading] = useState(false);
   const [user, setuserData] = useState([]);
   const supplierArray = [];
   const discountArray = [];
@@ -40,6 +42,7 @@ export default function ProfileScreen(props) {
     }
     // Call the async function
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
   const getProfileData = async () => {
     const response = await Request.get('user');
@@ -259,6 +262,8 @@ export default function ProfileScreen(props) {
             horizontal
             scrollEnabled={true}
             showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => index}
+            // eslint-disable-next-line react/no-unstable-nested-components
             ListEmptyComponent={() => {
               return (
                 <View
@@ -292,6 +297,8 @@ export default function ProfileScreen(props) {
             renderItem={supplierDatarenderItem}
             showsHorizontalScrollIndicator={false}
             style={{flexDirection: 'row'}}
+            keyExtractor={(item, index) => index}
+            // eslint-disable-next-line react/no-unstable-nested-components
             ListEmptyComponent={() => {
               return (
                 <View
@@ -410,7 +417,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
     alignItems: 'center',
     bottom: scale(70),
   },
@@ -460,7 +466,6 @@ const styles = StyleSheet.create({
   textStyleDesc: {
     alignSelf: 'center',
     color: COLORS.textColor,
-    paddingVertical: scale(3),
     textAlign: 'center',
     fontSize: scale(10),
     fontWeight: '400',

@@ -1,25 +1,24 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+import {Buffer} from 'buffer';
 import React, {useEffect, useMemo, useState} from 'react';
 import {
-  View,
-  Text,
+  Alert,
+  FlatList,
   Image,
   StyleSheet,
+  Text,
   TextInput,
-  FlatList,
   TouchableOpacity,
-  ScrollView,
-  Alert,
+  View,
 } from 'react-native';
-import {FONTS, IMAGES} from '../assets';
-import {COLORS} from '../common';
-import {moderateScale, scale} from '../common/Scale';
-import {wp} from '../utils/constants';
-import NavigationService from '../utils/NavigationService';
-import {ActivityLoader} from '../components/ActivityLoader';
 import Request from '../api/Request';
-import {showSimpleAlert} from '../utils/CommonUtils';
-import {Buffer} from 'buffer';
+import {FONTS, IMAGES} from '../assets';
+import {COLORS, CONSTANTS} from '../common';
 import {DiscountSkeleton} from '../common/CustomSkeleton';
+import {moderateScale, scale} from '../common/Scale';
+import {showSimpleAlert} from '../utils/CommonUtils';
+import NavigationService from '../utils/NavigationService';
 import {clearAllData} from '../utils/StorageService';
 
 export default function DiscountScreen({route, navigation}) {
@@ -204,7 +203,7 @@ export default function DiscountScreen({route, navigation}) {
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate('EmergencyContact');
+              // NavigationService.navigate('EmergencyContact');
             }}>
             <View style={styles.subContainer}>
               <Image source={IMAGES.notification} tintColor={COLORS.black} />
@@ -249,7 +248,7 @@ export default function DiscountScreen({route, navigation}) {
       {isLoading ? (
         <DiscountSkeleton />
       ) : (
-        <ScrollView style={{marginBottom: scale(20)}}>
+        <View style={{marginBottom: scale(20)}}>
           <FlatList
             data={discountData}
             showsVerticalScrollIndicator={false}
@@ -258,7 +257,7 @@ export default function DiscountScreen({route, navigation}) {
             style={{marginBottom: scale(80)}}
             numColumns={2}
           />
-        </ScrollView>
+        </View>
       )}
       {/* <ActivityLoader loading={isLoading} /> */}
     </View>

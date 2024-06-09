@@ -1,27 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react';
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+import moment from 'moment';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
+  Alert,
   FlatList,
   ImageBackground,
-  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import {Image} from 'react-native-animatable';
-import {FONTS, IMAGES} from '../assets';
-import {moderateScale, scale} from '../common/Scale';
-import {COLORS, CONSTANTS} from '../common';
-import {hp, wp} from '../utils/constants';
 import Request from '../api/Request';
-import {showSimpleAlert} from '../utils/CommonUtils';
-import {ActivityLoader} from '../components/ActivityLoader';
-import moment from 'moment';
-import StorageService, {clearAllData} from '../utils/StorageService';
-import NavigationService from '../utils/NavigationService';
+import {FONTS, IMAGES} from '../assets';
+import {COLORS, CONSTANTS} from '../common';
 import {EventSkeleton} from '../common/CustomSkeleton';
-import {WebView} from 'react-native-webview';
-import CustomIndicator from '../components/CustomIndicator';
+import {moderateScale, scale} from '../common/Scale';
+import {showSimpleAlert} from '../utils/CommonUtils';
+import NavigationService from '../utils/NavigationService';
+import StorageService, {clearAllData} from '../utils/StorageService';
+import {hp, wp} from '../utils/constants';
 
 export default function NewEventScreen(Props) {
   const [eventselected, seteventselected] = useState(true);
@@ -29,8 +28,6 @@ export default function NewEventScreen(Props) {
   const [user, setuserData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const [eventbanner, seteventbanner] = useState([]);
-  const flatListRef = useRef(null); // Ref for the FlatList
-  const scrollX = useRef(new Animated.Value(0)).current; // Animated value to track scroll position
 
   useEffect(() => {
     async function fetchData3() {
@@ -67,7 +64,7 @@ export default function NewEventScreen(Props) {
       <TouchableOpacity
         style={{margin: scale(10)}}
         onPress={() => {
-          Props.props.navigation.navigate('EventDetail', {newsevent: item});
+          NavigationService.navigate('EventDetail', {newsevent: item});
         }}>
         {item.image ? (
           <Image style={styles.imageView} source={{uri: item.image}} />
@@ -133,7 +130,7 @@ export default function NewEventScreen(Props) {
     return (
       <TouchableOpacity
         onPress={() => {
-          Props.props.navigation.navigate('EventDetail', {newsevent: item});
+          NavigationService.navigate('EventDetail', {newsevent: item});
         }}>
         <View style={styles.renderItem2}>
           <ImageBackground
@@ -163,13 +160,13 @@ export default function NewEventScreen(Props) {
               style={styles.profileEditImage}
             />
             <Text style={styles.headerText}>
-              {'Buen día'} {user?.firstName}
+              {/* {'Buen día'} {user?.firstName} */}
             </Text>
           </View>
 
           <TouchableOpacity
             onPress={() => {
-              NavigationService.navigate('EmergencyContact');
+              // NavigationService.navigate('EmergencyContact');
             }}>
             <Image source={IMAGES.notification} tintColor={COLORS.white} />
           </TouchableOpacity>
@@ -199,6 +196,7 @@ export default function NewEventScreen(Props) {
             data={eventbanner}
             renderItem={eventbannerRenderItem}
             horizontal
+            keyExtractor={(item, index) => index}
             showsHorizontalScrollIndicator={false}
           />
         </View>
@@ -252,6 +250,7 @@ export default function NewEventScreen(Props) {
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             style={styles.flatlistView}
+            // eslint-disable-next-line react/no-unstable-nested-components
             ListEmptyComponent={() => {
               return (
                 <View

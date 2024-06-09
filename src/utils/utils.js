@@ -1,6 +1,6 @@
-import { Component } from "react";
-import { Dimensions, Platform, Animated, Easing, Share } from "react-native";
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import {Component} from 'react';
+import {Dimensions, Platform, Animated, Easing, Share} from 'react-native';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 export default class Util extends Component {
   static isScrollToBottom = ({
@@ -20,12 +20,12 @@ export default class Util extends Component {
       enableVibrateFallback: true,
       ignoreAndroidSystemSettings: true,
     };
-    Platform.OS === "ios"
-      ? ReactNativeHapticFeedback.trigger("impactHeavy", options)
-      : ReactNativeHapticFeedback.trigger("impactLight", options);
+    Platform.OS === 'ios'
+      ? ReactNativeHapticFeedback.trigger('impactHeavy', options)
+      : ReactNativeHapticFeedback.trigger('impactLight', options);
   };
 
-  static onAgeCalculation = (selectedDate) => {
+  static onAgeCalculation = selectedDate => {
     var today = new Date();
     var birthDate = new Date(selectedDate);
     var ageNow = today.getFullYear() - birthDate.getFullYear();
@@ -36,7 +36,7 @@ export default class Util extends Component {
     return ageNow;
   };
   static slideAnimation = (moveAnimation, xValue, axis, type, callBack) => {
-    axis === "track"
+    axis === 'track'
       ? Animated.spring(moveAnimation, {
           toValue: xValue,
           duration: 300,
@@ -47,11 +47,11 @@ export default class Util extends Component {
       : Animated.timing(moveAnimation, {
           toValue: xValue,
           duration:
-            type === "toolBar"
+            type === 'toolBar'
               ? 250
-              : axis === "newTabs"
+              : axis === 'newTabs'
               ? 350
-              : type === "hideOption"
+              : type === 'hideOption'
               ? 500
               : 300,
           useNativeDriver: true,
@@ -77,11 +77,11 @@ export default class Util extends Component {
     }
   };
   static slideLeftAnim = (moveAnimation, xValue, axis, type, callBack) => {
-    axis === "track"
+    axis === 'track'
       ? Animated.spring(moveAnimation, {
           toValue: {
-            x: axis !== "y" ? xValue : 0,
-            y: axis === "y" ? xValue : 0,
+            x: axis !== 'y' ? xValue : 0,
+            y: axis === 'y' ? xValue : 0,
           },
           duration: 300,
           friction: 7,
@@ -89,43 +89,43 @@ export default class Util extends Component {
         }).start(() => callBack !== undefined && callBack())
       : Animated.timing(moveAnimation, {
           toValue: {
-            x: axis !== "y" ? xValue : 0,
-            y: axis === "y" ? xValue : 0,
+            x: axis !== 'y' ? xValue : 0,
+            y: axis === 'y' ? xValue : 0,
           },
           duration:
-            type === "toolBar"
+            type === 'toolBar'
               ? 250
-              : axis === "newTabs"
+              : axis === 'newTabs'
               ? 350
-              : type === "hideOption"
+              : type === 'hideOption'
               ? 500
               : 300,
         }).start(() => callBack !== undefined && callBack());
   };
   static slideRightAnim = (moveAnimation, xValue, axis, type, callBack) => {
-    const directionMultiplier = axis === "x" ? 1 : -1; // Adjust direction based on the axis
+    const directionMultiplier = axis === 'x' ? 1 : -1; // Adjust direction based on the axis
 
     Animated.timing(moveAnimation, {
       toValue: {
-        x: axis === "x" ? -xValue * 1 : 0, // Negate xValue to move to the right
-        y: axis === "y" ? -xValue * 1 : 0, // Negate xValue to move upward
+        x: axis === 'x' ? -xValue * 1 : 0, // Negate xValue to move to the right
+        y: axis === 'y' ? -xValue * 1 : 0, // Negate xValue to move upward
       },
       duration:
-        type === "toolBar"
+        type === 'toolBar'
           ? 250
-          : axis === "newTabs"
+          : axis === 'newTabs'
           ? 350
-          : type === "hideOption"
+          : type === 'hideOption'
           ? 500
           : 300,
     }).start(() => callBack !== undefined && callBack());
   };
   static slideLeftAnim2 = (moveAnimation, xValue, axis, type, callBack) => {
-    axis === "track"
+    axis === 'track'
       ? Animated.spring(moveAnimation, {
           toValue: {
-            x: axis !== "y" ? xValue : 0,
-            y: axis === "y" ? xValue : 0,
+            x: axis !== 'y' ? xValue : 0,
+            y: axis === 'y' ? xValue : 0,
           },
           duration: 300,
           friction: 7,
@@ -133,15 +133,15 @@ export default class Util extends Component {
         }).start(() => callBack !== undefined && callBack())
       : Animated.timing(moveAnimation, {
           toValue: {
-            x: axis !== "y" ? xValue : 0,
-            y: axis === "y" ? xValue : 0,
+            x: axis !== 'y' ? xValue : 0,
+            y: axis === 'y' ? xValue : 0,
           },
           duration:
-            type === "toolBar"
+            type === 'toolBar'
               ? 250
-              : axis === "newTabs"
+              : axis === 'newTabs'
               ? 350
-              : type === "hideOption"
+              : type === 'hideOption'
               ? 500
               : 300,
         }).start(() => callBack !== undefined && callBack());

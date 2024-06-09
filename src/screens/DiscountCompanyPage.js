@@ -1,25 +1,24 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+import {Buffer} from 'buffer';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
   Linking,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import globalStyles from '../res/globalStyles';
-import {FlashList} from '@shopify/flash-list';
-import {FONTS, IMAGES} from '../assets';
-import {scale, verticalScale} from '../common/Scale';
-import {COLORS, CONSTANTS} from '../common';
 import Request from '../api/Request';
-import {ActivityLoader} from '../components/ActivityLoader';
-import {showSimpleAlert} from '../utils/CommonUtils';
-import moment from 'moment';
-import {Buffer} from 'buffer';
+import {FONTS, IMAGES} from '../assets';
+import {COLORS, CONSTANTS} from '../common';
 import {SupplierDetailSkeleton} from '../common/CustomSkeleton';
+import {scale, verticalScale} from '../common/Scale';
+import globalStyles from '../res/globalStyles';
+import {showSimpleAlert} from '../utils/CommonUtils';
 
 function DiscountCompanyPage({route, navigation}) {
   const [isLoading, setisLoading] = useState(false);
@@ -33,6 +32,7 @@ function DiscountCompanyPage({route, navigation}) {
     // Call the async function
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const getdiscountcoverData = async data => {
     setisLoading(true);
@@ -137,7 +137,7 @@ function DiscountCompanyPage({route, navigation}) {
             </View>
             <View style={styles.validDateView}>
               <Text numberOfLines={1} style={styles.validDate}>
-                Validity:
+                Validez:
                 {moment(item?.valid_till).format('DD MMM')}
               </Text>
             </View>
@@ -274,14 +274,14 @@ function DiscountCompanyPage({route, navigation}) {
               </View>
             </View>
           </View>
-          <ScrollView style={{}}>
+          <View style={{}}>
             <FlatList
               data={discountArray}
               renderItem={renderItem}
               keyExtractor={(item, index) => index}
               style={{marginVertical: scale(20)}}
             />
-          </ScrollView>
+          </View>
         </View>
       )}
     </View>

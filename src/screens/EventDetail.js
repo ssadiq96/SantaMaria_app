@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -32,6 +33,7 @@ export default function EventDetail({route, navigation}) {
     // Call the async function
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const getEventDetails = async () => {
     setisLoading(true);
@@ -137,8 +139,8 @@ export default function EventDetail({route, navigation}) {
 
           <View
             style={{
-              borderTopLeftRadius: scale(30),
-              borderTopRightRadius: scale(30),
+              // borderTopLeftRadius: scale(30),
+              // borderTopRightRadius: scale(30),
               padding: scale(20),
               flex: 1,
               backgroundColor: COLORS.white,

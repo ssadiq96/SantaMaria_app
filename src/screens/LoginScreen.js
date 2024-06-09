@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FONTS, IMAGES} from '../assets';
@@ -44,7 +46,7 @@ export default function LoginScreen({route, navigation}) {
           // navigation.reset()
           navigation.reset({
             index: 0,
-            routes: [{name: 'TabScreen'}],
+            routes: [{name: 'MainScreen'}],
           });
         }, 1000);
       } else {
@@ -156,7 +158,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontFamily: FONTS.GotamBold,
-    fontWeight: '500',
     top: scale(3),
   },
   signUpView: {

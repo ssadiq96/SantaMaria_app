@@ -5,6 +5,7 @@ import {IMAGES} from '../assets';
 import NavigationService from '../utils/NavigationService';
 import StorageService from '../utils/StorageService';
 import {scale} from '../common/Scale';
+import {StackActions} from '@react-navigation/native';
 
 export default function SplashScreen({route, navigation}) {
   /**
@@ -17,6 +18,7 @@ export default function SplashScreen({route, navigation}) {
     }
     // Call the async function
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const load = async () => {
@@ -26,7 +28,7 @@ export default function SplashScreen({route, navigation}) {
     // console.log('data', data);
     if (data) {
       setTimeout(() => {
-        navigation.navigate('TabScreen');
+        navigation.navigate('MainScreen');
       }, 1500);
     } else {
       setTimeout(() => {
