@@ -21,53 +21,45 @@ import globalStyles from '../res/globalStyles';
 import {showSimpleAlert} from '../utils/CommonUtils';
 
 function DiscountCompanyPage({route, navigation}) {
-  const [isLoading, setisLoading] = useState(false);
-  const [discountArray, setdiscountArray] = useState([]);
-  const [disacountCoverData, setdisacountCoverData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [discountArray, setDiscountArray] = useState([]);
+  const [discountCoverData, setDiscountCoverData] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      await getdiscountDetails();
+      await getDiscountDetails();
     }
-    // Call the async function
-
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const getdiscountcoverData = async data => {
-    setisLoading(true);
-
-    // console.log('discountAray', data);
+  const getDiscountCoverData = async data => {
+    setIsLoading(true);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: data?.company?.id?.iv,
         encryptedData: data?.company?.id?.encryptedData,
       }),
     ).toString('base64');
-    // console.log('base64EncodedIdObject', base64EncodedIdObject);
     const response = await Request.get(`company/${base64EncodedIdObject}`);
-    // console.log('responseresponse', response);
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
       if (response.code == 200) {
-        setdisacountCoverData(response.data);
-        setdiscountArray(response.data.discounts);
+        setDiscountCoverData(response.data);
+        setDiscountArray(response.data.discounts);
       } else {
         showSimpleAlert(response.message);
       }
     }
   };
-  const getdiscountDetails = async () => {
-    setisLoading(true);
+  const getDiscountDetails = async () => {
+    setIsLoading(true);
     const encodedString = route?.params?.discountobj;
 
     const response = await Request.get(`discount/${encodedString}`);
-    // console.log('responseresponse', response);
     if (response) {
-      setisLoading(false);
-      // console.log('responser123', response);
+      setIsLoading(false);
       if (response.code == 200) {
-        await getdiscountcoverData(response.data);
+        await getDiscountCoverData(response.data);
       } else {
         showSimpleAlert(response.message);
       }
@@ -75,7 +67,6 @@ function DiscountCompanyPage({route, navigation}) {
   };
 
   const applysave = async item => {
-    // console.log('itemitem', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -88,10 +79,9 @@ function DiscountCompanyPage({route, navigation}) {
     };
     const response = await Request.post('wishlist', params);
     if (response) {
-      setisLoading(false);
-      // console.log('responser123', response);
+      setIsLoading(false);
       if (response.code == 200) {
-        getdiscountDetails();
+        getDiscountDetails();
       } else {
         showSimpleAlert(response.message);
       }
@@ -99,7 +89,6 @@ function DiscountCompanyPage({route, navigation}) {
   };
 
   const renderItem = ({item, index}) => {
-    // console.log('iteemm', item);
     return (
       <View style={styles.renderView}>
         <Image
@@ -110,35 +99,47 @@ function DiscountCompanyPage({route, navigation}) {
         <View
           style={{
             position: 'absolute',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
           }}>
           <View style={styles.overlay2} />
-
-          <View style={{}}>
-            <TouchableOpacity
-              onPress={() => {
-                applysave(item);
-              }}
-              style={styles.savedImage}>
-              <Image
-                source={
-                  item?.isWishlist == true ? IMAGES.unsaved : IMAGES.saved
-                }
-                resizeMode="contain"
-                style={{}}
-              />
-            </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginVertical: scale(10),
+            }}>
+            <View style={{}}>
+              <View style={styles.validDateView}>
+                <Text numberOfLines={1} style={styles.validDate}>
+                  Inicio de validez: {moment().format('DD MMM')}
+                </Text>
+              </View>
+              <View style={styles.validDateView}>
+                <Text numberOfLines={1} style={styles.validDate}>
+                  Fin de validez: {moment(item?.valid_till).format('DD MMM')}
+                </Text>
+              </View>
+            </View>
+            <View style={{}}>
+              <TouchableOpacity
+                onPress={() => {
+                  applysave(item);
+                }}
+                style={styles.savedImage}>
+                <Image
+                  source={
+                    item?.isWishlist == true ? IMAGES.unsaved : IMAGES.saved
+                  }
+                  resizeMode="contain"
+                  style={{}}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.bottomView}>
             <View style={styles.titleTextView}>
               <Text numberOfLines={2} style={styles.titleText2}>
                 {item?.title}
-              </Text>
-            </View>
-            <View style={styles.validDateView}>
-              <Text numberOfLines={1} style={styles.validDate}>
-                Validez:
-                {moment(item?.valid_till).format('DD MMM')}
               </Text>
             </View>
           </View>
@@ -155,7 +156,7 @@ function DiscountCompanyPage({route, navigation}) {
           <View style={styles.coverView}>
             <Image
               style={styles.imageView}
-              source={{uri: disacountCoverData.cover_image}}
+              source={{uri: discountCoverData.cover_image}}
             />
             <View
               style={{
@@ -186,7 +187,7 @@ function DiscountCompanyPage({route, navigation}) {
                     <TouchableOpacity
                       style={[styles.phoneView]}
                       onPress={() => {
-                        let phoneNumberFormatted = `tel:${disacountCoverData?.contact_no}`;
+                        let phoneNumberFormatted = `tel:${discountCoverData?.contact_no}`;
                         Linking.openURL(phoneNumberFormatted).catch(err =>
                           console.error('Error opening dialer', err),
                         );
@@ -199,37 +200,20 @@ function DiscountCompanyPage({route, navigation}) {
                         }}
                         source={IMAGES.phone}
                       />
-                      <Text style={styles.phoneText}>
-                        {disacountCoverData?.contact_no}
+                      <Text style={styles.socialText}>
+                        {discountCoverData?.contact_no}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => {
-                        Linking.openURL(disacountCoverData?.instagram_url);
+                        Linking.openURL(discountCoverData?.instagram_url);
                       }}
-                      style={[
-                        {
-                          backgroundColor: COLORS.yellow,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          // padding: scale(5),
-                          borderRadius: scale(20),
-                          marginRight: scale(10),
-                          paddingHorizontal: scale(10),
-                        },
-                      ]}>
+                      style={[styles.socialContainer]}>
                       <Image
-                        style={{
-                          height: scale(15),
-                          width: scale(15),
-                          resizeMode: 'contain',
-                          tintColor: COLORS.white,
-                          alignSelf: 'center',
-                        }}
+                        style={styles.instagramImage}
                         source={IMAGES.instagram}
                       />
-                      <Text style={styles.phoneText}>{'Instagram'}</Text>
+                      <Text style={styles.socialText}>{'Instagram'}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -242,15 +226,15 @@ function DiscountCompanyPage({route, navigation}) {
                   }}>
                   <Image
                     source={
-                      disacountCoverData?.profile_image
-                        ? {uri: disacountCoverData?.profile_image}
+                      discountCoverData?.profile_image
+                        ? {uri: discountCoverData?.profile_image}
                         : IMAGES.appLogo
                     }
                     style={styles.profileImage}
                   />
                   <TouchableOpacity
                     onPress={() => {
-                      Linking.openURL(disacountCoverData?.location);
+                      Linking.openURL(discountCoverData?.location);
                     }}
                     style={styles.directionView}>
                     <Text style={styles.directionText}>{'Dirección'}</Text>
@@ -258,30 +242,21 @@ function DiscountCompanyPage({route, navigation}) {
                 </View>
                 <View style={styles.nameView}>
                   <Text numberOfLines={2} style={styles.titleText}>
-                    {disacountCoverData?.name}
+                    {discountCoverData?.name}
                   </Text>
-                  {/* <TouchableOpacity
-                    onPress={() => {
-                      Linking.openURL(disacountCoverData?.location);
-                    }}
-                    style={styles.directionView}>
-                    <Text style={styles.directionText}>{'Direction'}</Text>
-                  </TouchableOpacity> */}
                 </View>
                 <Text numberOfLines={2} style={styles.descText}>
-                  {disacountCoverData?.bio}
+                  {discountCoverData?.bio}
                 </Text>
               </View>
             </View>
           </View>
-          <View style={{}}>
-            <FlatList
-              data={discountArray}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index}
-              style={{marginVertical: scale(20)}}
-            />
-          </View>
+          <FlatList
+            data={discountArray}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index}
+            style={{marginVertical: scale(20)}}
+          />
         </View>
       )}
     </View>
@@ -314,23 +289,37 @@ const styles = StyleSheet.create({
     borderRadius: scale(20),
     width: '100%',
   },
-  phoneText: {
+  socialText: {
     color: COLORS.white,
     fontSize: scale(14),
     paddingVertical: scale(5),
     paddingRight: scale(8),
     fontFamily: FONTS.GothamLight,
   },
+  socialContainer: {
+    backgroundColor: COLORS.yellow,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: scale(20),
+    marginRight: scale(10),
+    paddingHorizontal: scale(10),
+  },
+  instagramImage: {
+    height: scale(15),
+    width: scale(15),
+    resizeMode: 'contain',
+    tintColor: COLORS.white,
+    alignSelf: 'center',
+  },
   titleText: {
     color: COLORS.white,
     fontSize: scale(18),
-    // width: scale(180),
     fontFamily: FONTS.GotamBold,
   },
   titleText2: {
     color: COLORS.white,
     fontSize: scale(20),
-    paddingHorizontal: scale(12),
     fontFamily: FONTS.GothamMedium,
   },
   descText: {
@@ -346,7 +335,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginLeft: scale(130),
     marginHorizontal: scale(15),
-    // alignItems: 'center',
   },
   directionText: {
     color: COLORS.white,
@@ -368,23 +356,22 @@ const styles = StyleSheet.create({
   savedImage: {
     alignSelf: 'flex-end',
     borderRadius: scale(20),
-    margin: scale(10),
+    marginHorizontal: scale(10),
     right: scale(5),
   },
   validDateView: {
     backgroundColor: COLORS.yellow,
-    // alignSelf: 'flex-end',
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
     marginHorizontal: scale(10),
-    width: scale(150),
+    width: scale(185),
+    paddingHorizontal: scale(10),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: scale(20),
+    marginBottom: scale(5),
   },
   titleTextView: {
-    alignSelf: 'center',
     textAlign: 'left',
-    width: '30%',
     alignItems: 'center',
     marginHorizontal: scale(10),
   },
@@ -393,7 +380,7 @@ const styles = StyleSheet.create({
     width: CONSTANTS.screenWidth - 40,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: scale(80),
+    marginTop: scale(40),
   },
   overlay: {
     position: 'absolute',
@@ -402,8 +389,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: verticalScale(300),
-    // borderBottomLeftRadius: scale(30),
-    // borderBottomRightRadius: scale(40),
     backgroundColor: 'rgba(0, 0, 0, 1)',
     opacity: 0.3, // Adjust opacity as needed
   },
@@ -431,21 +416,16 @@ const styles = StyleSheet.create({
   imageView: {
     height: verticalScale(300),
     width: CONSTANTS.screenWidth,
-    // borderBottomLeftRadius: scale(30),
-    // borderBottomRightRadius: scale(30),
   },
   coverView: {
     height: verticalScale(300),
     width: CONSTANTS.screenWidth,
     position: 'relative',
-    // borderBottomLeftRadius: scale(30),
-    // borderBottomRightRadius: scale(30),
   },
 
   phoneView: {
     flexDirection: 'row',
     alignItems: 'center',
-    // width: scale(140),
     marginRight: scale(8),
   },
   nameView: {

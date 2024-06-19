@@ -139,7 +139,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('discount');
     if (response) {
       setisLoading(false);
-      // console.log('responser123', response);
+
       if (response.code == 200) {
         setdiscountData(response.data.rows);
       } else {
@@ -151,7 +151,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('component');
     if (response) {
       setisLoading(false);
-      // console.log('getComponentDataresponser123', response);
+
       if (response.code == 200) {
         setarrData(response.data.rows);
       } else {
@@ -163,7 +163,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('supplier');
     if (response) {
       setisLoading(false);
-      // console.log('supplierresponser123', response);
+
       if (response.code == 200) {
         setsupplierArray(response.data.rows);
       } else {
@@ -182,7 +182,7 @@ export default function HomeScreen(props) {
           } else if (item.type == 'Discount') {
             props.ontabPress(2);
           } else {
-            NavigationService.navigate('EmergencyContact');
+            props.ontabPress(4);
           }
         }}>
         <View style={styles.renderView}>
@@ -228,7 +228,6 @@ export default function HomeScreen(props) {
     );
   };
   const navigatediscountDetailPage = item => {
-    // console.log('item1234', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -365,14 +364,13 @@ export default function HomeScreen(props) {
   };
 
   const supplierRedirection = item => {
-    // console.log('item', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
         encryptedData: item?.id?.encryptedData,
       }),
     ).toString('base64');
-    // console.log('base64EncodedIdObject12', base64EncodedIdObject);
+
     NavigationService.navigate('SupplierDetails', {
       supplierObj: base64EncodedIdObject,
     });
@@ -382,7 +380,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('newsandevent');
     if (response) {
       setisLoading(false);
-      // console.log('getnewsEventresponser123', response);
+
       if (response.code == 200) {
         setnewsData(response.data.rows);
       } else {
@@ -427,7 +425,7 @@ export default function HomeScreen(props) {
             <View style={{position: 'absolute'}}>
               <TouchableOpacity
                 onPress={() => {
-                  props.ontabPress(4);
+                  NavigationService.navigate('ProfileScreen');
                 }}>
                 <Image
                   source={user?.image ? {uri: user?.image} : IMAGES.profileEdit}

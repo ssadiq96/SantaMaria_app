@@ -23,27 +23,34 @@ import NavigationService from '../utils/NavigationService';
 import {clearAllData} from '../utils/StorageService';
 
 export default function SupplierScreen() {
-  const [searchValue, setsearchValue] = useState('');
-  const [supplierData, setsupplierData] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [supplierData, setSupplierData] = useState([]);
+  const [supplierCategory, setSupplierCategory] = useState([]);
+  const [activeSupplierCategory, setActiveSupplierCategory] = useState('all');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      setisLoading(true);
-      const response = await Request.get('supplier');
+      setIsLoading(true);
+      let response = await Request.get('supplier');
       if (response) {
-        setisLoading(false);
-        // console.log('responser123', response);
+        setIsLoading(false);
+
         if (response.code == 200) {
-          setsupplierData(response.data.rows);
+          response = response.data.rows.map((row, index) => {
+            row.testCategory = `${row.name}`;
+            return row;
+          });
+          setSupplierCategory(response.map(item => item.testCategory));
+          setSupplierData(response);
         } else {
           showSimpleAlert(response.message);
         }
       }
     }
-    // Call the async function
     fetchData();
   }, []);
+
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -54,7 +61,7 @@ export default function SupplierScreen() {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-          // console.log('base64EncodedIdObject12', base64EncodedIdObject);
+
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -101,16 +108,22 @@ export default function SupplierScreen() {
       </TouchableOpacity>
     );
   };
+
   const searchData = useMemo(() => {
     return async searchText => {
       try {
-        setisLoading(true);
-        const response = await Request.get(`supplier?name=${searchText}`);
+        setIsLoading(true);
+        let response = await Request.get(`supplier?name=${searchText}`);
         if (response) {
-          setisLoading(false);
-          // console.log('responser123', response);
+          setIsLoading(false);
+
           if (response.code == 200) {
-            setsupplierData(response.data.rows);
+            response = response.data.rows.map((row, index) => {
+              row.testCategory = index;
+              return row;
+            });
+            setSupplierCategory(response.map(item => item.testCategory));
+            setSupplierData(response.data.rows);
           } else {
             showSimpleAlert(response.message);
           }
@@ -123,15 +136,15 @@ export default function SupplierScreen() {
   }, []); // Empty dependency array means this memoized function won't change
 
   const handleSearchChange = text => {
-    setsearchValue(text);
+    setSearchValue(text);
     searchData(text); // Call the memoized API function when search text changes
   };
   const logoutApi = async () => {
     // NavigationService.navigate('LoginScreen');
-    setisLoading(true);
+    setIsLoading(true);
     const response = await Request.get('logout');
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
       if (response.code == 200) {
         clearAllData(() => {
           NavigationService.navigate('LoginScreen');
@@ -139,6 +152,71 @@ export default function SupplierScreen() {
       }
     }
   };
+
+  const categoryListHeaderComponent = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setActiveSupplierCategory('all');
+        }}>
+        <View
+          style={[
+            styles.categoryView,
+            activeSupplierCategory === 'all'
+              ? {}
+              : {
+                  backgroundColor: COLORS.transparent,
+                },
+          ]}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.category,
+              activeSupplierCategory === 'all'
+                ? {}
+                : {
+                    color: COLORS.yellow,
+                  },
+            ]}>
+            All
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderCategoryList = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setActiveSupplierCategory(item);
+        }}>
+        <View
+          style={[
+            styles.categoryView,
+            activeSupplierCategory === item
+              ? {}
+              : {
+                  backgroundColor: COLORS.transparent,
+                },
+          ]}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.category,
+              activeSupplierCategory === item
+                ? {}
+                : {
+                    color: COLORS.yellow,
+                  },
+            ]}>
+            {item}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={{flex: 1}}>
@@ -195,8 +273,7 @@ export default function SupplierScreen() {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            marginHorizontal: scale(20),
-            marginBottom: scale(20),
+            marginHorizontal: scale(23),
           }}>
           <Image source={IMAGES.warning} />
           <Text style={styles.warningText}>
@@ -209,25 +286,43 @@ export default function SupplierScreen() {
         {isLoading ? (
           <SupplierSkeleton />
         ) : (
-          <View style={styles.listView}>
-            <FlatList
-              data={supplierData}
-              showsVerticalScrollIndicator={false}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => `${index}`}
-              style={{marginBottom: scale(10), marginTop: scale(10)}}
-              contentContainerStyle={{flexGrow: 1}}
-              // eslint-disable-next-line react/no-unstable-nested-components
-              ListEmptyComponent={() => {
-                return (
-                  <View style={{flex: 1, justifyContent: 'center'}}>
-                    <Text style={styles.nodatadount}>
-                      {'No se encontró ningún proveedor '}
-                    </Text>
-                  </View>
-                );
-              }}
-            />
+          <View style={{flex: 1}}>
+            <View style={styles.categoryListContainer}>
+              <FlatList
+                data={supplierCategory}
+                showsVerticalScrollIndicator={false}
+                ListHeaderComponent={categoryListHeaderComponent}
+                renderItem={renderCategoryList}
+                keyExtractor={(item, index) => `${index}`}
+                horizontal
+              />
+            </View>
+            <View style={styles.listView}>
+              <FlatList
+                data={
+                  activeSupplierCategory !== 'all'
+                    ? supplierData.filter(
+                        item => item.testCategory === activeSupplierCategory,
+                      )
+                    : supplierData
+                }
+                showsVerticalScrollIndicator={false}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => `${index}`}
+                style={{marginBottom: scale(10), marginTop: scale(10)}}
+                contentContainerStyle={{flexGrow: 1}}
+                // eslint-disable-next-line react/no-unstable-nested-components
+                ListEmptyComponent={() => {
+                  return (
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                      <Text style={styles.nodatadount}>
+                        {'No se encontró ningún proveedor '}
+                      </Text>
+                    </View>
+                  );
+                }}
+              />
+            </View>
           </View>
         )}
       </View>
@@ -264,7 +359,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: scale(50),
-    marginHorizontal: scale(30),
+    marginHorizontal: scale(23),
   },
   logoutView: {
     height: scale(20),
@@ -274,7 +369,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: scale(45),
-    width: scale(300),
+    width: scale(322),
     backgroundColor: COLORS.white,
     alignSelf: 'center',
     fontSize: scale(12),
@@ -319,8 +414,36 @@ const styles = StyleSheet.create({
   searchIconView: {
     position: 'absolute',
     // top: scale(32),
-    left: scale(40),
+    left: scale(30),
     zIndex: 1,
+  },
+  categoryListContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    maxHeight: scale(55),
+    marginHorizontal: scale(15),
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  categoryView: {
+    backgroundColor: COLORS.yellow,
+    alignSelf: 'flex-start',
+    // alignSelf: 'center',
+    marginHorizontal: scale(5),
+    // width: scale(150),
+    paddingHorizontal: scale(15),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: scale(20),
+  },
+  category: {
+    color: COLORS.white,
+    fontSize: scale(12),
+    minWidth: scale(38),
+    fontFamily: FONTS.GothamMedium,
+    letterSpacing: 0.4,
+    paddingVertical: scale(6),
+    textAlign: 'center',
   },
   listView: {
     flex: 1,

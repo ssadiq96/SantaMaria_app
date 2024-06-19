@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet, View, Image} from 'react-native';
 import PropTypes from 'prop-types';
@@ -10,7 +12,7 @@ const CustomButton = props => {
   /**
    * Custom button Comman rendring
    */
-  const {params} = props;
+  // const {params} = props;
   return (
     <View>
       {props.flag == 0 ? (
@@ -92,19 +94,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: FONTS.GothamLight,
   },
-  title2: {
-    fontSize: scale(20),
-    color: COLORS.themeDark,
-    paddingLeft: scale(20),
-    fontWeight: '600',
-  },
+  // title2: {
+  //   fontSize: scale(20),
+  //   color: COLORS.themeDark,
+  //   paddingLeft: scale(20),
+  //   fontWeight: '600',
+  // },
   container2: {
     justifyContent: 'center',
     alignItems: 'center',
     height: scale(50),
-    borderRadius: 5,
     paddingHorizontal: 20,
-    alignSelf: 'stretch',
     width: CONSTANTS.screenWidth / 2.5,
     backgroundColor: COLORS.pink,
     borderRadius: scale(15),

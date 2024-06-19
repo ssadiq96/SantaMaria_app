@@ -47,7 +47,7 @@ export default function EmergencyContact({navigation}) {
     const emergencyResponse = await Request.get('component');
     if (emergencyResponse) {
       setisLoading(false);
-      // console.log('emergencyResponse', emergencyResponse);
+
       let rowData = [];
       emergencyResponse.data.rows.map(item => {
         if (item.type === 'EmergencyContact') {
@@ -56,7 +56,6 @@ export default function EmergencyContact({navigation}) {
       });
 
       setemergencyCoverData(rowData[0]);
-      // console.log('filteredData', rowData);
     } else {
       setisLoading(false);
       showSimpleAlert(emergencyResponse.message);
@@ -232,7 +231,7 @@ export default function EmergencyContact({navigation}) {
             />
             <View style={styles.subView}>
               <View style={styles.backIconView}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.backView}
                   onPress={() => {
                     navigation.goBack();
@@ -241,7 +240,7 @@ export default function EmergencyContact({navigation}) {
                     source={IMAGES.backIcon}
                     style={styles.backIconStyle}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
               <View style={{marginTop: '18%', marginLeft: '5%'}}>
                 <Image
@@ -273,7 +272,7 @@ export default function EmergencyContact({navigation}) {
             style={{
               flex: 1,
               marginTop: scale(10),
-              marginBottom: scale(20),
+              marginBottom: scale(80),
             }}>
             <FlatList
               data={emergencyContactData}

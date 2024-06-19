@@ -22,32 +22,36 @@ import NavigationService from '../utils/NavigationService';
 import {clearAllData} from '../utils/StorageService';
 
 export default function DiscountScreen({route, navigation}) {
-  const [searchValue, setsearchValue] = useState('');
-  const [discountData, setdiscountData] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [discountData, setDiscountData] = useState([]);
+  const [discountCategory, setDiscountCategory] = useState([]);
+  const [activeDiscountCategory, setActiveDiscountCategory] = useState('all');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      setisLoading(true);
-      await getdiscountData();
+      setIsLoading(true);
+      await getDiscountData();
     }
-    // Call the async function
     fetchData();
   }, []);
-  const getdiscountData = async () => {
-    const response = await Request.get('discount');
+  const getDiscountData = async () => {
+    let response = await Request.get('discount');
     if (response) {
-      setisLoading(false);
-      // console.log('responser123', response);
+      setIsLoading(false);
       if (response.code == 200) {
-        setdiscountData(response.data.rows);
+        response = response.data.rows.map((row, index) => {
+          row.testCategory = `${row.title}`;
+          return row;
+        });
+        setDiscountCategory(response.map(item => item.testCategory));
+        setDiscountData(response);
       } else {
         showSimpleAlert(response.message);
       }
     }
   };
-  const navigatediscountDetailPage = item => {
-    // console.log('item1234', item);
+  const navigateDiscountDetailPage = item => {
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -72,10 +76,10 @@ export default function DiscountScreen({route, navigation}) {
     };
     const response = await Request.post('wishlist', params);
     if (response) {
-      setisLoading(false);
-      // console.log('responser123', response);
+      setIsLoading(false);
+
       if (response.code == 200) {
-        getdiscountData();
+        getDiscountData();
       } else {
         showSimpleAlert(response.message);
       }
@@ -86,9 +90,9 @@ export default function DiscountScreen({route, navigation}) {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigatediscountDetailPage(item);
+          navigateDiscountDetailPage(item);
         }}
-        style={{borderRadius: scale(12), marginVertical: scale(10)}}>
+        style={{borderRadius: scale(12), marginBottom: scale(10)}}>
         <View style={styles.renderView}>
           {item.image ? (
             <Image
@@ -159,13 +163,17 @@ export default function DiscountScreen({route, navigation}) {
   const searchData = useMemo(() => {
     return async searchText => {
       try {
-        setisLoading(true);
-        const response = await Request.get(`discount?search=${searchText}`);
+        setIsLoading(true);
+        let response = await Request.get(`discount?search=${searchText}`);
         if (response) {
-          setisLoading(false);
-          // console.log('responser123', response);
+          setIsLoading(false);
           if (response.code == 200) {
-            setdiscountData(response.data.rows);
+            response = response.data.rows.map((row, index) => {
+              row.testCategory = `${row.title}`;
+              return row;
+            });
+            setDiscountCategory(response.map(item => item.testCategory));
+            setDiscountData(response);
           } else {
             showSimpleAlert(response.message);
           }
@@ -177,15 +185,15 @@ export default function DiscountScreen({route, navigation}) {
   }, []); // Empty dependency array means this memoized function won't change
 
   const handleSearchChange = text => {
-    setsearchValue(text);
+    setSearchValue(text);
     searchData(text); // Call the memoized API function when search text changes
   };
   const logoutApi = async () => {
     // NavigationService.navigate('LoginScreen');
-    setisLoading(true);
+    setIsLoading(true);
     const response = await Request.get('logout');
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
       if (response.code == 200) {
         clearAllData(() => {
           NavigationService.navigate('LoginScreen');
@@ -193,6 +201,71 @@ export default function DiscountScreen({route, navigation}) {
       }
     }
   };
+
+  const categoryListHeaderComponent = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setActiveDiscountCategory('all');
+        }}>
+        <View
+          style={[
+            styles.categoryView,
+            activeDiscountCategory === 'all'
+              ? {}
+              : {
+                  backgroundColor: COLORS.transparent,
+                },
+          ]}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.category,
+              activeDiscountCategory === 'all'
+                ? {}
+                : {
+                    color: COLORS.yellow,
+                  },
+            ]}>
+            All
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderCategoryList = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setActiveDiscountCategory(item);
+        }}>
+        <View
+          style={[
+            styles.categoryView,
+            activeDiscountCategory === item
+              ? {}
+              : {
+                  backgroundColor: COLORS.transparent,
+                },
+          ]}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.category,
+              activeDiscountCategory === item
+                ? {}
+                : {
+                    color: COLORS.yellow,
+                  },
+            ]}>
+            {item}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
@@ -231,7 +304,6 @@ export default function DiscountScreen({route, navigation}) {
       <View
         style={{
           height: scale(45),
-          marginBottom: scale(20),
           marginTop: scale(20),
           justifyContent: 'center',
         }}>
@@ -248,15 +320,33 @@ export default function DiscountScreen({route, navigation}) {
       {isLoading ? (
         <DiscountSkeleton />
       ) : (
-        <View style={{marginBottom: scale(20)}}>
-          <FlatList
-            data={discountData}
-            showsVerticalScrollIndicator={false}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => `${index}`}
-            style={{marginBottom: scale(80)}}
-            numColumns={2}
-          />
+        <View style={{flex: 1}}>
+          <View style={styles.categoryListContainer}>
+            <FlatList
+              data={discountCategory}
+              showsVerticalScrollIndicator={false}
+              ListHeaderComponent={categoryListHeaderComponent}
+              renderItem={renderCategoryList}
+              keyExtractor={(item, index) => `${index}`}
+              horizontal
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <FlatList
+              data={
+                activeDiscountCategory !== 'all'
+                  ? discountData.filter(
+                      item => item.testCategory === activeDiscountCategory,
+                    )
+                  : discountData
+              }
+              showsVerticalScrollIndicator={false}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => `${index}`}
+              style={{marginBottom: scale(80)}}
+              numColumns={2}
+            />
+          </View>
         </View>
       )}
       {/* <ActivityLoader loading={isLoading} /> */}
@@ -273,6 +363,34 @@ const styles = StyleSheet.create({
     width: scale(20),
     marginLeft: scale(10),
     tintColor: COLORS.black,
+  },
+  categoryListContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    maxHeight: scale(55),
+    marginHorizontal: scale(10),
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  categoryView: {
+    backgroundColor: COLORS.yellow,
+    alignSelf: 'flex-start',
+    // alignSelf: 'center',
+    marginHorizontal: scale(5),
+    // width: scale(150),
+    paddingHorizontal: scale(15),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: scale(20),
+  },
+  category: {
+    color: COLORS.white,
+    fontSize: scale(12),
+    minWidth: scale(38),
+    fontFamily: FONTS.GothamMedium,
+    letterSpacing: 0.4,
+    paddingVertical: scale(6),
+    textAlign: 'center',
   },
   renderView: {
     borderRadius: scale(12),
@@ -330,7 +448,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     top: scale(32),
-    left: scale(40),
+    left: scale(30),
     zIndex: 1,
   },
   iconView: {
@@ -343,11 +461,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: scale(50),
-    marginHorizontal: scale(30),
+    marginHorizontal: scale(22),
   },
   textInput: {
     height: scale(45),
-    width: scale(300),
+    width: scale(322),
     backgroundColor: COLORS.white,
     alignSelf: 'center',
     fontSize: scale(12),
@@ -370,7 +488,7 @@ const styles = StyleSheet.create({
   searchIconView: {
     position: 'absolute',
     // top: scale(32),
-    left: scale(40),
+    left: scale(30),
     zIndex: 1,
   },
   headerText: {

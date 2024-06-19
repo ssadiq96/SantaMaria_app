@@ -45,7 +45,7 @@ export default function EventDetail({route, navigation}) {
       }),
     ).toString('base64');
     const response = await Request.get(`newsandevent/${base64EncodedIdObject}`);
-    // console.log('responseresponse', response);
+
     if (response) {
       setisLoading(false);
       if (response.code == 200) {
@@ -54,7 +54,6 @@ export default function EventDetail({route, navigation}) {
         showSimpleAlert(response.message);
       }
     }
-    // console.log('base64EncodedIdObject', base64EncodedIdObject);
   };
   const modifyHtmlContent = html => {
     // Regular expression to match <p> tags with or without existing styles
@@ -79,7 +78,6 @@ export default function EventDetail({route, navigation}) {
       })
       .replace(imgRegex, imgReplacement);
 
-    // console.log('Modified HTML:', data);
     return data;
   };
   // const randomItem = dummyData[Math.floor(Math.random() * dummyData.length)];

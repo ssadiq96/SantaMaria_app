@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 // import {
 //    React, commonColors, Image, Platform, AppState, StorageService, Fonts, Request, showSimpleAlert,
 //    Text,
@@ -6,8 +7,8 @@
 import {AppState, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import StorageService from './StorageService';
-import NavigationService from './NavigationService';
-import {COLORS} from '../common';
+// import NavigationService from './NavigationService';
+// import {COLORS} from '../common';
 import {useEffect} from 'react';
 import Request from '../api/Request';
 
@@ -28,11 +29,11 @@ export default function PushNotification({route, navigation}) {
 
     // forground ( when app open ) in firebase notification
     messaging().onMessage(async remoteMessage => {
-      // console.log("remotemessage", remoteMessage);
       if (appState == 'active') {
+        /*
         showMessage(
           {
-            type: 'default',
+            // type: 'default',
             // description: remoteMessage.notification.body,
             message: remoteMessage.notification.title,
             color: remoteMessage.notification.body,
@@ -57,7 +58,7 @@ export default function PushNotification({route, navigation}) {
           },
           () => {},
         );
-        // console.log('remoteMessageremoteMessage', remoteMessage);
+        */
       }
     });
 
@@ -72,18 +73,19 @@ export default function PushNotification({route, navigation}) {
     });
 
     //If your app is closed
-    const remoteInitialNotification = messaging()
-      .getInitialNotification()
-      .then(notificationOpen => {
-        if (notificationOpen) {
-          handleNotificationRedirection(notificationOpen.data, true);
-        }
-      });
+    // const remoteInitialNotification = messaging()
+    //   .getInitialNotification()
+    //   .then(notificationOpen => {
+    //     if (notificationOpen) {
+    //       handleNotificationRedirection(notificationOpen.data, true);
+    //     }
+    //   });
     checkForIOS();
     return () => {
       //compowillunmout
       removeAllNotificationListners();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -118,9 +120,6 @@ export default function PushNotification({route, navigation}) {
   /**check the notification permission */
   const checkPermission = async () => {
     const hasPermission = await messaging().hasPermission();
-    const enabled =
-      hasPermission === messaging.AuthorizationStatus.AUTHORIZED ||
-      hasPermission === messaging.AuthorizationStatus.PROVISIONAL;
     if (
       hasPermission === messaging.AuthorizationStatus.AUTHORIZED ||
       hasPermission === messaging.AuthorizationStatus.PROVISIONAL
@@ -133,12 +132,16 @@ export default function PushNotification({route, navigation}) {
       const isPermission = await requestUserPermission();
       if (!isPermission) {
         return false;
-      } else getFCMToken();
+      } else {
+        getFCMToken();
+      }
     } else {
       const isPermission = await requestUserPermission();
       if (!isPermission) {
         return false;
-      } else getFCMToken();
+      } else {
+        getFCMToken();
+      }
     }
   };
 
@@ -152,7 +155,6 @@ export default function PushNotification({route, navigation}) {
 
   /**set the fcm token */
   const setFCMToken = async fcmToken => {
-    // console.log('token', fcmToken);
     await StorageService.saveItem(
       StorageService.STORAGE_KEYS.DEVICE_TOKEN,
       fcmToken,

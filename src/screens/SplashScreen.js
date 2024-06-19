@@ -25,7 +25,7 @@ export default function SplashScreen({route, navigation}) {
     const data = await StorageService.getItem(
       StorageService.STORAGE_KEYS.AUTH_TOKEN,
     );
-    // console.log('data', data);
+
     if (data) {
       setTimeout(() => {
         navigation.navigate('MainScreen');

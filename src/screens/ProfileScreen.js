@@ -34,7 +34,6 @@ export default function ProfileScreen(props) {
   useEffect(() => {
     async function fetchData() {
       if (isFocused) {
-        // console.log('props234', props);
         await getProfileData();
         await getWishlistData();
         props.updateprofile(1);
@@ -56,11 +55,10 @@ export default function ProfileScreen(props) {
   const getWishlistData = async () => {
     setisLoading(true);
     const response = await Request.get('wishlist');
-    // console.log('wishlistresponseresponseresponse', response);
+
     if (response) {
       setisLoading(false);
 
-      // console.log('responser123', response);
       if (response.code == 200) {
         response.data.rows.forEach(item => {
           if (item.category === 'Supplier') {
@@ -128,7 +126,7 @@ export default function ProfileScreen(props) {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-          // console.log('base64EncodedIdObject12', base64EncodedIdObject);
+
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });

@@ -40,11 +40,11 @@ export default function SupplierDetails({route, navigation}) {
   }, []);
   const getComponentData = async () => {
     const encodedString = route?.params?.supplierObj;
-    // console.log('encodedString', encodedString);
+
     const response = await Request.get(`supplier/${encodedString}`);
     if (response) {
       setisLoading(false);
-      // console.log('getComponentDataresponser123', response);
+
       if (response.code == 200) {
         setsupplierDetails(response.data);
         setservice(response.data.services);
@@ -78,7 +78,6 @@ export default function SupplierDetails({route, navigation}) {
     );
   };
   const ratingrenderItem = ({item}) => {
-    // console.log('ratingrenderItemitem', item);
     return (
       <View style={{marginVertical: scale(10)}}>
         <View style={{flexDirection: 'row', marginHorizontal: scale(10)}}>
@@ -122,7 +121,6 @@ export default function SupplierDetails({route, navigation}) {
         comment: comment,
       };
       const response = await Request.post('supplier/giveFeedback', params);
-      // console.log('responseresponse', response);
 
       if (response.code == 200) {
         setcomment('');
@@ -136,7 +134,7 @@ export default function SupplierDetails({route, navigation}) {
   };
   const addwishlist = async () => {
     const encodedString = route?.params?.supplierObj;
-    // console.log('encodedString', encodedString);
+
     let params = {
       category: 'Supplier',
       typeId: encodedString,
@@ -144,7 +142,7 @@ export default function SupplierDetails({route, navigation}) {
     const response = await Request.post('wishlist', params);
     if (response) {
       setisLoading(false);
-      // console.log('responser123', response);
+
       if (response.code == 200) {
         getComponentData();
       } else {
@@ -301,7 +299,6 @@ export default function SupplierDetails({route, navigation}) {
               fillColor={COLORS.yellow}
               type={'custom'}
               onChange={data => {
-                // console.log('data', Math.round(data));
                 setuserRate(Math.round((data + userRate) * 5) / 10);
               }}
               onMove={data => {

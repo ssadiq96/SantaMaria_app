@@ -35,7 +35,7 @@ export default function NewEventScreen(Props) {
         StorageService.STORAGE_KEYS.USER_DETAILS,
       );
       setuserData(userData);
-      // console.log('userDatauserDatauserData', userData);
+
       await geteventnewsBanner();
     }
     // Call the async function
@@ -118,7 +118,7 @@ export default function NewEventScreen(Props) {
     );
     if (response) {
       setisLoading(false);
-      // console.log('responser123', response);
+
       if (response.code == 200) {
         setnewsData(response.data.rows);
       } else {

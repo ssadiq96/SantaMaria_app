@@ -42,7 +42,7 @@ export default function SignUpScreen({route, navigation}) {
       const selectedImage = await ImagePicker.openPicker({
         mediaType: 'photo',
       });
-      // console.log('selectedImage', selectedImage);
+
       setImage(selectedImage.path);
       setimgObj(selectedImage);
       refRBSheet.current.close();
@@ -66,10 +66,9 @@ export default function SignUpScreen({route, navigation}) {
     }
   };
   const signup = async () => {
-    // console.log('image', image);
     const dateofbirth =
       date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
-    // console.log('dateofbirth', dateofbirth);
+
     const ConfirmValid = validationofField();
     if (ConfirmValid) {
       // let params = {
@@ -96,7 +95,7 @@ export default function SignUpScreen({route, navigation}) {
 
       formData.append('dob', dateofbirth);
       setisLoading(true);
-      // console.log('formdara', formData);
+
       const response = await Request.post('register', formData);
       setisLoading(false);
 

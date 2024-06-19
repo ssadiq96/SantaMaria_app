@@ -26,6 +26,9 @@ import NavigationService from '../utils/NavigationService';
 import {DEVICE, hp, wp} from '../utils/constants';
 import {isIphoneX} from '../utils/iPhoneXHelper';
 import Util from '../utils/utils';
+import ProfileScreen from '../screens/ProfileScreen';
+import {useIsFocused} from '@react-navigation/native';
+import Request from '../api/Request';
 
 const Stack = createNativeStackNavigator();
 const options2 = {
@@ -44,7 +47,7 @@ const MainScreenRoutes = () => {
     'NewsEvent',
     'Discount',
     'Supplier',
-    'ProfileEdit',
+    'EmergencyContact',
   ]);
   const [tabIndex, setTabIndex] = React.useState(0);
   const [userImage, setuserImage] = React.useState('');
@@ -58,6 +61,29 @@ const MainScreenRoutes = () => {
       />
     );
   };
+
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const Profile = () => {
+    return <ProfileScreen updateprofile={updateProfile} />;
+  };
+
+  const isFocused = useIsFocused();
+  React.useEffect(() => {
+    async function fetchData() {
+      if (isFocused) {
+        await updateProfile();
+      }
+    }
+    // Call the async function
+    fetchData();
+  }, [isFocused]);
+  const updateProfile = async () => {
+    const response = await Request.get('user');
+    if (response.code == 200) {
+      setuserImage(response.data?.image);
+    }
+  };
+
   return (
     <>
       <Stack.Navigator
@@ -129,6 +155,11 @@ const MainScreenRoutes = () => {
           component={SupplierScreen}
           options={options2}
         />
+        <Stack.Screen
+          name={'ProfileScreen'}
+          component={Profile}
+          options={options2}
+        />
       </Stack.Navigator>
       <View style={[styles.tabBarContainer, moveMenuBarAnimation.getLayout()]}>
         {tabArray.map((data, index) => {
@@ -159,7 +190,6 @@ const MainScreenRoutes = () => {
                     height: wp('7%'),
                     width: wp('7%'),
                     marginTop: wp(3),
-
                     tintColor:
                       tabIndex == index ? COLORS.yellow : COLORS.textColor,
                   },
@@ -167,7 +197,6 @@ const MainScreenRoutes = () => {
                     height: wp('7%'),
                     width: wp('7%'),
                     marginTop: wp(3),
-
                     tintColor:
                       tabIndex == index ? COLORS.yellow : COLORS.textColor,
                   },
@@ -175,16 +204,15 @@ const MainScreenRoutes = () => {
                     height: wp('7%'),
                     width: wp('7%'),
                     marginTop: wp(3),
-
                     tintColor:
                       tabIndex == index ? COLORS.yellow : COLORS.textColor,
                   },
                   index === 4 && {
-                    height: wp('8%'),
-                    width: wp('8%'),
-                    borderRadius: wp('4%'),
+                    height: wp('7%'),
+                    width: wp('7%'),
                     marginTop: wp(3),
-                    // borderWidth:StyleSheet.hairlineWidth
+                    tintColor:
+                      tabIndex == index ? COLORS.yellow : COLORS.textColor,
                   },
                 ]}
                 source={
@@ -196,9 +224,7 @@ const MainScreenRoutes = () => {
                     ? IMAGES.discount
                     : index === 3
                     ? IMAGES.supplier
-                    : userImage
-                    ? {uri: userImage}
-                    : IMAGES.placeholder
+                    : IMAGES.emergencyContactIcon
                 }
               />
             </TouchableOpacity>
