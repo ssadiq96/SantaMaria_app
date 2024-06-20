@@ -29,12 +29,9 @@ function getGlobalNavigator() {
  * provide navigation to given routename
  */
 function navigate(routeName, params) {
-  // console.log("routeName", routeName, params);
   _navigator.navigate(routeName, params);
 }
 function resetnavigate(routeName, params) {
-  // console.log(" _navigator _navigator", _navigator.getState());
-  // console.log("currentRoute123:-->", _navigator.getCurrentRoute());
   const currentRoute = _navigator.getCurrentRoute();
   if (currentRoute.name === routeName) {
     _navigator.dispatch(

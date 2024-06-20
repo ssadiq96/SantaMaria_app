@@ -1,19 +1,12 @@
-import React from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Platform,
-  Text,
-} from "react-native";
-import constants from "../common/constants";
-import { scale, verticalScale } from "../common/Scale";
-import { COLORS } from "../common";
-import NavigationService from "../utils/NavigationService";
-import { IMAGES } from "../assets";
-import { Fonts } from "../utils/font";
-import { hp, wp } from "../utils/constants";
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {View, StyleSheet, TouchableOpacity, Image, Text} from 'react-native';
+import constants from '../common/constants';
+import {scale, verticalScale} from '../common/Scale';
+import {COLORS} from '../common';
+import NavigationService from '../utils/NavigationService';
+import {IMAGES} from '../assets';
+import {hp, wp} from '../utils/constants';
 
 const CustomHeader = ({
   isBackIcon,
@@ -29,34 +22,35 @@ const CustomHeader = ({
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={[styles.firstView, firstViewStyle]}>
-        <View style={{ flex: 0.4 }}>
+        <View style={{flex: 0.4}}>
           {isBackIcon ? (
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "flex-start",
+                flexDirection: 'row',
+                alignItems: 'flex-start',
                 marginLeft: wp('7%'),
-              }}
-            >
+              }}>
               <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => {
-                  if (onBackButtonPress) onBackButtonPress();
-                  else NavigationService.goBack();
+                  if (onBackButtonPress) {
+                    onBackButtonPress();
+                  } else {
+                    NavigationService.goBack();
+                  }
                 }}
                 activeOpacity={constants.activeOpacity}
                 delayPressIn={0}
-                hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-              >
+                hitSlop={{top: 10, right: 10, bottom: 10, left: 10}}>
                 <Image
                   source={imageSource}
-                  style={{ height: wp('9%'), width: wp('9%') }}
+                  style={{height: wp('9%'), width: wp('9%')}}
                 />
               </TouchableOpacity>
             </View>
           ) : null}
         </View>
-        <View style={{ marginLeft: wp('7%'), marginTop: hp("2%") }}>
+        <View style={{marginLeft: wp('7%'), marginTop: hp('2%')}}>
           {isAppLogo ? (
             <View style={styles.appLogoView}>
               {isCenteredText ? (
@@ -83,49 +77,49 @@ const CustomHeader = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingBottom: verticalScale(10),
-    justifyContent: "space-between",
-    marginTop:hp('6%')
+    justifyContent: 'space-between',
+    marginTop: hp('6%'),
   },
   firstView: {
     zIndex: 2,
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   backButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   middleView: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 3,
   },
   middleViewWrap: {},
   lastView: {
     flex: 0.5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textstyle: {
     fontSize: scale(22),
     color: COLORS.black,
-    textAlign: "center",
+    textAlign: 'center',
   },
   logoStyle: {
     height: wp('28%'),
     width: wp('28%'),
   },
   appLogoView: {
-    alignItems: "center",
-    flexDirection: "column",
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   accountText: {
     color: COLORS.white,
     paddingVertical: scale(15),
     fontSize: scale(18),
     letterSpacing: 0.5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   centeredText: {
     color: COLORS.white,
@@ -133,7 +127,7 @@ const styles = StyleSheet.create({
     paddingVertical: scale(8),
     marginBottom: scale(20),
     letterSpacing: 0.5,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

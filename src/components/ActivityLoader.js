@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Text, View, ActivityIndicator, StyleSheet} from 'react-native';
+import React from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {COLORS, CONSTANTS} from '../common';
 
 export const ActivityLoader = ({loading, style, color, container}) => {

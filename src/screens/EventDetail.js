@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -32,6 +33,7 @@ export default function EventDetail({route, navigation}) {
     // Call the async function
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const getEventDetails = async () => {
     setisLoading(true);
@@ -43,7 +45,7 @@ export default function EventDetail({route, navigation}) {
       }),
     ).toString('base64');
     const response = await Request.get(`newsandevent/${base64EncodedIdObject}`);
-    // console.log('responseresponse', response);
+
     if (response) {
       setisLoading(false);
       if (response.code == 200) {
@@ -52,7 +54,6 @@ export default function EventDetail({route, navigation}) {
         showSimpleAlert(response.message);
       }
     }
-    // console.log('base64EncodedIdObject', base64EncodedIdObject);
   };
   const modifyHtmlContent = html => {
     // Regular expression to match <p> tags with or without existing styles
@@ -77,7 +78,6 @@ export default function EventDetail({route, navigation}) {
       })
       .replace(imgRegex, imgReplacement);
 
-    // console.log('Modified HTML:', data);
     return data;
   };
   // const randomItem = dummyData[Math.floor(Math.random() * dummyData.length)];
@@ -137,8 +137,8 @@ export default function EventDetail({route, navigation}) {
 
           <View
             style={{
-              borderTopLeftRadius: scale(30),
-              borderTopRightRadius: scale(30),
+              // borderTopLeftRadius: scale(30),
+              // borderTopRightRadius: scale(30),
               padding: scale(20),
               flex: 1,
               backgroundColor: COLORS.white,

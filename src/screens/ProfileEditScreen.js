@@ -44,7 +44,6 @@ export default function ProfileEditScreen({route, navigation}) {
         StorageService.STORAGE_KEYS.USER_DETAILS,
       );
       setuserData(userData);
-      // console.log('imageimageimageimage', image);
     }
     // Call the async function
     fetchData();
@@ -98,7 +97,7 @@ export default function ProfileEditScreen({route, navigation}) {
     const ConfirmValid = validationofField();
     const dateofbirth =
       date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
-    // console.log('dateofbirth', dateofbirth);
+
     if (ConfirmValid) {
       let formData = new FormData();
       formData.append('bio', bio);
@@ -111,7 +110,7 @@ export default function ProfileEditScreen({route, navigation}) {
       formData.append('location', location);
       formData.append('dob', dateofbirth);
       setisLoading(true);
-      // console.log('formDataformDataformData', formData);
+
       const response = await Request.post('update', formData);
       setisLoading(false);
 
@@ -223,7 +222,6 @@ export default function ProfileEditScreen({route, navigation}) {
             mode="date"
             date={date}
             onConfirm={date => {
-              // console.log('datedate', date);
               setOpen(false);
               setDate(date);
               setselectedDate(date);

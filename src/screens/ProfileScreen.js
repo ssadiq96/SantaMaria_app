@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
@@ -25,14 +27,13 @@ export default function ProfileScreen(props) {
 
   const [bannerData, setbannerData] = useState([]);
   const [supplierData, setsupplierData] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [, setisLoading] = useState(false);
   const [user, setuserData] = useState([]);
   const supplierArray = [];
   const discountArray = [];
   useEffect(() => {
     async function fetchData() {
       if (isFocused) {
-        // console.log('props234', props);
         await getProfileData();
         await getWishlistData();
         props.updateprofile(1);
@@ -40,6 +41,7 @@ export default function ProfileScreen(props) {
     }
     // Call the async function
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
   const getProfileData = async () => {
     const response = await Request.get('user');
@@ -53,11 +55,10 @@ export default function ProfileScreen(props) {
   const getWishlistData = async () => {
     setisLoading(true);
     const response = await Request.get('wishlist');
-    // console.log('wishlistresponseresponseresponse', response);
+
     if (response) {
       setisLoading(false);
 
-      // console.log('responser123', response);
       if (response.code == 200) {
         response.data.rows.forEach(item => {
           if (item.category === 'Supplier') {
@@ -125,7 +126,7 @@ export default function ProfileScreen(props) {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-          // console.log('base64EncodedIdObject12', base64EncodedIdObject);
+          console.log(item, 'profile');
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -259,6 +260,8 @@ export default function ProfileScreen(props) {
             horizontal
             scrollEnabled={true}
             showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => index}
+            // eslint-disable-next-line react/no-unstable-nested-components
             ListEmptyComponent={() => {
               return (
                 <View
@@ -292,6 +295,8 @@ export default function ProfileScreen(props) {
             renderItem={supplierDatarenderItem}
             showsHorizontalScrollIndicator={false}
             style={{flexDirection: 'row'}}
+            keyExtractor={(item, index) => index}
+            // eslint-disable-next-line react/no-unstable-nested-components
             ListEmptyComponent={() => {
               return (
                 <View
@@ -410,7 +415,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
     alignItems: 'center',
     bottom: scale(70),
   },
@@ -460,7 +464,6 @@ const styles = StyleSheet.create({
   textStyleDesc: {
     alignSelf: 'center',
     color: COLORS.textColor,
-    paddingVertical: scale(3),
     textAlign: 'center',
     fontSize: scale(10),
     fontWeight: '400',

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -26,7 +27,8 @@ export const SupplierSkeleton = ({itemCount}) => {
           marginTop={6}
           flexDirection="row"
           width={moderateScale(150)}
-          height={moderateScale(20)}></SkeletonPlaceholder.Item>
+          height={moderateScale(20)}
+        />
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder.Item>
   );
@@ -53,7 +55,8 @@ export const SupplierDetailSkeleton = ({itemCount}) => {
           flexDirection="row"
           marginLeft={scale(30)}
           width={CONSTANTS.screenWidth - 50}
-          height={moderateScale(100)}></SkeletonPlaceholder.Item>
+          height={moderateScale(100)}
+        />
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder.Item>
   );
@@ -142,7 +145,8 @@ export const CoverSkeleton = ({itemCount}) => {
       <SkeletonPlaceholder.Item
         width={CONSTANTS.screenWidth - 60}
         height={moderateScale(280)}
-        borderRadius={moderateScale(20)}></SkeletonPlaceholder.Item>
+        borderRadius={moderateScale(20)}
+      />
     </SkeletonPlaceholder.Item>
   );
 

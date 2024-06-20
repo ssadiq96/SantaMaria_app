@@ -1,7 +1,9 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FONTS, IMAGES} from '../assets';
-import {scale} from '../common/Scale';
+import {scale, verticalScale} from '../common/Scale';
 import CustomTextInput from '../components/CustomTextInput';
 import {COLORS} from '../common';
 import CustomButton from '../components/CustomButton';
@@ -44,7 +46,7 @@ export default function LoginScreen({route, navigation}) {
           // navigation.reset()
           navigation.reset({
             index: 0,
-            routes: [{name: 'TabScreen'}],
+            routes: [{name: 'MainScreen'}],
           });
         }, 1000);
       } else {
@@ -76,7 +78,18 @@ export default function LoginScreen({route, navigation}) {
     <View style={styles.container}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <View style={{marginTop: scale(80), alignItems: 'center'}}>
-          <Image source={loginImage ? {uri: loginImage} : IMAGES.loginLogo} />
+          <Image
+            source={
+              loginImage?.cover_image
+                ? {uri: loginImage.cover_image}
+                : IMAGES.loginLogo
+            }
+            style={{
+              height: verticalScale(loginImage?.cover_image ? 140 : 200),
+              width: scale(loginImage?.cover_image ? 149 : 239),
+            }}
+          />
+          <Image source={IMAGES.loginLogoText} style={{width: scale(239)}} />
         </View>
         <View style={styles.textinputView}>
           <CustomTextInput
@@ -156,7 +169,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontFamily: FONTS.GotamBold,
-    fontWeight: '500',
     top: scale(3),
   },
   signUpView: {

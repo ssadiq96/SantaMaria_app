@@ -1,8 +1,10 @@
+/* eslint-disable eqeqeq */
 import StorageService from '../utils/StorageService';
 import NetInfo from '@react-native-community/netinfo';
 import apiConfigs from './apiConfig';
 import {ConstantsText} from '../constants';
 import {showSimpleAlert} from '../utils/CommonUtils';
+import {Alert} from 'react-native';
 
 /**
  * Header for Api calls
@@ -28,7 +30,7 @@ export const getToken = async () => {
   const authToken = await StorageService.getItem(
     StorageService.STORAGE_KEYS.AUTH_TOKEN,
   );
-  // console.log('authToken -->', authToken);
+
   if (authToken) {
     return authToken;
   } else {
@@ -39,7 +41,6 @@ export const getToken = async () => {
 
 /**Sets the User Auth token */
 const setToken = async token => {
-  // console.log('token-->', token);
   return await StorageService.saveItem(
     StorageService.STORAGE_KEYS.AUTH_TOKEN,
     token,
@@ -109,19 +110,16 @@ const updateAuthToken = async (endpoint, params) => {
 const buildRequest = async (endpoint, params = {}, options = undefined) => {
   if ((await checkNetInfo()) != false) {
     try {
-      // console.log('endpointendpoint', endpoint);
-
       const headers =
         endpoint == 'update' || endpoint == 'register'
           ? await getHeaders3()
           : await getHeaders2();
-      // console.log("headers->", headers);
 
       // console.log('%c REQUEST::', 'background: #222; color: #bada55', {
       //   url: `${apiConfigs.SERVER_API_URL}${endpoint}`,
       //   ...params,
       // });
-      // console.log('headerssss', headers);
+
       if (endpoint == 'user') {
         const response = await timeOut(
           fetch(`${apiConfigs.USER_PROFILE}`, {
@@ -129,11 +127,9 @@ const buildRequest = async (endpoint, params = {}, options = undefined) => {
             ...params,
           }),
         );
-        // console.log('response', response);
-        const result = await response.json();
-        // console.log('result---->', result);
 
-        // console.log('result---->', result);
+        const result = await response.json();
+
         return checkValidatinoResponse(result, endpoint, params);
       } else {
         const response = await timeOut(
@@ -142,15 +138,12 @@ const buildRequest = async (endpoint, params = {}, options = undefined) => {
             ...params,
           }),
         );
-        // console.log('response', response);
-        const result = await response.json();
-        // console.log('result---->', result);
 
-        // console.log('result---->', result);
+        const result = await response.json();
+
         return checkValidatinoResponse(result, endpoint, params);
       }
     } catch (error) {
-      // console.log('Error----->', error);
       if (error) {
         if (error.status == apiConfigs.TIMEOUT) {
           showSimpleAlert(ConstantsText.requestTimeoutMessage);

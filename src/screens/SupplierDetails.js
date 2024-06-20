@@ -1,4 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   // FlatList,
@@ -10,21 +12,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import globalStyles from '../res/globalStyles';
-import {FlashList} from '@shopify/flash-list';
 import {FONTS, IMAGES} from '../assets';
-import {moderateScale, scale, verticalScale} from '../common/Scale';
 import {COLORS, CONSTANTS} from '../common';
-import NavigationService from '../utils/NavigationService';
+import {moderateScale, scale} from '../common/Scale';
+import globalStyles from '../res/globalStyles';
 // import {Rating} from 'react-native-ratings';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Rating} from '@kolking/react-native-rating';
 import Request from '../api/Request';
 import {showSimpleAlert} from '../utils/CommonUtils';
-import {ActivityLoader} from '../components/ActivityLoader';
-import {Rating} from '@kolking/react-native-rating';
 
 export default function SupplierDetails({route, navigation}) {
-  const [isLoading, setisLoading] = useState(false);
+  const [, setisLoading] = useState(false);
   const [service, setservice] = useState([]);
   const [supplierDetails, setsupplierDetails] = useState([]);
   const [userRate, setuserRate] = useState(0);
@@ -38,14 +36,22 @@ export default function SupplierDetails({route, navigation}) {
     }
     // Call the async function
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const getComponentData = async () => {
     const encodedString = route?.params?.supplierObj;
-    // console.log('encodedString', encodedString);
+    console.log(
+      '-------------------------------------------------------------------',
+    );
+    console.log(encodedString);
+    console.log(
+      '-------------------------------------------------------------------',
+    );
+
     const response = await Request.get(`supplier/${encodedString}`);
     if (response) {
       setisLoading(false);
-      // console.log('getComponentDataresponser123', response);
+
       if (response.code == 200) {
         setsupplierDetails(response.data);
         setservice(response.data.services);
@@ -79,7 +85,6 @@ export default function SupplierDetails({route, navigation}) {
     );
   };
   const ratingrenderItem = ({item}) => {
-    // console.log('ratingrenderItemitem', item);
     return (
       <View style={{marginVertical: scale(10)}}>
         <View style={{flexDirection: 'row', marginHorizontal: scale(10)}}>
@@ -123,7 +128,6 @@ export default function SupplierDetails({route, navigation}) {
         comment: comment,
       };
       const response = await Request.post('supplier/giveFeedback', params);
-      // console.log('responseresponse', response);
 
       if (response.code == 200) {
         setcomment('');
@@ -137,7 +141,7 @@ export default function SupplierDetails({route, navigation}) {
   };
   const addwishlist = async () => {
     const encodedString = route?.params?.supplierObj;
-    // console.log('encodedString', encodedString);
+
     let params = {
       category: 'Supplier',
       typeId: encodedString,
@@ -145,7 +149,7 @@ export default function SupplierDetails({route, navigation}) {
     const response = await Request.post('wishlist', params);
     if (response) {
       setisLoading(false);
-      // console.log('responser123', response);
+
       if (response.code == 200) {
         getComponentData();
       } else {
@@ -258,10 +262,13 @@ export default function SupplierDetails({route, navigation}) {
         }}>
         <View>
           <Text style={styles.supplierText}>{'Servicios que brindamos'}</Text>
-          <ScrollView horizontal style={{flex: 1}}>
+          <View style={{flex: 1}}>
             <FlatList
               data={service}
               renderItem={renderItem1}
+              keyExtractor={(item, index) => index}
+              horizontal
+              // eslint-disable-next-line react/no-unstable-nested-components
               ListEmptyComponent={() => {
                 return (
                   <View
@@ -284,9 +291,8 @@ export default function SupplierDetails({route, navigation}) {
                   </View>
                 );
               }}
-              horizontal
             />
-          </ScrollView>
+          </View>
         </View>
 
         <View style={styles.ratingView}>
@@ -300,7 +306,6 @@ export default function SupplierDetails({route, navigation}) {
               fillColor={COLORS.yellow}
               type={'custom'}
               onChange={data => {
-                // console.log('data', Math.round(data));
                 setuserRate(Math.round((data + userRate) * 5) / 10);
               }}
               onMove={data => {
@@ -320,7 +325,7 @@ export default function SupplierDetails({route, navigation}) {
                 backgroundColor: COLORS.yellow,
                 borderRadius: scale(20),
               }}>
-              <Text style={styles.submitText}>{'Entregar'}</Text>
+              <Text style={styles.submitText}>{'Enviar'}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.textinputView}>
@@ -345,6 +350,7 @@ export default function SupplierDetails({route, navigation}) {
             style={{flex: 1}}
             data={supplierRating}
             renderItem={ratingrenderItem}
+            // eslint-disable-next-line react/no-unstable-nested-components
             ListEmptyComponent={() => {
               return (
                 <View style={styles.nodataView}>

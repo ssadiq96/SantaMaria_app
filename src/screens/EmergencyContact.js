@@ -1,7 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
-  // FlatList,
   Image,
   Linking,
   StyleSheet,
@@ -9,17 +10,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import globalStyles from '../res/globalStyles';
-import {FlashList} from '@shopify/flash-list';
-import {FONTS, IMAGES} from '../assets';
-import {moderateScale, scale, verticalScale} from '../common/Scale';
-import {COLORS, CONSTANTS} from '../common';
 import Request from '../api/Request';
-import {showSimpleAlert} from '../utils/CommonUtils';
+import {FONTS, IMAGES} from '../assets';
+import {COLORS, CONSTANTS} from '../common';
 import {CoverSkeleton, DiscountSkeleton} from '../common/CustomSkeleton';
+import {moderateScale, scale} from '../common/Scale';
+import {showSimpleAlert} from '../utils/CommonUtils';
 
 export default function EmergencyContact({navigation}) {
-  const carouselRef = useRef(null);
   const [isLoading, setisLoading] = useState(false);
   const [emergencyContactData, setemergencyContactData] = useState([]);
   const [bannerArray, setbannerArray] = useState([]);
@@ -49,19 +47,18 @@ export default function EmergencyContact({navigation}) {
     const emergencyResponse = await Request.get('component');
     if (emergencyResponse) {
       setisLoading(false);
-      // console.log('emergencyResponse', emergencyResponse);
+
       let rowData = [];
-      const emergencydata = emergencyResponse.data.rows.map(item => {
+      emergencyResponse.data.rows.map(item => {
         if (item.type === 'EmergencyContact') {
           rowData.push(item);
         }
       });
 
       setemergencyCoverData(rowData[0]);
-      // console.log('filteredData', rowData);
     } else {
       setisLoading(false);
-      showSimpleAlert(response.message);
+      showSimpleAlert(emergencyResponse.message);
     }
   };
   const getBannerData = async data => {
@@ -100,7 +97,7 @@ export default function EmergencyContact({navigation}) {
           ]}
         />
         <View style={styles.profileView}>
-          <View style={styles.profileImage}></View>
+          <View style={styles.profileImage} />
           <Text numberOfLines={1} style={styles.ambulanceText}>
             {item.name}
           </Text>
@@ -214,27 +211,27 @@ export default function EmergencyContact({navigation}) {
           <CoverSkeleton />
         ) : (
           <View style={{}}>
-            {emergencyCoverData?.cover_image ? (
+            {!emergencyCoverData.cover_image ? (
+              <Image source={IMAGES.appLogo} style={styles.coverImage} />
+            ) : (
               <Image
                 source={{uri: emergencyCoverData?.cover_image}}
                 style={styles.coverImage}
               />
-            ) : (
-              <Image source={IMAGES.appLogo} style={styles.coverImage} />
             )}
             <View
               style={[
                 styles.overlay,
                 {
                   height: scale(280),
-                  borderBottomLeftRadius: scale(40),
-                  borderBottomRightRadius: scale(40),
+                  // borderBottomLeftRadius: scale(40),
+                  // borderBottomRightRadius: scale(40),
                 },
               ]}
             />
             <View style={styles.subView}>
               <View style={styles.backIconView}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.backView}
                   onPress={() => {
                     navigation.goBack();
@@ -243,7 +240,7 @@ export default function EmergencyContact({navigation}) {
                     source={IMAGES.backIcon}
                     style={styles.backIconStyle}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
               <View style={{marginTop: '18%', marginLeft: '5%'}}>
                 <Image
@@ -264,7 +261,7 @@ export default function EmergencyContact({navigation}) {
           <FlatList
             data={bannerArray}
             renderItem={renderItem1}
-            keyExtractor={(item, index) => item.key}
+            keyExtractor={(item, index) => index}
             horizontal
           />
         </View>
@@ -275,7 +272,7 @@ export default function EmergencyContact({navigation}) {
             style={{
               flex: 1,
               marginTop: scale(10),
-              marginBottom: scale(20),
+              marginBottom: scale(80),
             }}>
             <FlatList
               data={emergencyContactData}
@@ -297,8 +294,8 @@ const styles = StyleSheet.create({
   },
   coverImage: {
     height: scale(280),
-    borderBottomLeftRadius: scale(40),
-    borderBottomRightRadius: scale(40),
+    // borderBottomLeftRadius: scale(40),
+    // borderBottomRightRadius: scale(40),
     width: CONSTANTS.screenWidth,
   },
   profileImageView: {

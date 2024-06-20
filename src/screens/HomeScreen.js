@@ -1,29 +1,29 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
+import {Rating} from '@kolking/react-native-rating';
+import {useIsFocused} from '@react-navigation/native';
+import {Buffer} from 'buffer';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  Alert,
 } from 'react-native';
 import {Image} from 'react-native-animatable';
+import Request from '../api/Request';
 import {FONTS, IMAGES} from '../assets';
 import {COLORS, CONSTANTS} from '../common';
-import {hp, wp} from '../utils/constants';
-import {moderateScale, scale} from '../common/Scale';
-import NavigationService from '../utils/NavigationService';
-import Request from '../api/Request';
-import {showSimpleAlert} from '../utils/CommonUtils';
-import {Rating} from '@kolking/react-native-rating';
-import {Buffer} from 'buffer';
-import {ActivityLoader} from '../components/ActivityLoader';
 import {HomeSkeleton} from '../common/CustomSkeleton';
+import {moderateScale, scale} from '../common/Scale';
+import {showSimpleAlert} from '../utils/CommonUtils';
+import NavigationService from '../utils/NavigationService';
 import StorageService, {clearAllData} from '../utils/StorageService';
-import SvgUri from 'react-native-svg';
-import {useIsFocused} from '@react-navigation/native';
-import moment from 'moment';
+import {hp, wp} from '../utils/constants';
 export default function HomeScreen(props) {
   const [arrData, setarrData] = useState([]);
   const [supplierArray, setsupplierArray] = useState([]);
@@ -31,50 +31,49 @@ export default function HomeScreen(props) {
   const [newsData, setnewsData] = useState([]);
   const [discountData, setdiscountData] = useState([]);
   const [user, setuserData] = useState([]);
-  const [userBirthDay, setUserBirthDay] = useState(false);
   const [mainPageImage, setMainPageImage] = useState(null);
   const isFocused = useIsFocused();
 
-  const [bannerData, setbannerData] = useState([
-    {
-      image: IMAGES.discountBanner,
-      text: 'Newly Launch Panigale V4 SP2',
-    },
-    {
-      image: IMAGES.discountBanner,
-      text: 'Newly Launch Panigale V4 SP2',
-    },
-    {
-      image: IMAGES.discountBanner,
-      text: 'Newly Launch Panigale V4 SP2',
-    },
-    {
-      image: IMAGES.discountBanner,
-      text: 'Newly Launch Panigale V4 SP2',
-    },
-  ]);
-  const [supplierData, setsupplierData] = useState([
-    {
-      title: 'Supplier',
-      desc: 'This is a text sample',
-      img: IMAGES.profileEdit,
-    },
-    {
-      title: 'Supplier',
-      desc: 'This is a text sample',
-      img: IMAGES.profileEdit,
-    },
-    {
-      title: 'Supplier',
-      desc: 'This is a text sample',
-      img: IMAGES.profileEdit,
-    },
-    {
-      title: 'Supplier',
-      desc: 'This is a text sample',
-      img: IMAGES.profileEdit,
-    },
-  ]);
+  // const [bannerData, setbannerData] = useState([
+  //   {
+  //     image: IMAGES.discountBanner,
+  //     text: 'Newly Launch Panigale V4 SP2',
+  //   },
+  //   {
+  //     image: IMAGES.discountBanner,
+  //     text: 'Newly Launch Panigale V4 SP2',
+  //   },
+  //   {
+  //     image: IMAGES.discountBanner,
+  //     text: 'Newly Launch Panigale V4 SP2',
+  //   },
+  //   {
+  //     image: IMAGES.discountBanner,
+  //     text: 'Newly Launch Panigale V4 SP2',
+  //   },
+  // ]);
+  // const [supplierData, setsupplierData] = useState([
+  //   {
+  //     title: 'Supplier',
+  //     desc: 'This is a text sample',
+  //     img: IMAGES.profileEdit,
+  //   },
+  //   {
+  //     title: 'Supplier',
+  //     desc: 'This is a text sample',
+  //     img: IMAGES.profileEdit,
+  //   },
+  //   {
+  //     title: 'Supplier',
+  //     desc: 'This is a text sample',
+  //     img: IMAGES.profileEdit,
+  //   },
+  //   {
+  //     title: 'Supplier',
+  //     desc: 'This is a text sample',
+  //     img: IMAGES.profileEdit,
+  //   },
+  // ]);
   useEffect(() => {
     async function fetchData() {
       setisLoading(true);
@@ -86,26 +85,32 @@ export default function HomeScreen(props) {
     async function fetchData() {
       if (isFocused) {
         await getProfileData();
-        await getMainPageImage();
       }
     }
     // Call the async function
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
   const getProfileData = async () => {
     const response = await Request.get('user');
     setuserData(response.data);
-    setUserBirthDay(checkUserBirthDay(response.data.dob));
+    const isUserBirthDay = checkUserBirthDay(response.data.dob);
+    const mainPageImageResponse = await Request.get(
+      'mainPageImage/getMainPageImage',
+    );
+    setMainPageImage(
+      isUserBirthDay
+        ? mainPageImageResponse?.data?.find(item => item.type == 'BDImage')
+            ?.cover_image
+        : mainPageImageResponse?.data?.find(
+            item => item.type == 'DasboardImage',
+          )?.cover_image,
+    );
     await StorageService.saveItem(
       StorageService.STORAGE_KEYS.USER_DETAILS,
       response.data,
     );
-  };
-
-  const getMainPageImage = async () => {
-    const response = await Request.get('mainPageImage/getMainPageImage');
-    setMainPageImage(response?.data);
   };
 
   const checkUserBirthDay = dob => {
@@ -138,7 +143,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('discount');
     if (response) {
       setisLoading(false);
-      // console.log('responser123', response);
+
       if (response.code == 200) {
         setdiscountData(response.data.rows);
       } else {
@@ -150,7 +155,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('component');
     if (response) {
       setisLoading(false);
-      // console.log('getComponentDataresponser123', response);
+
       if (response.code == 200) {
         setarrData(response.data.rows);
       } else {
@@ -162,7 +167,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('supplier');
     if (response) {
       setisLoading(false);
-      // console.log('supplierresponser123', response);
+
       if (response.code == 200) {
         setsupplierArray(response.data.rows);
       } else {
@@ -181,7 +186,7 @@ export default function HomeScreen(props) {
           } else if (item.type == 'Discount') {
             props.ontabPress(2);
           } else {
-            NavigationService.navigate('EmergencyContact');
+            props.ontabPress(4);
           }
         }}>
         <View style={styles.renderView}>
@@ -227,7 +232,6 @@ export default function HomeScreen(props) {
     );
   };
   const navigatediscountDetailPage = item => {
-    // console.log('item1234', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -364,14 +368,13 @@ export default function HomeScreen(props) {
   };
 
   const supplierRedirection = item => {
-    // console.log('item', item);
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
         encryptedData: item?.id?.encryptedData,
       }),
     ).toString('base64');
-    // console.log('base64EncodedIdObject12', base64EncodedIdObject);
+
     NavigationService.navigate('SupplierDetails', {
       supplierObj: base64EncodedIdObject,
     });
@@ -381,7 +384,7 @@ export default function HomeScreen(props) {
     const response = await Request.get('newsandevent');
     if (response) {
       setisLoading(false);
-      // console.log('getnewsEventresponser123', response);
+
       if (response.code == 200) {
         setnewsData(response.data.rows);
       } else {
@@ -395,16 +398,16 @@ export default function HomeScreen(props) {
       NavigationService.navigate('LoginScreen');
     });
     return;
-    setisLoading(true);
-    const response = await Request.get('logout');
-    if (response) {
-      setisLoading(false);
-      if (response.code == 200) {
-        clearAllData(() => {
-          NavigationService.navigate('LoginScreen');
-        });
-      }
-    }
+    // setisLoading(true);
+    // const response = await Request.get('logout');
+    // if (response) {
+    //   setisLoading(false);
+    //   if (response.code == 200) {
+    //     clearAllData(() => {
+    //       NavigationService.navigate('LoginScreen');
+    //     });
+    //   }
+    // }
   };
   return (
     <View style={styles.container}>
@@ -419,14 +422,16 @@ export default function HomeScreen(props) {
           bounces={false}>
           <View style={{flex: 1}}>
             <Image
-              source={IMAGES.defaultHomeImage}
+              source={
+                mainPageImage ? {uri: mainPageImage} : IMAGES.defaultHomeImage
+              }
               resizeMode="stretch"
               style={styles.imageStyle}
             />
             <View style={{position: 'absolute'}}>
               <TouchableOpacity
                 onPress={() => {
-                  props.ontabPress(4);
+                  NavigationService.navigate('ProfileScreen');
                 }}>
                 <Image
                   source={user?.image ? {uri: user?.image} : IMAGES.profileEdit}
@@ -435,7 +440,7 @@ export default function HomeScreen(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  NavigationService.navigate('EmergencyContact');
+                  // NavigationService.navigate('EmergencyContact');
                 }}>
                 <Image
                   source={IMAGES.notification}
@@ -474,18 +479,19 @@ export default function HomeScreen(props) {
               marginBottom: scale(70),
             }}>
             <View style={{flex: 1}}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View>
                 <FlatList
                   data={arrData}
                   renderItem={renderItem}
                   bounces={false}
                   keyExtractor={(item, index) => `${index}`}
                   scrollEnabled={true}
+                  horizontal
                   style={{flexDirection: 'row', flex: 1}}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.contentContainerStyle}
                 />
-              </ScrollView>
+              </View>
             </View>
             <View style={{flex: 1, marginVertical: scale(15)}}>
               <View
@@ -498,18 +504,19 @@ export default function HomeScreen(props) {
                   <Text style={styles.viewAll}>{'Ver todo'}</Text>
                 </TouchableOpacity>
               </View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View>
                 <FlatList
                   data={discountData}
                   renderItem={bannerDatarenderItem}
                   bounces={false}
                   scrollEnabled={true}
+                  horizontal
                   keyExtractor={(item, index) => `${index}`}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.contentContainerStyle2}
                   style={{flexDirection: 'row', flex: 1}}
                 />
-              </ScrollView>
+              </View>
             </View>
             <View style={{flex: 1}}>
               <View
@@ -522,7 +529,7 @@ export default function HomeScreen(props) {
                   <Text style={styles.viewAll}>{'Ver todo'}</Text>
                 </TouchableOpacity>
               </View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View>
                 <FlatList
                   data={newsData}
                   renderItem={newsRenderItem}
@@ -530,10 +537,11 @@ export default function HomeScreen(props) {
                   scrollEnabled={true}
                   keyExtractor={(item, index) => `${index}`}
                   showsHorizontalScrollIndicator={false}
+                  horizontal
                   contentContainerStyle={styles.contentContainerStyle2}
                   style={{flexDirection: 'row', flex: 1}}
                 />
-              </ScrollView>
+              </View>
             </View>
 
             <View style={{flex: 1, marginVertical: scale(10)}}>
@@ -547,17 +555,16 @@ export default function HomeScreen(props) {
                   <Text style={styles.viewAll}>{'Ver todo'}</Text>
                 </TouchableOpacity>
               </View>
-              <ScrollView
-                style={{marginBottom: scale(20)}}
-                horizontal
-                showsHorizontalScrollIndicator={false}>
+              <View style={{marginBottom: scale(20)}}>
                 <FlatList
                   data={supplierArray}
                   scrollEnabled
+                  horizontal
                   renderItem={supplierDatarenderItem}
                   showsHorizontalScrollIndicator={false}
                   keyExtractor={(item, index) => `${index}`}
                   style={{flexDirection: 'row'}}
+                  // eslint-disable-next-line react/no-unstable-nested-components
                   ListEmptyComponent={() => {
                     return (
                       <View
@@ -582,7 +589,7 @@ export default function HomeScreen(props) {
                   }}
                   contentContainerStyle={styles.contentContainerStyle3}
                 />
-              </ScrollView>
+              </View>
             </View>
           </View>
         </ScrollView>

@@ -1,6 +1,7 @@
 const IMAGES = {
   appLogo: require('./appLogo.png'),
   loginLogo: require('./loginLogo.png'),
+  loginLogoText: require('./loginLogoText.png'),
   emailIcon: require('./emailIcon.png'),
   passwordIcon: require('./passwordIcon.png'),
   backIcon: require('./Back.png'),
@@ -36,6 +37,7 @@ const IMAGES = {
   instagram: require('./instagram.png'),
   emergencyBanner: require('./emergencyBanner.png'),
   emergencyContact: require('./emergencyContact.png'),
+  emergencyContactIcon: require('./emergencyContactIcon.png'),
   birthday: require('./birthday.png'),
   nodataImage: require('./NodataFound.png'),
   logoutIcon: require('./logoutIcon.png'),
