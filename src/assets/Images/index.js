@@ -1,6 +1,7 @@
 const IMAGES = {
   appLogo: require('./appLogo.png'),
   loginLogo: require('./loginLogo.png'),
+  loginLogoText: require('./loginLogoText.png'),
   emailIcon: require('./emailIcon.png'),
   passwordIcon: require('./passwordIcon.png'),
   backIcon: require('./Back.png'),

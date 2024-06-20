@@ -31,8 +31,7 @@ export default function HomeScreen(props) {
   const [newsData, setnewsData] = useState([]);
   const [discountData, setdiscountData] = useState([]);
   const [user, setuserData] = useState([]);
-  const [, setUserBirthDay] = useState(false);
-  const [, setMainPageImage] = useState(null);
+  const [mainPageImage, setMainPageImage] = useState(null);
   const isFocused = useIsFocused();
 
   // const [bannerData, setbannerData] = useState([
@@ -86,7 +85,6 @@ export default function HomeScreen(props) {
     async function fetchData() {
       if (isFocused) {
         await getProfileData();
-        await getMainPageImage();
       }
     }
     // Call the async function
@@ -97,16 +95,22 @@ export default function HomeScreen(props) {
   const getProfileData = async () => {
     const response = await Request.get('user');
     setuserData(response.data);
-    setUserBirthDay(checkUserBirthDay(response.data.dob));
+    const isUserBirthDay = checkUserBirthDay(response.data.dob);
+    const mainPageImageResponse = await Request.get(
+      'mainPageImage/getMainPageImage',
+    );
+    setMainPageImage(
+      isUserBirthDay
+        ? mainPageImageResponse?.data?.find(item => item.type == 'BDImage')
+            ?.cover_image
+        : mainPageImageResponse?.data?.find(
+            item => item.type == 'DasboardImage',
+          )?.cover_image,
+    );
     await StorageService.saveItem(
       StorageService.STORAGE_KEYS.USER_DETAILS,
       response.data,
     );
-  };
-
-  const getMainPageImage = async () => {
-    const response = await Request.get('mainPageImage/getMainPageImage');
-    setMainPageImage(response?.data);
   };
 
   const checkUserBirthDay = dob => {
@@ -418,7 +422,9 @@ export default function HomeScreen(props) {
           bounces={false}>
           <View style={{flex: 1}}>
             <Image
-              source={IMAGES.defaultHomeImage}
+              source={
+                mainPageImage ? {uri: mainPageImage} : IMAGES.defaultHomeImage
+              }
               resizeMode="stretch"
               style={styles.imageStyle}
             />

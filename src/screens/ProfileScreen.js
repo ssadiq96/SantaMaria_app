@@ -126,7 +126,7 @@ export default function ProfileScreen(props) {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-
+          console.log(item, 'profile');
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });

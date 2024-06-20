@@ -111,12 +111,22 @@ function DiscountCompanyPage({route, navigation}) {
             <View style={{}}>
               <View style={styles.validDateView}>
                 <Text numberOfLines={1} style={styles.validDate}>
-                  Inicio de validez: {moment().format('DD MMM')}
+                  Inicio de validez:
+                  {moment(
+                    item?.valid_from ||
+                      moment(item?.valid_till).subtract(1, 'day') ||
+                      moment(),
+                  ).format('DD MMM')}
                 </Text>
               </View>
               <View style={styles.validDateView}>
                 <Text numberOfLines={1} style={styles.validDate}>
-                  Fin de validez: {moment(item?.valid_till).format('DD MMM')}
+                  Fin de validez:{' '}
+                  {moment(
+                    item?.valid_till ||
+                      moment(item?.valid_from).add(1, 'day') ||
+                      moment(),
+                  ).format('DD MMM')}
                 </Text>
               </View>
             </View>

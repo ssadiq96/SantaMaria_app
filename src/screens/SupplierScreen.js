@@ -32,17 +32,13 @@ export default function SupplierScreen() {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
+      await getCategoryData();
       let response = await Request.get('supplier');
       if (response) {
         setIsLoading(false);
 
         if (response.code == 200) {
-          response = response.data.rows.map((row, index) => {
-            row.testCategory = `${row.name}`;
-            return row;
-          });
-          setSupplierCategory(response.map(item => item.testCategory));
-          setSupplierData(response);
+          setSupplierData(response.data.rows);
         } else {
           showSimpleAlert(response.message);
         }
@@ -50,6 +46,11 @@ export default function SupplierScreen() {
     }
     fetchData();
   }, []);
+
+  const getCategoryData = async () => {
+    let response = await Request.get('category?type=Supplier');
+    setSupplierCategory(response?.data?.rows);
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -61,7 +62,7 @@ export default function SupplierScreen() {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-
+          console.log(item);
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -118,11 +119,6 @@ export default function SupplierScreen() {
           setIsLoading(false);
 
           if (response.code == 200) {
-            response = response.data.rows.map((row, index) => {
-              row.testCategory = index;
-              return row;
-            });
-            setSupplierCategory(response.map(item => item.testCategory));
             setSupplierData(response.data.rows);
           } else {
             showSimpleAlert(response.message);
@@ -189,12 +185,12 @@ export default function SupplierScreen() {
     return (
       <TouchableOpacity
         onPress={() => {
-          setActiveSupplierCategory(item);
+          setActiveSupplierCategory(item?.id?.iv);
         }}>
         <View
           style={[
             styles.categoryView,
-            activeSupplierCategory === item
+            activeSupplierCategory === item?.id?.iv
               ? {}
               : {
                   backgroundColor: COLORS.transparent,
@@ -204,13 +200,13 @@ export default function SupplierScreen() {
             numberOfLines={1}
             style={[
               styles.category,
-              activeSupplierCategory === item
+              activeSupplierCategory === item?.id?.iv
                 ? {}
                 : {
                     color: COLORS.yellow,
                   },
             ]}>
-            {item}
+            {item.name}
           </Text>
         </View>
       </TouchableOpacity>

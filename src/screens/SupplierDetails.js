@@ -40,6 +40,13 @@ export default function SupplierDetails({route, navigation}) {
   }, []);
   const getComponentData = async () => {
     const encodedString = route?.params?.supplierObj;
+    console.log(
+      '-------------------------------------------------------------------',
+    );
+    console.log(encodedString);
+    console.log(
+      '-------------------------------------------------------------------',
+    );
 
     const response = await Request.get(`supplier/${encodedString}`);
     if (response) {

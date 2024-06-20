@@ -31,21 +31,23 @@ export default function DiscountScreen({route, navigation}) {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
+      await getCategoryData();
       await getDiscountData();
     }
     fetchData();
   }, []);
+
+  const getCategoryData = async () => {
+    let response = await Request.get('category?type=Discount');
+    setDiscountCategory(response?.data?.rows);
+  };
+
   const getDiscountData = async () => {
     let response = await Request.get('discount');
     if (response) {
       setIsLoading(false);
       if (response.code == 200) {
-        response = response.data.rows.map((row, index) => {
-          row.testCategory = `${row.title}`;
-          return row;
-        });
-        setDiscountCategory(response.map(item => item.testCategory));
-        setDiscountData(response);
+        setDiscountData(response.data.rows);
       } else {
         showSimpleAlert(response.message);
       }
@@ -168,12 +170,7 @@ export default function DiscountScreen({route, navigation}) {
         if (response) {
           setIsLoading(false);
           if (response.code == 200) {
-            response = response.data.rows.map((row, index) => {
-              row.testCategory = `${row.title}`;
-              return row;
-            });
-            setDiscountCategory(response.map(item => item.testCategory));
-            setDiscountData(response);
+            setDiscountData(response.data.rows);
           } else {
             showSimpleAlert(response.message);
           }
@@ -238,12 +235,12 @@ export default function DiscountScreen({route, navigation}) {
     return (
       <TouchableOpacity
         onPress={() => {
-          setActiveDiscountCategory(item);
+          setActiveDiscountCategory(item?.id?.iv);
         }}>
         <View
           style={[
             styles.categoryView,
-            activeDiscountCategory === item
+            activeDiscountCategory === item?.id?.iv
               ? {}
               : {
                   backgroundColor: COLORS.transparent,
@@ -253,13 +250,13 @@ export default function DiscountScreen({route, navigation}) {
             numberOfLines={1}
             style={[
               styles.category,
-              activeDiscountCategory === item
+              activeDiscountCategory === item?.id?.iv
                 ? {}
                 : {
                     color: COLORS.yellow,
                   },
             ]}>
-            {item}
+            {item.name}
           </Text>
         </View>
       </TouchableOpacity>
