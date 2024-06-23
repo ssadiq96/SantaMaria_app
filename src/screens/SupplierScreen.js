@@ -4,7 +4,6 @@ import {Rating} from '@kolking/react-native-rating';
 import {Buffer} from 'buffer';
 import React, {useEffect, useMemo, useState} from 'react';
 import {
-  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -15,12 +14,11 @@ import {
 } from 'react-native';
 import Request from '../api/Request';
 import {FONTS, IMAGES} from '../assets';
-import {COLORS, CONSTANTS} from '../common';
+import {COLORS} from '../common';
 import {SupplierSkeleton} from '../common/CustomSkeleton';
 import {moderateScale, scale} from '../common/Scale';
 import {showSimpleAlert} from '../utils/CommonUtils';
 import NavigationService from '../utils/NavigationService';
-import {clearAllData} from '../utils/StorageService';
 
 export default function SupplierScreen() {
   const [searchValue, setSearchValue] = useState('');
@@ -38,7 +36,19 @@ export default function SupplierScreen() {
         setIsLoading(false);
 
         if (response.code == 200) {
-          setSupplierData(response.data.rows);
+          const data = response.data.rows?.map(row => {
+            row.categories = row.categories.map(item => {
+              item.id = Buffer.from(
+                JSON.stringify({
+                  iv: item?.id?.iv,
+                  encryptedData: item?.id?.encryptedData,
+                }),
+              ).toString('base64');
+              return item;
+            });
+            return row;
+          });
+          setSupplierData(data);
         } else {
           showSimpleAlert(response.message);
         }
@@ -49,7 +59,16 @@ export default function SupplierScreen() {
 
   const getCategoryData = async () => {
     let response = await Request.get('category?type=Supplier');
-    setSupplierCategory(response?.data?.rows);
+    const data = response?.data?.rows?.map(item => {
+      item.id = Buffer.from(
+        JSON.stringify({
+          iv: item?.id?.iv,
+          encryptedData: item?.id?.encryptedData,
+        }),
+      ).toString('base64');
+      return item;
+    });
+    setSupplierCategory(data);
   };
 
   const renderItem = ({item, index}) => {
@@ -62,7 +81,6 @@ export default function SupplierScreen() {
               encryptedData: item?.id?.encryptedData,
             }),
           ).toString('base64');
-          console.log(item);
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -135,19 +153,19 @@ export default function SupplierScreen() {
     setSearchValue(text);
     searchData(text); // Call the memoized API function when search text changes
   };
-  const logoutApi = async () => {
-    // NavigationService.navigate('LoginScreen');
-    setIsLoading(true);
-    const response = await Request.get('logout');
-    if (response) {
-      setIsLoading(false);
-      if (response.code == 200) {
-        clearAllData(() => {
-          NavigationService.navigate('LoginScreen');
-        });
-      }
-    }
-  };
+  // const logoutApi = async () => {
+  //   // NavigationService.navigate('LoginScreen');
+  //   setIsLoading(true);
+  //   const response = await Request.get('logout');
+  //   if (response) {
+  //     setIsLoading(false);
+  //     if (response.code == 200) {
+  //       clearAllData(() => {
+  //         NavigationService.navigate('LoginScreen');
+  //       });
+  //     }
+  //   }
+  // };
 
   const categoryListHeaderComponent = () => {
     return (
@@ -185,12 +203,12 @@ export default function SupplierScreen() {
     return (
       <TouchableOpacity
         onPress={() => {
-          setActiveSupplierCategory(item?.id?.iv);
+          setActiveSupplierCategory(item?.id);
         }}>
         <View
           style={[
             styles.categoryView,
-            activeSupplierCategory === item?.id?.iv
+            activeSupplierCategory === item?.id
               ? {}
               : {
                   backgroundColor: COLORS.transparent,
@@ -200,7 +218,7 @@ export default function SupplierScreen() {
             numberOfLines={1}
             style={[
               styles.category,
-              activeSupplierCategory === item?.id?.iv
+              activeSupplierCategory === item?.id
                 ? {}
                 : {
                     color: COLORS.yellow,
@@ -224,13 +242,13 @@ export default function SupplierScreen() {
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => {
-                // NavigationService.navigate('EmergencyContact');
+                NavigationService.navigate('NotificationScreen');
               }}>
               <View style={styles.subContainer}>
                 <Image source={IMAGES.notification} tintColor={COLORS.black} />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 Alert.alert(
                   CONSTANTS.AppName,
@@ -246,7 +264,7 @@ export default function SupplierScreen() {
                 );
               }}>
               <Image source={IMAGES.logoutIcon} style={styles.logoutView} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         <View
@@ -297,8 +315,10 @@ export default function SupplierScreen() {
               <FlatList
                 data={
                   activeSupplierCategory !== 'all'
-                    ? supplierData.filter(
-                        item => item.testCategory === activeSupplierCategory,
+                    ? supplierData.filter(item =>
+                        item.categories.find(
+                          category => category.id === activeSupplierCategory,
+                        ),
                       )
                     : supplierData
                 }

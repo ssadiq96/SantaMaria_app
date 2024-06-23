@@ -3,7 +3,6 @@
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
-  Alert,
   FlatList,
   ImageBackground,
   StyleSheet,
@@ -19,7 +18,7 @@ import {EventSkeleton} from '../common/CustomSkeleton';
 import {moderateScale, scale} from '../common/Scale';
 import {showSimpleAlert} from '../utils/CommonUtils';
 import NavigationService from '../utils/NavigationService';
-import StorageService, {clearAllData} from '../utils/StorageService';
+import StorageService from '../utils/StorageService';
 import {hp, wp} from '../utils/constants';
 
 export default function NewEventScreen(Props) {
@@ -98,19 +97,19 @@ export default function NewEventScreen(Props) {
       </TouchableOpacity>
     );
   };
-  const logoutApi = async () => {
-    // NavigationService.navigate('LoginScreen');
-    setisLoading(true);
-    const response = await Request.get('logout');
-    if (response) {
-      setisLoading(false);
-      if (response.code == 200) {
-        clearAllData(() => {
-          NavigationService.navigate('LoginScreen');
-        });
-      }
-    }
-  };
+  // const logoutApi = async () => {
+  //   // NavigationService.navigate('LoginScreen');
+  //   setisLoading(true);
+  //   const response = await Request.get('logout');
+  //   if (response) {
+  //     setisLoading(false);
+  //     if (response.code == 200) {
+  //       clearAllData(() => {
+  //         NavigationService.navigate('LoginScreen');
+  //       });
+  //     }
+  //   }
+  // };
   const getnewsEvent = async data => {
     setisLoading(true);
     const response = await Request.get(
@@ -166,11 +165,11 @@ export default function NewEventScreen(Props) {
 
           <TouchableOpacity
             onPress={() => {
-              // NavigationService.navigate('EmergencyContact');
+              NavigationService.navigate('NotificationScreen');
             }}>
             <Image source={IMAGES.notification} tintColor={COLORS.white} />
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               Alert.alert(
                 CONSTANTS.AppName,
@@ -186,7 +185,7 @@ export default function NewEventScreen(Props) {
               );
             }}>
             <Image source={IMAGES.logoutIcon} style={styles.logoutView} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <Text style={styles.discoverText}>
           {'Descubre lo que está en tendencia'}
