@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   ScrollView,
@@ -14,7 +15,7 @@ import {FONTS, IMAGES} from '../assets';
 import {moderateScale, scale} from '../common/Scale';
 import {COLORS, CONSTANTS} from '../common';
 import NavigationService from '../utils/NavigationService';
-import StorageService from '../utils/StorageService';
+import StorageService, {clearAllData} from '../utils/StorageService';
 import moment from 'moment';
 import Request from '../api/Request';
 import {useIsFocused} from '@react-navigation/native';
@@ -25,10 +26,10 @@ import {Buffer} from 'buffer';
 export default function ProfileScreen(props) {
   const isFocused = useIsFocused();
 
-  const [bannerData, setbannerData] = useState([]);
-  const [supplierData, setsupplierData] = useState([]);
-  const [, setisLoading] = useState(false);
-  const [user, setuserData] = useState([]);
+  const [bannerData, setBannerData] = useState([]);
+  const [supplierData, setSupplierData] = useState([]);
+  const [, setIsLoading] = useState(false);
+  const [user, setUserData] = useState([]);
   const supplierArray = [];
   const discountArray = [];
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function ProfileScreen(props) {
   }, [isFocused]);
   const getProfileData = async () => {
     const response = await Request.get('user');
-    setuserData(response.data);
+    setUserData(response.data);
 
     await StorageService.saveItem(
       StorageService.STORAGE_KEYS.USER_DETAILS,
@@ -53,11 +54,11 @@ export default function ProfileScreen(props) {
     );
   };
   const getWishlistData = async () => {
-    setisLoading(true);
+    setIsLoading(true);
     const response = await Request.get('wishlist');
 
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
 
       if (response.code == 200) {
         response.data.rows.forEach(item => {
@@ -67,15 +68,15 @@ export default function ProfileScreen(props) {
             discountArray.push(item);
           }
         });
-        setsupplierData(supplierArray);
-        setbannerData(discountArray);
+        setSupplierData(supplierArray);
+        setBannerData(discountArray);
         // setsupplierData(response.data.rows);
       } else {
         showSimpleAlert(response.message);
       }
     }
   };
-  const navigatediscountDetailPage = item => {
+  const navigateDiscountDetailPage = item => {
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -86,11 +87,11 @@ export default function ProfileScreen(props) {
       discountobj: base64EncodedIdObject,
     });
   };
-  const bannerDatarenderItem = ({item, index}) => {
+  const bannerDataRenderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigatediscountDetailPage(item);
+          navigateDiscountDetailPage(item);
         }}
         style={{}}>
         <View style={styles.renderView2}>
@@ -116,7 +117,7 @@ export default function ProfileScreen(props) {
       </TouchableOpacity>
     );
   };
-  const supplierDatarenderItem = ({item, index}) => {
+  const supplierDataRenderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -168,6 +169,20 @@ export default function ProfileScreen(props) {
     );
   };
 
+  const logoutApi = async () => {
+    // NavigationService.navigate('LoginScreen');
+    setIsLoading(true);
+    const response = await Request.get('logout');
+    setIsLoading(false);
+    if (response) {
+      if (response.code == 200) {
+        clearAllData(() => {
+          NavigationService.navigate('LoginScreen');
+        });
+      }
+    }
+  };
+
   return (
     <ScrollView bounces={false} style={styles.container}>
       <View style={styles.mainView}>
@@ -177,13 +192,33 @@ export default function ProfileScreen(props) {
         />
         <View style={styles.overlay} />
 
-        <TouchableOpacity
-          onPress={() => {
-            NavigationService.navigate('ProfileEditScreen', {user: user});
-          }}
-          style={styles.profileView2}>
-          <Text style={styles.profileText}>{'Editar perfil'}</Text>
-        </TouchableOpacity>
+        <View style={{alignSelf: 'flex-end'}}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate('ProfileEditScreen', {user: user});
+            }}
+            style={styles.profileView2}>
+            <Text style={styles.profileText}>{'Editar perfil'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.logoutViewContainer}
+            onPress={() => {
+              Alert.alert(
+                CONSTANTS.AppName,
+                '¿Estás seguro de que quieres cerrar sesión?',
+                [
+                  {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {text: 'DE ACUERDO', onPress: () => logoutApi()},
+                ],
+              );
+            }}>
+            <Image source={IMAGES.logoutIcon} style={styles.logoutView} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.nameView}>
           <Text numberOfLines={1} style={styles.nameText}>
             {`${user?.firstName || ''} ${user?.lastName || ''}`}
@@ -255,7 +290,7 @@ export default function ProfileScreen(props) {
           <Text style={styles.headerText}>{'Descuentos Guardados'}</Text>
           <FlatList
             data={bannerData}
-            renderItem={bannerDatarenderItem}
+            renderItem={bannerDataRenderItem}
             bounces={false}
             horizontal
             scrollEnabled={true}
@@ -292,7 +327,7 @@ export default function ProfileScreen(props) {
             data={supplierData}
             scrollEnabled
             horizontal
-            renderItem={supplierDatarenderItem}
+            renderItem={supplierDataRenderItem}
             showsHorizontalScrollIndicator={false}
             style={{flexDirection: 'row'}}
             keyExtractor={(item, index) => index}
@@ -409,7 +444,14 @@ const styles = StyleSheet.create({
     borderRadius: scale(20),
     alignSelf: 'flex-end',
     bottom: scale(220),
-    right: scale(30),
+    right: scale(35),
+  },
+  logoutViewContainer: {
+    position: 'absolute',
+    borderRadius: scale(20),
+    alignSelf: 'flex-end',
+    bottom: scale(223),
+    right: scale(7),
   },
   nameView: {
     position: 'absolute',
@@ -492,5 +534,10 @@ const styles = StyleSheet.create({
     marginTop: '45%',
     alignSelf: 'flex-start',
     marginHorizontal: scale(10),
+  },
+  logoutView: {
+    height: scale(20),
+    width: scale(20),
+    marginLeft: scale(10),
   },
 });

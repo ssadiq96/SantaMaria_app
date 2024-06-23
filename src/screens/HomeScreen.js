@@ -6,7 +6,6 @@ import {Buffer} from 'buffer';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
-  Alert,
   FlatList,
   ScrollView,
   StyleSheet,
@@ -22,7 +21,7 @@ import {HomeSkeleton} from '../common/CustomSkeleton';
 import {moderateScale, scale} from '../common/Scale';
 import {showSimpleAlert} from '../utils/CommonUtils';
 import NavigationService from '../utils/NavigationService';
-import StorageService, {clearAllData} from '../utils/StorageService';
+import StorageService from '../utils/StorageService';
 import {hp, wp} from '../utils/constants';
 export default function HomeScreen(props) {
   const [arrData, setarrData] = useState([]);
@@ -392,23 +391,23 @@ export default function HomeScreen(props) {
       }
     }
   };
-  const logoutApi = async () => {
-    // NavigationService.navigate('LoginScreen');
-    clearAllData(() => {
-      NavigationService.navigate('LoginScreen');
-    });
-    return;
-    // setisLoading(true);
-    // const response = await Request.get('logout');
-    // if (response) {
-    //   setisLoading(false);
-    //   if (response.code == 200) {
-    //     clearAllData(() => {
-    //       NavigationService.navigate('LoginScreen');
-    //     });
-    //   }
-    // }
-  };
+  // const logoutApi = async () => {
+  //   // NavigationService.navigate('LoginScreen');
+  //   clearAllData(() => {
+  //     NavigationService.navigate('LoginScreen');
+  //   });
+  //   return;
+  //   // setisLoading(true);
+  //   // const response = await Request.get('logout');
+  //   // if (response) {
+  //   //   setisLoading(false);
+  //   //   if (response.code == 200) {
+  //   //     clearAllData(() => {
+  //   //       NavigationService.navigate('LoginScreen');
+  //   //     });
+  //   //   }
+  //   // }
+  // };
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -440,14 +439,14 @@ export default function HomeScreen(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  // NavigationService.navigate('EmergencyContact');
+                  NavigationService.navigate('NotificationScreen');
                 }}>
                 <Image
                   source={IMAGES.notification}
                   style={styles.profileEditView2}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   Alert.alert(
                     CONSTANTS.AppName,
@@ -463,7 +462,7 @@ export default function HomeScreen(props) {
                   );
                 }}>
                 <Image source={IMAGES.logoutIcon} style={styles.logoutView} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <Image

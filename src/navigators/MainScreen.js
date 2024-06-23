@@ -29,6 +29,7 @@ import Util from '../utils/utils';
 import ProfileScreen from '../screens/ProfileScreen';
 import {useIsFocused} from '@react-navigation/native';
 import Request from '../api/Request';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const Stack = createNativeStackNavigator();
 const options2 = {
@@ -50,16 +51,10 @@ const MainScreenRoutes = () => {
     'EmergencyContact',
   ]);
   const [tabIndex, setTabIndex] = React.useState(0);
-  const [userImage, setuserImage] = React.useState('');
+  const [, setuserImage] = React.useState('');
   // eslint-disable-next-line react/no-unstable-nested-components
   const TabScreens = () => {
-    return (
-      <TabBar
-        tabIndex={tabIndex}
-        setTabIndex={setTabIndex}
-        setuserImage={setuserImage}
-      />
-    );
+    return <TabBar tabIndex={tabIndex} setTabIndex={setTabIndex} />;
   };
 
   // eslint-disable-next-line react/no-unstable-nested-components
@@ -158,6 +153,11 @@ const MainScreenRoutes = () => {
         <Stack.Screen
           name={'ProfileScreen'}
           component={Profile}
+          options={options2}
+        />
+        <Stack.Screen
+          name={'NotificationScreen'}
+          component={NotificationScreen}
           options={options2}
         />
       </Stack.Navigator>
