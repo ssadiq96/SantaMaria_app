@@ -53,7 +53,11 @@ export default function NewEventScreen(Props) {
     setisLoading(false);
 
     if (response.code == 200) {
-      seteventbanner(response.data);
+      seteventbanner(
+        response.data.sort(
+          (a, b) => new Date(b.published_date) - new Date(a.published_date),
+        ),
+      );
     } else {
       showSimpleAlert(response.message);
     }
@@ -119,7 +123,12 @@ export default function NewEventScreen(Props) {
       setisLoading(false);
 
       if (response.code == 200) {
-        setnewsData(response.data.rows);
+        console.log(response.data.rows);
+        setnewsData(
+          response.data.rows.sort(
+            (a, b) => new Date(b.published_date) - new Date(a.published_date),
+          ),
+        );
       } else {
         showSimpleAlert(response.message);
       }

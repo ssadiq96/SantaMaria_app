@@ -79,8 +79,8 @@ export default function ProfileScreen(props) {
   const navigateDiscountDetailPage = item => {
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
-        iv: item?.id?.iv,
-        encryptedData: item?.id?.encryptedData,
+        iv: item?.discountId?.iv,
+        encryptedData: item?.discountId?.encryptedData,
       }),
     ).toString('base64');
     NavigationService.navigate('DiscountCompanyPage', {
