@@ -17,10 +17,7 @@ const NotificationScreen = ({route, navigation}) => {
               style={styles.iconView}
             />
           </View>
-          <Text
-            style={styles.titleText}
-            numberOfLines={2}
-            textBreakStrategy="balanced">
+          <Text style={styles.titleText} numberOfLines={2}>
             {item.text}
           </Text>
         </View>
@@ -56,7 +53,7 @@ const NotificationScreen = ({route, navigation}) => {
         <FlatList
           data={[
             {
-              text: 'This is Lorem Ipsum custom text to display on the screen  screen ',
+              text: 'This is Lorem Ipsum custom text to display on the screen  screen  display on the screen  screen ',
               img: IMAGES.appLogo,
             },
             {
@@ -146,10 +143,12 @@ const styles = StyleSheet.create({
     borderRadius: scale(20),
   },
   titleText: {
-    color: 'black',
-    fontSize: scale(14),
-    fontFamily: FONTS.GothamMedium,
-    fontWeight: 'normal',
+    color: '#000',
+    fontSize: scale(13),
+    fontFamily: FONTS.GothamLight,
+    fontWeight: '600',
     marginHorizontal: scale(10),
+    flex: 1,
+    flexWrap: 'wrap',
   },
 });
