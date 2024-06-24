@@ -9,6 +9,7 @@ import {
   Alert,
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -175,14 +176,17 @@ export default function ProfileScreen(props) {
     if (response) {
       if (response.code == 200) {
         clearAllData(() => {
-          NavigationService.navigate('LoginScreen');
+          NavigationService.replace('LoginScreen');
         });
       }
     }
   };
 
   return (
-    <View bounces={false} style={styles.container}>
+    <ScrollView
+      bounces={false}
+      showsVerticalScrollIndicator={false}
+      style={styles.container}>
       <View style={styles.mainView}>
         <Image
           style={styles.profileView}
@@ -353,7 +357,7 @@ export default function ProfileScreen(props) {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
