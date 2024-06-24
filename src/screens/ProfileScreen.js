@@ -1,27 +1,26 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable react-native/no-inline-styles */
+import {Rating} from '@kolking/react-native-rating';
+import {useIsFocused} from '@react-navigation/native';
+import {Buffer} from 'buffer';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Request from '../api/Request';
 import {FONTS, IMAGES} from '../assets';
-import {moderateScale, scale} from '../common/Scale';
 import {COLORS, CONSTANTS} from '../common';
+import {moderateScale, scale} from '../common/Scale';
+import {showSimpleAlert} from '../utils/CommonUtils';
 import NavigationService from '../utils/NavigationService';
 import StorageService, {clearAllData} from '../utils/StorageService';
-import moment from 'moment';
-import Request from '../api/Request';
-import {useIsFocused} from '@react-navigation/native';
-import {showSimpleAlert} from '../utils/CommonUtils';
-import {Rating} from '@kolking/react-native-rating';
-import {Buffer} from 'buffer';
 
 export default function ProfileScreen(props) {
   const isFocused = useIsFocused();
@@ -123,11 +122,10 @@ export default function ProfileScreen(props) {
         onPress={() => {
           const base64EncodedIdObject = Buffer.from(
             JSON.stringify({
-              iv: item?.id?.iv,
-              encryptedData: item?.id?.encryptedData,
+              iv: item?.supplierId?.iv,
+              encryptedData: item?.supplierId?.encryptedData,
             }),
           ).toString('base64');
-          console.log(item, 'profile');
           NavigationService.navigate('SupplierDetails', {
             supplierObj: base64EncodedIdObject,
           });
@@ -184,7 +182,7 @@ export default function ProfileScreen(props) {
   };
 
   return (
-    <ScrollView bounces={false} style={styles.container}>
+    <View bounces={false} style={styles.container}>
       <View style={styles.mainView}>
         <Image
           style={styles.profileView}
@@ -355,7 +353,7 @@ export default function ProfileScreen(props) {
           />
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
