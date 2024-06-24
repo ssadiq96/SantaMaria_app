@@ -77,7 +77,12 @@ export default function LoginScreen({route, navigation}) {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <View style={{marginTop: scale(80), alignItems: 'center'}}>
+        <View
+          style={{
+            marginTop: scale(80),
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
           <Image
             source={
               loginImage?.cover_image
@@ -85,11 +90,16 @@ export default function LoginScreen({route, navigation}) {
                 : IMAGES.loginLogo
             }
             style={{
-              height: verticalScale(loginImage?.cover_image ? 140 : 200),
-              width: scale(loginImage?.cover_image ? 149 : 239),
+              height: verticalScale(loginImage?.cover_image ? 150 : 200),
+              width: scale(loginImage?.cover_image ? 189 : 239),
             }}
           />
-          <Image source={IMAGES.loginLogoText} style={{width: scale(239)}} />
+          <View style={{flex: 1, width: scale(245)}}>
+            <Text style={styles.titleText}>Inicio de Sesión</Text>
+            <Text style={styles.subTitleText}>
+              ¡El Hub de la Comunidad de Santa María te espera!
+            </Text>
+          </View>
         </View>
         <View style={styles.textinputView}>
           <CustomTextInput
@@ -147,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textinputView: {
-    marginTop: scale(40),
+    marginTop: scale(30),
   },
   forgotPasswordText: {
     textAlign: 'right',
@@ -175,5 +185,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  titleText: {
+    textAlign: 'center',
+    color: COLORS.yellow,
+    fontSize: scale(24),
+    marginTop: scale(5),
+    fontFamily: FONTS.GotamBold,
+    flex: 1,
+  },
+  subTitleText: {
+    textAlign: 'center',
+    color: COLORS.yellow,
+    fontSize: scale(14),
+    marginTop: scale(5),
+    fontFamily: FONTS.GothamMedium,
+    flex: 1,
+    flexWrap: 'wrap',
   },
 });
