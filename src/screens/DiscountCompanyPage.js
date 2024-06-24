@@ -111,7 +111,7 @@ function DiscountCompanyPage({route, navigation}) {
             <View style={{}}>
               <View style={styles.validDateView}>
                 <Text numberOfLines={1} style={styles.validDate}>
-                  Inicio de validez:
+                  Desde:
                   {moment(
                     item?.valid_from ||
                       moment(item?.valid_till).subtract(1, 'day') ||
@@ -121,7 +121,7 @@ function DiscountCompanyPage({route, navigation}) {
               </View>
               <View style={styles.validDateView}>
                 <Text numberOfLines={1} style={styles.validDate}>
-                  Fin de validez:{' '}
+                  Hasta:{' '}
                   {moment(
                     item?.valid_till ||
                       moment(item?.valid_from).add(1, 'day') ||
