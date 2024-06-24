@@ -105,6 +105,10 @@ function popToTop() {
   _navigator.dispatch(StackActions.popToTop());
 }
 
+function replace(route) {
+  _navigator.dispatch(StackActions.replace({routeName: route}));
+}
+
 /** stack reset action method */
 function resetAction(routeName, params, index = 0) {
   _navigator.dispatch(
@@ -150,4 +154,5 @@ export default {
   stackReset,
   getGlobalNavigator,
   resetnavigate,
+  replace,
 };
