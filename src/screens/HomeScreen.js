@@ -24,58 +24,18 @@ import NavigationService from '../utils/NavigationService';
 import StorageService from '../utils/StorageService';
 import {hp, wp} from '../utils/constants';
 export default function HomeScreen(props) {
-  const [arrData, setarrData] = useState([]);
-  const [supplierArray, setsupplierArray] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
-  const [newsData, setnewsData] = useState([]);
-  const [discountData, setdiscountData] = useState([]);
-  const [user, setuserData] = useState([]);
+  const [homeComponentTiles, setHomeComponentTiles] = useState([]);
+  const [supplierArray, setSupplierArray] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [newsData, setNewsData] = useState([]);
+  const [discountData, setDiscountData] = useState([]);
+  const [user, setUserData] = useState([]);
   const [mainPageImage, setMainPageImage] = useState(null);
   const isFocused = useIsFocused();
 
-  // const [bannerData, setbannerData] = useState([
-  //   {
-  //     image: IMAGES.discountBanner,
-  //     text: 'Newly Launch Panigale V4 SP2',
-  //   },
-  //   {
-  //     image: IMAGES.discountBanner,
-  //     text: 'Newly Launch Panigale V4 SP2',
-  //   },
-  //   {
-  //     image: IMAGES.discountBanner,
-  //     text: 'Newly Launch Panigale V4 SP2',
-  //   },
-  //   {
-  //     image: IMAGES.discountBanner,
-  //     text: 'Newly Launch Panigale V4 SP2',
-  //   },
-  // ]);
-  // const [supplierData, setsupplierData] = useState([
-  //   {
-  //     title: 'Supplier',
-  //     desc: 'This is a text sample',
-  //     img: IMAGES.profileEdit,
-  //   },
-  //   {
-  //     title: 'Supplier',
-  //     desc: 'This is a text sample',
-  //     img: IMAGES.profileEdit,
-  //   },
-  //   {
-  //     title: 'Supplier',
-  //     desc: 'This is a text sample',
-  //     img: IMAGES.profileEdit,
-  //   },
-  //   {
-  //     title: 'Supplier',
-  //     desc: 'This is a text sample',
-  //     img: IMAGES.profileEdit,
-  //   },
-  // ]);
   useEffect(() => {
     async function fetchData() {
-      setisLoading(true);
+      setIsLoading(true);
       await getComponentData();
     }
     fetchData();
@@ -93,7 +53,7 @@ export default function HomeScreen(props) {
 
   const getProfileData = async () => {
     const response = await Request.get('user');
-    setuserData(response.data);
+    setUserData(response.data);
     const isUserBirthDay = checkUserBirthDay(response.data.dob);
     const mainPageImageResponse = await Request.get(
       'mainPageImage/getMainPageImage',
@@ -118,7 +78,7 @@ export default function HomeScreen(props) {
 
   useEffect(() => {
     async function fetchData2() {
-      setisLoading(true);
+      setIsLoading(true);
       await getComponentData2();
     }
     // Call the async function
@@ -126,13 +86,13 @@ export default function HomeScreen(props) {
   }, []);
   useEffect(() => {
     async function fetchData4() {
-      getnewsEvent(true);
+      getNewsEvent(true);
     }
     fetchData4();
   }, []);
   useEffect(() => {
     async function fetchData5() {
-      setisLoading(true);
+      setIsLoading(true);
       await getdiscountData();
     }
     // Call the async function
@@ -141,10 +101,10 @@ export default function HomeScreen(props) {
   const getdiscountData = async () => {
     const response = await Request.get('discount');
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
 
       if (response.code == 200) {
-        setdiscountData(response.data.rows);
+        setDiscountData(response.data.rows);
       } else {
         showSimpleAlert(response.message);
       }
@@ -153,10 +113,20 @@ export default function HomeScreen(props) {
   const getComponentData = async () => {
     const response = await Request.get('component');
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
 
       if (response.code == 200) {
-        setarrData(response.data.rows);
+        let sortOrder = [
+          'Discount',
+          'Suppliers',
+          'Newsandevent',
+          'EmergencyContact',
+        ];
+        setHomeComponentTiles(
+          response.data.rows.sort(
+            (a, b) => sortOrder.indexOf(a.type) - sortOrder.indexOf(b.type),
+          ),
+        );
       } else {
         showSimpleAlert(response.message);
       }
@@ -165,10 +135,10 @@ export default function HomeScreen(props) {
   const getComponentData2 = async () => {
     const response = await Request.get('supplier');
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
 
       if (response.code == 200) {
-        setsupplierArray(response.data.rows);
+        setSupplierArray(response.data.rows);
       } else {
         showSimpleAlert(response.message);
       }
@@ -230,7 +200,7 @@ export default function HomeScreen(props) {
       </TouchableOpacity>
     );
   };
-  const navigatediscountDetailPage = item => {
+  const navigateDiscountDetailPage = item => {
     const base64EncodedIdObject = Buffer.from(
       JSON.stringify({
         iv: item?.id?.iv,
@@ -241,11 +211,11 @@ export default function HomeScreen(props) {
       discountobj: base64EncodedIdObject,
     });
   };
-  const bannerDatarenderItem = ({item, index}) => {
+  const bannerDataRenderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigatediscountDetailPage(item);
+          navigateDiscountDetailPage(item);
         }}>
         <View style={styles.renderView2}>
           {item.image ? (
@@ -378,36 +348,19 @@ export default function HomeScreen(props) {
       supplierObj: base64EncodedIdObject,
     });
   };
-  const getnewsEvent = async data => {
-    setisLoading(true);
+  const getNewsEvent = async data => {
+    setIsLoading(true);
     const response = await Request.get('newsandevent');
     if (response) {
-      setisLoading(false);
+      setIsLoading(false);
 
       if (response.code == 200) {
-        setnewsData(response.data.rows);
+        setNewsData(response.data.rows);
       } else {
         showSimpleAlert(response.message);
       }
     }
   };
-  // const logoutApi = async () => {
-  //   // NavigationService.navigate('LoginScreen');
-  //   clearAllData(() => {
-  //     NavigationService.navigate('LoginScreen');
-  //   });
-  //   return;
-  //   // setisLoading(true);
-  //   // const response = await Request.get('logout');
-  //   // if (response) {
-  //   //   setisLoading(false);
-  //   //   if (response.code == 200) {
-  //   //     clearAllData(() => {
-  //   //       NavigationService.navigate('LoginScreen');
-  //   //     });
-  //   //   }
-  //   // }
-  // };
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -446,23 +399,6 @@ export default function HomeScreen(props) {
                   style={styles.profileEditView2}
                 />
               </TouchableOpacity>
-              {/* <TouchableOpacity
-                onPress={() => {
-                  Alert.alert(
-                    CONSTANTS.AppName,
-                    '¿Estás seguro de que quieres cerrar sesión?',
-                    [
-                      {
-                        text: 'Cancelar',
-                        onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                      },
-                      {text: 'DE ACUERDO', onPress: () => logoutApi()},
-                    ],
-                  );
-                }}>
-                <Image source={IMAGES.logoutIcon} style={styles.logoutView} />
-              </TouchableOpacity> */}
             </View>
 
             <Image
@@ -480,7 +416,7 @@ export default function HomeScreen(props) {
             <View style={{flex: 1}}>
               <View>
                 <FlatList
-                  data={arrData}
+                  data={homeComponentTiles}
                   renderItem={renderItem}
                   bounces={false}
                   keyExtractor={(item, index) => `${index}`}
@@ -506,7 +442,7 @@ export default function HomeScreen(props) {
               <View>
                 <FlatList
                   data={discountData}
-                  renderItem={bannerDatarenderItem}
+                  renderItem={bannerDataRenderItem}
                   bounces={false}
                   scrollEnabled={true}
                   horizontal
