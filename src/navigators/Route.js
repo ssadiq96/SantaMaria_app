@@ -1,22 +1,17 @@
-/* eslint-disable eqeqeq */
 /* eslint-disable react-native/no-inline-styles */
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
-import {Animated, StatusBar, StyleSheet, View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import SplashScreen from '../screens/SplashScreen';
 
 import Toast from 'react-native-toast-message';
 import {COLORS} from '../common';
-import {scale} from '../common/Scale';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-import TabBar from '../screens/TabBar';
 import VerifySignupScreen from '../screens/VerifySignupScreen';
 import NavigationService from '../utils/NavigationService';
-import {DEVICE, hp, wp} from '../utils/constants';
-import {isIphoneX} from '../utils/iPhoneXHelper';
 import MainScreenRoutes from './MainScreen';
 
 const Stack = createNativeStackNavigator();
@@ -117,48 +112,3 @@ export default function Route({route, navigate}) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    paddingRight: wp(2),
-  },
-  absolute: {
-    width: DEVICE.DEVICE_WIDTH,
-    paddingTop: hp('1%'),
-    paddingBottom: isIphoneX() ? hp('2.6%') : hp('1.5%'),
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  tabBarContainer: {
-    width: DEVICE.DEVICE_WIDTH,
-    backgroundColor: COLORS.white,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    paddingTop: hp('1%'),
-    paddingBottom: isIphoneX() ? hp('2.6%') : hp('1.5%'),
-  },
-  blurOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Semi-transparent white to mimic blur
-  },
-
-  tabIcon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: wp(2),
-    marginBottom: wp(5),
-    marginHorizontal: scale(16),
-  },
-  tabText: {
-    fontSize: wp('3.2%'),
-    lineHeight: wp(5),
-    color: COLORS.white,
-    textAlign: 'center',
-  },
-});
