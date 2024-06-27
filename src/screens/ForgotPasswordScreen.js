@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FONTS, IMAGES} from '../assets';
@@ -10,18 +12,18 @@ import {isValidEmail, showSimpleAlert} from '../utils/CommonUtils';
 import Request from '../api/Request';
 
 export default function ForgotPasswordScreen({route, navigation}) {
-  const [email, setemail] = useState('');
-  const [isLoading, setisLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [, setIsLoading] = useState(false);
 
   const forgotPassword = async () => {
-    const ConfirmValid = validationofField();
+    const ConfirmValid = validationOfField();
     if (ConfirmValid) {
       let params = {
         email: email,
       };
-      setisLoading(true);
+      setIsLoading(true);
       const response = await Request.post('forgotPassword', params);
-      setisLoading(false);
+      setIsLoading(false);
 
       if (response.status == true) {
       } else {
@@ -29,7 +31,7 @@ export default function ForgotPasswordScreen({route, navigation}) {
       }
     }
   };
-  const validationofField = () => {
+  const validationOfField = () => {
     if (email == '') {
       showSimpleAlert('Por favor ingrese el correo electrónico');
     } else if (!isValidEmail(email)) {
@@ -56,7 +58,7 @@ export default function ForgotPasswordScreen({route, navigation}) {
             imageSource={IMAGES.emailIcon}
             value={email}
             onChangeText={text => {
-              setemail(text);
+              setEmail(text);
             }}
             placeholder={'Correo electrónico'}
           />

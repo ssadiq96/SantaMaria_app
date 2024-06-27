@@ -119,12 +119,14 @@ export default function LoginScreen({route, navigation}) {
             imageSource={IMAGES.passwordIcon}
             placeholder={'Contraseña'}
           />
-          {/* <TouchableOpacity
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate('ForgotPasswordScreen');
             }}>
-            <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
-          </TouchableOpacity> */}
+            <Text style={styles.forgotPasswordText}>
+              ¿Olvidaste tu contraseña?
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <CustomButton
