@@ -8,43 +8,49 @@ import CustomTextInput from '../components/CustomTextInput';
 import {COLORS} from '../common';
 import CustomButton from '../components/CustomButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {isValidEmail, showSimpleAlert} from '../utils/CommonUtils';
+import {showSimpleAlert} from '../utils/CommonUtils';
 import Request from '../api/Request';
-import NavigationService from '../utils/NavigationService';
 
-export default function ForgotPasswordScreen({route, navigation}) {
-  const [email, setEmail] = useState('');
+export default function NewPasswordScreen({route, navigation}) {
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [, setIsLoading] = useState(false);
 
-  const forgotPassword = async () => {
-    const ConfirmValid = validationOfField();
-    if (ConfirmValid) {
-      let params = {
-        email: email,
-      };
+  const resetPassword = async () => {
+    const isValid = validateField();
+    const token = route?.params?.token;
+    let params = {
+      token: token,
+      newPassword: newPassword,
+    };
+    if (isValid) {
       setIsLoading(true);
-      const response = await Request.post('sendOtp', params);
+      const response = await Request.post('resetPassword', params);
       setIsLoading(false);
 
       if (response.code == 200) {
         showSimpleAlert(response.message);
-        NavigationService.navigate('VerifyOTPScreen', {
-          email: email,
-        });
+        navigation.navigate('LoginScreen'); // Assuming there's a LoginScreen
       } else {
         showSimpleAlert(response.message);
       }
     }
   };
-  const validationOfField = () => {
-    if (email == '') {
-      showSimpleAlert('Por favor ingrese el correo electrónico');
-    } else if (!isValidEmail(email)) {
-      showSimpleAlert('Por favor introduzca un correo electrónico válido');
-    } else {
-      return true;
+
+  const validateField = () => {
+    if (newPassword == '') {
+      showSimpleAlert('Por favor ingrese la nueva contraseña');
+      return false;
+    } else if (confirmPassword == '') {
+      showSimpleAlert('Por favor confirme la nueva contraseña');
+      return false;
+    } else if (newPassword !== confirmPassword) {
+      showSimpleAlert('Las contraseñas no coinciden');
+      return false;
     }
+    return true;
   };
+
   return (
     <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -60,24 +66,35 @@ export default function ForgotPasswordScreen({route, navigation}) {
         </View>
         <View style={styles.textinputView}>
           <CustomTextInput
-            imageSource={IMAGES.emailIcon}
-            value={email}
+            imageSource={IMAGES.passwordIcon}
+            value={newPassword}
             onChangeText={text => {
-              setEmail(text);
+              setNewPassword(text);
             }}
-            placeholder={'Correo electrónico'}
+            placeholder={'Nueva contraseña'}
+            secureTextEntry={true}
+          />
+        </View>
+        <View style={styles.textinputView}>
+          <CustomTextInput
+            imageSource={IMAGES.passwordIcon}
+            value={confirmPassword}
+            onChangeText={text => {
+              setConfirmPassword(text);
+            }}
+            placeholder={'Confirmar nueva contraseña'}
+            secureTextEntry={true}
           />
         </View>
         <CustomButton
           flag={0}
-          title={'Has olvidado tu contraseña'}
+          title={'Restablecer contraseña'}
           onPress={() => {
-            forgotPassword();
+            resetPassword();
           }}
         />
-        <Text style={styles.signUpText}>
-          Le enviaremos una nueva contraseña a su correo electrónico y luego
-          podrá cambiarla en su configuración.
+        <Text style={styles.instructionText}>
+          Ingrese su nueva contraseña y confírmela para continuar.
         </Text>
       </View>
     </KeyboardAwareScrollView>
@@ -90,14 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textinputView: {
-    marginTop: scale(60),
-  },
-  forgotPasswordText: {
-    textAlign: 'right',
-    paddingVertical: scale(1),
-    color: COLORS.yellow,
-    fontWeight: '700',
-    fontSize: scale(12),
+    marginTop: scale(20),
   },
   backIconStyle: {
     height: scale(30),
@@ -105,17 +115,12 @@ const styles = StyleSheet.create({
     top: scale(10),
     margin: scale(20),
   },
-  signUpText: {
+  instructionText: {
     textAlign: 'center',
     color: COLORS.yellow,
     fontFamily: FONTS.GothamLight,
     width: scale(300),
     fontSize: scale(13),
-  },
-
-  signUpView: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: scale(20),
   },
 });

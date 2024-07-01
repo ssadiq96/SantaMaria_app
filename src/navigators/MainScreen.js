@@ -9,6 +9,8 @@ import {
   View,
 } from 'react-native';
 
+import {useIsFocused} from '@react-navigation/native';
+import Request from '../api/Request';
 import {IMAGES} from '../assets';
 import {COLORS} from '../common';
 import {scale} from '../common/Scale';
@@ -18,7 +20,9 @@ import DiscountScreen from '../screens/DiscountScreen';
 import EmergencyContact from '../screens/EmergencyContact';
 import EventDetail from '../screens/EventDetail';
 import NewEventScreen from '../screens/NewEventScreen';
+import NotificationScreen from '../screens/NotificationScreen';
 import ProfileEditScreen from '../screens/ProfileEditScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import SupplierDetails from '../screens/SupplierDetails';
 import SupplierScreen from '../screens/SupplierScreen';
 import TabBar from '../screens/TabBar';
@@ -26,10 +30,6 @@ import NavigationService from '../utils/NavigationService';
 import {DEVICE, hp, wp} from '../utils/constants';
 import {isIphoneX} from '../utils/iPhoneXHelper';
 import Util from '../utils/utils';
-import ProfileScreen from '../screens/ProfileScreen';
-import {useIsFocused} from '@react-navigation/native';
-import Request from '../api/Request';
-import NotificationScreen from '../screens/NotificationScreen';
 
 const Stack = createNativeStackNavigator();
 const options2 = {

@@ -16,7 +16,7 @@ const errorCodes = {
 const apiUrl = {
   SERVER_API_URL:
     'http://ec2-16-170-165-104.eu-north-1.compute.amazonaws.com:5000/api/user/',
-    USER_PROFILE:
+  USER_PROFILE:
     'http://ec2-16-170-165-104.eu-north-1.compute.amazonaws.com:5000/api/user',
 };
 

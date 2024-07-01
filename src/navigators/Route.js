@@ -13,6 +13,8 @@ import SignUpScreen from '../screens/SignUpScreen';
 import VerifySignupScreen from '../screens/VerifySignupScreen';
 import NavigationService from '../utils/NavigationService';
 import MainScreenRoutes from './MainScreen';
+import VerifyOTPScreen from '../screens/VerifyOTPScreen';
+import NewPasswordScreen from '../screens/NewPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 const options2 = {
@@ -64,6 +66,17 @@ const StackNavigator = () => {
         <Stack.Screen
           name={'ForgotPasswordScreen'}
           component={ForgotPasswordScreen}
+          options={options2}
+        />
+
+        <Stack.Screen
+          name={'NewPasswordScreen'}
+          component={NewPasswordScreen}
+          options={options2}
+        />
+        <Stack.Screen
+          name={'VerifyOTPScreen'}
+          component={VerifyOTPScreen}
           options={options2}
         />
         <Stack.Screen
