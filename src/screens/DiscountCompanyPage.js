@@ -6,6 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
+  ImageBackground,
   Linking,
   StyleSheet,
   Text,
@@ -164,108 +165,92 @@ function DiscountCompanyPage({route, navigation}) {
       ) : (
         <View style={{flex: 1}}>
           <View style={styles.coverView}>
-            <Image
+            <ImageBackground
+              resizeMethod="scale"
+              resizeMode="cover"
               style={styles.imageView}
-              source={{uri: discountCoverData.cover_image}}
-            />
-            <View
-              style={{
-                position: 'absolute',
-              }}>
-              <View style={styles.overlay} />
-
-              <View style={styles.topView}>
-                <View>
-                  <TouchableOpacity
-                    style={styles.backView}
-                    onPress={() => {
-                      navigation.goBack();
-                    }}>
-                    <Image
-                      source={IMAGES.backIcon}
-                      style={styles.backIconStyle}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={{marginRight: scale(25)}}>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                    }}>
+              source={{uri: discountCoverData.cover_image}}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}>
+                <View style={styles.topView}>
+                  <View>
                     <TouchableOpacity
-                      style={[styles.phoneView]}
+                      style={styles.backView}
                       onPress={() => {
-                        let phoneNumberFormatted = `tel:${discountCoverData?.contact_no}`;
-                        Linking.openURL(phoneNumberFormatted).catch(err =>
-                          console.error('Error opening dialer', err),
-                        );
+                        navigation.goBack();
                       }}>
                       <Image
-                        style={{
-                          height: scale(20),
-                          width: scale(20),
-                          resizeMode: 'contain',
-                        }}
-                        source={IMAGES.phone}
+                        source={IMAGES.backIcon}
+                        style={styles.backIconStyle}
                       />
-                      <Text style={styles.socialText}>
-                        {discountCoverData?.contact_no}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        Linking.openURL(discountCoverData?.instagram_url);
-                      }}
-                      style={[styles.socialContainer]}>
-                      <Image
-                        style={styles.instagramImage}
-                        source={IMAGES.instagram}
-                      />
-                      <Text style={styles.socialText}>{'Instagram'}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-              </View>
-              <View style={styles.subView}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Image
-                    source={
-                      discountCoverData?.profile_image
-                        ? {uri: discountCoverData?.profile_image}
-                        : IMAGES.appLogo
-                    }
-                    style={styles.profileImage}
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      Linking.openURL(discountCoverData?.location);
-                    }}
-                    style={styles.directionView}>
-                    <Text style={styles.directionText}>{'Dirección'}</Text>
-                  </TouchableOpacity>
+                <View style={styles.subView}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Image
+                      source={
+                        discountCoverData?.profile_image
+                          ? {uri: discountCoverData?.profile_image}
+                          : IMAGES.appLogo
+                      }
+                      style={styles.profileImage}
+                    />
+                  </View>
+                  <View style={styles.nameView}>
+                    <Text numberOfLines={2} style={styles.titleText}>
+                      {discountCoverData?.name}
+                    </Text>
+                  </View>
+                  <Text style={styles.descText}>{discountCoverData?.bio}</Text>
                 </View>
-                <View style={styles.nameView}>
-                  <Text numberOfLines={2} style={styles.titleText}>
-                    {discountCoverData?.name}
-                  </Text>
-                </View>
-                <Text numberOfLines={2} style={styles.descText}>
-                  {discountCoverData?.bio}
-                </Text>
               </View>
-            </View>
+            </ImageBackground>
+          </View>
+          <View style={styles.contactContainer}>
+            <TouchableOpacity
+              style={[styles.socialContainer]}
+              onPress={() => {
+                let phoneNumberFormatted = `tel:${discountCoverData?.contact_no}`;
+                Linking.openURL(phoneNumberFormatted).catch(err =>
+                  console.error('Error opening dialer', err),
+                );
+              }}>
+              <Image style={styles.instagramImage} source={IMAGES.phone} />
+              <Text style={styles.socialText}>
+                {discountCoverData?.contact_no}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(discountCoverData?.instagram_url);
+              }}
+              style={[styles.socialContainer]}>
+              <Image style={styles.instagramImage} source={IMAGES.instagram} />
+              <Text style={styles.socialText}>{'Instagram'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(discountCoverData?.location);
+              }}
+              style={styles.socialContainer}>
+              <Image style={styles.instagramImage} source={IMAGES.instagram} />
+              <Text style={styles.socialText}>{'Dirección'}</Text>
+            </TouchableOpacity>
           </View>
           <FlatList
             data={discountArray}
             renderItem={renderItem}
             keyExtractor={(item, index) => index}
-            style={{marginVertical: scale(20)}}
+            style={{marginBottom: scale(20)}}
           />
         </View>
       )}
@@ -273,6 +258,13 @@ function DiscountCompanyPage({route, navigation}) {
   );
 }
 const styles = StyleSheet.create({
+  contactContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: scale(12),
+    paddingHorizontal: scale(14),
+    justifyContent: 'space-between',
+  },
   backIconStyle: {
     height: scale(30),
     width: scale(30),
@@ -281,13 +273,13 @@ const styles = StyleSheet.create({
   topView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: '10%',
+    marginTop: scale(10),
   },
   subView: {
     marginHorizontal: scale(20),
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    marginTop: verticalScale(62),
+    // marginTop: verticalScale(62),
   },
   backView: {
     alignSelf: 'flex-start',
@@ -301,9 +293,8 @@ const styles = StyleSheet.create({
   },
   socialText: {
     color: COLORS.white,
-    fontSize: scale(14),
+    fontSize: scale(12),
     paddingVertical: scale(5),
-    paddingRight: scale(8),
     fontFamily: FONTS.GothamLight,
   },
   socialContainer: {
@@ -312,12 +303,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: scale(20),
-    marginRight: scale(10),
+    marginRight: scale(5),
     paddingHorizontal: scale(10),
   },
   instagramImage: {
     height: scale(15),
     width: scale(15),
+    marginRight: scale(2),
     resizeMode: 'contain',
     tintColor: COLORS.white,
     alignSelf: 'center',
@@ -342,9 +334,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.yellow,
     borderRadius: scale(20),
     justifyContent: 'center',
-    alignSelf: 'flex-end',
-    marginLeft: scale(130),
-    marginHorizontal: scale(15),
   },
   directionText: {
     color: COLORS.white,
@@ -424,6 +413,7 @@ const styles = StyleSheet.create({
     borderRadius: scale(30),
   },
   imageView: {
+    paddingBottom: scale(20),
     height: verticalScale(300),
     width: CONSTANTS.screenWidth,
   },
@@ -432,11 +422,9 @@ const styles = StyleSheet.create({
     width: CONSTANTS.screenWidth,
     position: 'relative',
   },
-
   phoneView: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: scale(8),
   },
   nameView: {
     flexDirection: 'row',

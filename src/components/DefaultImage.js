@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
-import { View, ImageBackground, StyleSheet, Image ,ActivityIndicator} from 'react-native';
+import React, {Component} from 'react';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import _ from 'lodash';
-import { COLORS } from '../common';
+import {COLORS} from '../common';
 
 class DefaultImage extends Component {
   constructor(props) {
@@ -10,11 +16,11 @@ class DefaultImage extends Component {
     this.state = {
       failToLoad: false,
       loadComplete: false,
-      loading:false
+      loading: false,
     };
   }
   render() {
-    let { containerStyle } = this.props;
+    let {containerStyle} = this.props;
     return (
       <View style={[styles.container, containerStyle]}>
         {this.renderImageView()}
@@ -23,11 +29,11 @@ class DefaultImage extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (_.isEqual(this.props.source, nextProps.source)) {
-      this.setState({ failToLoad: false, /* loadComplete: false */ })
+      this.setState({failToLoad: false /* loadComplete: false */});
     }
   }
   renderImageView() {
-    let { loadComplete, failToLoad } = this.state;
+    let {loadComplete, failToLoad} = this.state;
     let {
       source,
       resizeMode,
@@ -47,7 +53,7 @@ class DefaultImage extends Component {
           resizeMode={resizeMode || 'cover'}
           style={style ? style : [styles.errorImageStyle, errorImageStyle]}
         />
-      )
+      );
     } else if (loadComplete) {
       // after cache network image
       return (
@@ -56,28 +62,28 @@ class DefaultImage extends Component {
           resizeMode={resizeMode || 'cover'}
           style={style ? style : [styles.imageStyle, imageStyle]}
         />
-      )
+      );
     } else {
       // default image rendering
       return (
         <ImageBackground
           source={defaultImage}
           style={style ? style : [styles.defaultImageStyle, defaultImageStyle]}
-          resizeMode={defaultImageResizeMode || 'cover'}
-        >
-          {this.props.isBase64 &&
+          resizeMode={defaultImageResizeMode || 'cover'}>
+          {(this.props.isBase64 && (
             <Image
               source={source}
               resizeMode={resizeMode || 'cover'}
               style={style ? style : [styles.imageStyle, imageStyle]}
             />
-            ||
-            <View style={[style, { justifyContent: 'center', alignItems: 'center' }]}>
+          )) || (
+            <View
+              style={[style, {justifyContent: 'center', alignItems: 'center'}]}>
               <FastImage
                 source={source}
-                onError={() => this.setState({ failToLoad: true })}
-                onLoad={() => this.setState({ loadComplete: true })}
-                onLoadStart={() => this.setState({ loadComplete: false })}
+                onError={() => this.setState({failToLoad: true})}
+                onLoad={() => this.setState({loadComplete: true})}
+                onLoadStart={() => this.setState({loadComplete: false})}
                 resizeMode={resizeMode || 'cover'}
                 style={style} // I know, Hack for load image! :)
               />
@@ -89,33 +95,32 @@ class DefaultImage extends Component {
                 />
               </View>
             </View>
-          }
+          )}
         </ImageBackground>
-      )
+      );
     }
   }
 }
 
 let styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   imageStyle: {
     height: 150,
-    width: 150
+    width: 150,
   },
   defaultImageStyle: {
     height: 150,
-    width: 150
+    width: 150,
   },
   errorImageStyle: {
     height: 150,
-    width: 150
+    width: 150,
   },
   loaderStyle: {
-    position: "absolute",
-    alignItems: "center",
+    position: 'absolute',
+    alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });
 
-export { DefaultImage };
+export {DefaultImage};
