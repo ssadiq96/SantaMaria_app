@@ -92,69 +92,69 @@ function DiscountCompanyPage({route, navigation}) {
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.renderView}>
-        <Image
+        <ImageBackground
           style={styles.discountImage}
-          source={item.image ? {uri: item.image} : IMAGES.appLogo}
-        />
-
-        <View
-          style={{
-            position: 'absolute',
-            justifyContent: 'space-between',
-          }}>
-          <View style={styles.overlay2} />
+          resizeMode="cover"
+          source={item.image ? {uri: item.image} : IMAGES.appLogo}>
           <View
             style={{
-              flexDirection: 'row',
+              flex: 1,
+              flexDirection: 'column',
               justifyContent: 'space-between',
-              marginVertical: scale(10),
+              paddingVertical: scale(15),
+              paddingHorizontal: scale(15),
             }}>
-            <View style={{}}>
-              <View style={styles.validDateView}>
-                <Text numberOfLines={1} style={styles.validDate}>
-                  Desde:
-                  {moment(
-                    item?.valid_from ||
-                      moment(item?.valid_till).subtract(1, 'day') ||
-                      moment(),
-                  ).format('DD MMM')}
-                </Text>
+            <View style={styles.overlay2} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{}}>
+                <View style={styles.validDateView}>
+                  <Text numberOfLines={1} style={styles.validDate}>
+                    Desde:
+                    {moment(
+                      item?.valid_from ||
+                        moment(item?.valid_till).subtract(1, 'day') ||
+                        moment(),
+                    ).format('DD MMM')}
+                  </Text>
+                </View>
+                <View style={styles.validDateView}>
+                  <Text numberOfLines={1} style={styles.validDate}>
+                    Hasta:{' '}
+                    {moment(
+                      item?.valid_till ||
+                        moment(item?.valid_from).add(1, 'day') ||
+                        moment(),
+                    ).format('DD MMM')}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.validDateView}>
-                <Text numberOfLines={1} style={styles.validDate}>
-                  Hasta:{' '}
-                  {moment(
-                    item?.valid_till ||
-                      moment(item?.valid_from).add(1, 'day') ||
-                      moment(),
-                  ).format('DD MMM')}
-                </Text>
+              <View style={{}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    applysave(item);
+                  }}
+                  style={styles.savedImage}>
+                  <Image
+                    source={
+                      item?.isWishlist == true ? IMAGES.unsaved : IMAGES.saved
+                    }
+                    resizeMode="contain"
+                    style={{}}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
-            <View style={{}}>
-              <TouchableOpacity
-                onPress={() => {
-                  applysave(item);
-                }}
-                style={styles.savedImage}>
-                <Image
-                  source={
-                    item?.isWishlist == true ? IMAGES.unsaved : IMAGES.saved
-                  }
-                  resizeMode="contain"
-                  style={{}}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.bottomView}>
-            <View style={styles.titleTextView}>
+            <View>
               <Text numberOfLines={2} style={styles.titleText2}>
                 {item?.title}
               </Text>
             </View>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     );
   };
@@ -170,11 +170,13 @@ function DiscountCompanyPage({route, navigation}) {
               resizeMode="cover"
               style={styles.imageView}
               source={{uri: discountCoverData.cover_image}}>
+              <View style={styles.overlay} />
               <View
                 style={{
                   flex: 1,
                   flexDirection: 'column',
                   justifyContent: 'space-between',
+                  paddingBottom: scale(20),
                 }}>
                 <View style={styles.topView}>
                   <View>
@@ -242,7 +244,7 @@ function DiscountCompanyPage({route, navigation}) {
                 Linking.openURL(discountCoverData?.location);
               }}
               style={styles.socialContainer}>
-              <Image style={styles.instagramImage} source={IMAGES.instagram} />
+              <Image style={styles.instagramImage} source={IMAGES.location} />
               <Text style={styles.socialText}>{'Dirección'}</Text>
             </TouchableOpacity>
           </View>
@@ -279,7 +281,6 @@ const styles = StyleSheet.create({
     marginHorizontal: scale(20),
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    // marginTop: verticalScale(62),
   },
   backView: {
     alignSelf: 'flex-start',
@@ -289,12 +290,12 @@ const styles = StyleSheet.create({
     marginVertical: scale(4),
     height: scale(170),
     borderRadius: scale(20),
-    width: '100%',
+    overflow: 'hidden',
   },
   socialText: {
     color: COLORS.white,
     fontSize: scale(12),
-    paddingVertical: scale(5),
+    paddingVertical: scale(4.5),
     fontFamily: FONTS.GothamLight,
   },
   socialContainer: {
@@ -303,13 +304,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: scale(20),
-    marginRight: scale(5),
     paddingHorizontal: scale(10),
+    paddingVertical: scale(1),
   },
   instagramImage: {
-    height: scale(15),
-    width: scale(15),
-    marginRight: scale(2),
+    height: scale(13),
+    width: scale(13),
+    marginRight: scale(2.5),
     resizeMode: 'contain',
     tintColor: COLORS.white,
     alignSelf: 'center',
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
   },
   titleText2: {
     color: COLORS.white,
-    fontSize: scale(20),
+    fontSize: scale(16),
     fontFamily: FONTS.GothamMedium,
   },
   descText: {
@@ -355,13 +356,10 @@ const styles = StyleSheet.create({
   savedImage: {
     alignSelf: 'flex-end',
     borderRadius: scale(20),
-    marginHorizontal: scale(10),
-    right: scale(5),
   },
   validDateView: {
     backgroundColor: COLORS.yellow,
     alignSelf: 'flex-start',
-    marginHorizontal: scale(10),
     width: scale(185),
     paddingHorizontal: scale(10),
     justifyContent: 'center',
@@ -372,14 +370,6 @@ const styles = StyleSheet.create({
   titleTextView: {
     textAlign: 'left',
     alignItems: 'center',
-    marginHorizontal: scale(10),
-  },
-  bottomView: {
-    flexDirection: 'row',
-    width: CONSTANTS.screenWidth - 40,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: scale(40),
   },
   overlay: {
     position: 'absolute',
@@ -387,7 +377,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: verticalScale(300),
+    height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 1)',
     opacity: 0.3, // Adjust opacity as needed
   },
@@ -403,9 +393,7 @@ const styles = StyleSheet.create({
     opacity: 0.5, // Adjust opacity as needed
   },
   discountImage: {
-    height: scale(170),
-    width: CONSTANTS.screenWidth - 40,
-    borderRadius: scale(20),
+    height: '100%',
   },
   profileImage: {
     height: scale(60),
@@ -413,14 +401,11 @@ const styles = StyleSheet.create({
     borderRadius: scale(30),
   },
   imageView: {
-    paddingBottom: scale(20),
-    height: verticalScale(300),
-    width: CONSTANTS.screenWidth,
+    height: '100%',
   },
   coverView: {
     height: verticalScale(300),
     width: CONSTANTS.screenWidth,
-    position: 'relative',
   },
   phoneView: {
     flexDirection: 'row',
